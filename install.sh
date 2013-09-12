@@ -4,8 +4,6 @@ echo "Blackprint Installer"
 echo "----------------------"
 echo ""
 echo "Setting application cache directories and permissions..."
-mkdir -R resources/tmp/cache/templates
-mkdir -R resources/g11n
 chmod -R 777 resources
 chmod -R 775 config/bootstrap/libraries
 chmod -R 775 config/bootstrap/connections
