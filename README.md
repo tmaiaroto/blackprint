@@ -3,20 +3,20 @@
 **Quickstart** ```bash <(curl -s https://raw.github.com/tmaiaroto/blackprint/master/clone.sh) && bash install.sh```
 
 #### Requirements
-Blackprint requires a few things. First, since it uses the [Lithium PHP Framework](http://lithify.me), PHP 5.3+ is required. 
 
-Second, Blackprint uses MongoDB. No exceptions here. I'm not sorry. Yes, we could use other NoSQL databases, but MongoDB works
-with Lithium out of the box. Yes, Blackprint can even use MySQL...But not for its core. MySQL does not lend itself well to the 
-kind of flexible schema a CMS needs. However, you may very well use MySQL for parts of your site powered by Blackprint and 
-that's totally fine.
+ * PHP 5.3+ (Blackprint uses [Lithium PHP Framework](http://lithify.me))
+ * MongoDB
+ * A web server of course (Nginx preferred)
+ * [Composer](http://getcomposer.org/) (this will be downloaded for you if you don't have it when running ```install.sh```)
+ * [Bower](http://bower.io/) (technically optional, but it'll be on you to hunt down front-end dependencies)
+ * Git
 
-Last, a web server of course. I'd suggest Nginx, but you're welcome to use Apache or any other web server that works with PHP. 
-Ensure that you have set the web root properly for a Lithium application and all that good jazz.
+Note: Your target production system need not have Bower if you are committing everything to a repository that you 
+simply update from in production. Technically not even Composer if you force add the libraries to your own repository.
 
 **Recommended**    
 It is also recommended that you use utilize an opcode cache solution such as APC, though it is not necessarily required (you'd
-just get some crazy looks).
-
+just get some crazy looks). 
 
 #### Installation
 You could clone this repository and then run ```install.sh``` to get going...Or, if you're on Linux or OS X, you could simply create 

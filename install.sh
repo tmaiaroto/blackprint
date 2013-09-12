@@ -33,4 +33,8 @@ echo ""
 
 echo ""
 echo "Installation complete."
+echo "------------------------"
 echo ""
+echo "Attempting to install front-end dependencies..."
+echo ""
+exec frontend.sh
