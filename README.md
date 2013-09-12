@@ -1,4 +1,4 @@
-# Blackprint CMS
+# ![image](https://github.com/tmaiaroto/blackprint/tree/master/webroot/img/blackprint-logo-square-64.png) Blackprint CMS
 
 **Quickstart** ```bash <(curl -s https://raw.github.com/tmaiaroto/blackprint/master/clone.sh) && bash install.sh```
 
