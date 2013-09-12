@@ -8,7 +8,7 @@
  * MongoDB
  * A web server of course (Nginx preferred)
  * [Composer](http://getcomposer.org/) (this will be downloaded for you if you don't have it when running ```install.sh```)
- * [Bower](http://bower.io/) (technically optional, but it'll be on you to hunt down front-end dependencies)
+ * [Bower](http://bower.io/) (this means Node.js and NPM)
  * Git
 
 Note: Your target production system need not have Bower if you are committing everything to a repository that you 
