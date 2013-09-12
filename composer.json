@@ -5,6 +5,7 @@
     "minimum-stability": "dev",
     "require": {
         "unionofrad/lithium": "1.0-beta",
-    	"tmaiaroto/li3b_core": "dev-master"
+    	"tmaiaroto/li3b_core": "dev-master",
+        "tmaiaroto/li3b_users": "dev-master"
     }
 }

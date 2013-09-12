@@ -45,6 +45,17 @@ if($env == 'development') {
 	Environment::set('development');
 }
 
+$defaults = array(
+	'database' => 'blackprint',
+	'devDatabase' => 'blackprint_dev',
+	'host' => 'localhost',
+	// this is a good value for remote MongoDB services such as MongoLab or MongoHQ or Object Rocket, etc.
+	// on a local server, this is obviously quite generous and could be lowered...
+	'timeout' => 81000,
+	'devHosts' => array('localhost', 'blackprint.dev.local')
+);
+$options = $defaults;
+
 $li3Options = false;
 // Optional config.ini file sets some options.
 if(file_exists(dirname(dirname(__DIR__)) . '/config.ini')) {
@@ -52,53 +63,48 @@ if(file_exists(dirname(dirname(__DIR__)) . '/config.ini')) {
 	$li3Options = isset($li3Options['mongodb']) ? $li3Options['mongodb']:$li3Options;
 }
 if($li3Options) {
-	$defaults = array(
-		'database' => 'blackprint',
-		'devDatabase' => 'blackprint_dev',
-		'host' => 'localhost',
-		// this is a good value for remote MongoDB services such as MongoLab or MongoHQ or Object Rocket, etc.
-		// on a local server, this is obviously quite generous and could be lowered...
-		'timeout' => 81000,
-		'devHosts' => array('localhost')
-	);
 	$options = $li3Options += $defaults;
 	if(is_string($options['devHosts'])) {
 		$options['devHosts'] = explode(',', $options['devHosts']);
 	}
-
-	$httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']:'localhost';
-
-	if(in_array($httpHost, $options['devHosts']) || $env == 'development') {
-		$options['database'] = $options['devDatabase'];
-	}
-
-	$dbOptions = array(
-			'type' => 'database',
-			'adapter' => 'MongoDb',
-			'database' => $options['database'],
-			'host' => $options['host'],
-			'timeout' => $options['timeout']
-	);
-	if(isset($options['login'])) {
-		$dbOptions['login'] = $options['login'];
-	}
-	if(isset($options['password'])) {
-		$dbOptions['password'] = $options['password'];
-	}
-
-	Connections::add('li3b_mongodb', $dbOptions);
-
-	// li3b_users is going to use the same database. If this is not the case,
-	// you will not be able to configure it from the ini file and must overwrite
-	// this connection by overwriting this file or making another file in the
-	// `connections` directory. Keep in mind the order in which they are parsed.
-	Connections::add('li3b_users', $dbOptions);
-
-	// Of course set the default connection to use this MongoDB connection as well.
-	// This will make it a little easier for your main application. You won't need
-	// to specify the connection name in each model class.
-	Connections::add('default', $dbOptions);
 }
+
+// See if we should use the dev database (this is based on hostname).
+$httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']:'localhost';
+if(in_array($httpHost, $options['devHosts']) || $env == 'development') {
+	$options['database'] = $options['devDatabase'];
+}
+
+$dbOptions = array(
+	'type' => 'database',
+	'adapter' => 'MongoDb',
+	'database' => $options['database'],
+	'host' => $options['host'],
+	'timeout' => $options['timeout']
+);
+
+// Typically we firewall our MongoDB, but for those of you using a service or who just
+// like to have a username and password anyway....
+if(isset($options['login'])) {
+	$dbOptions['login'] = $options['login'];
+}
+if(isset($options['password'])) {
+	$dbOptions['password'] = $options['password'];
+}
+
+Connections::add('li3b_mongodb', $dbOptions);
+
+// li3b_users is going to use the same database. If this is not the case,
+// you will not be able to configure it from the ini file and must overwrite
+// this connection by overwriting this file or making another file in the
+// `connections` directory. Keep in mind the order in which they are parsed.
+Connections::add('li3b_users', $dbOptions);
+
+// Of course set the default connection to use this MongoDB connection as well.
+// This will make it a little easier for your main application. You won't need
+// to specify the connection name in each model class.
+Connections::add('default', $dbOptions);
+
 
 // Add your own connections here or in another file within the `connections`
 // directory. You may want to consider adding another file if you wisht to

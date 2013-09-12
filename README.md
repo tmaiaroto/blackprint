@@ -29,7 +29,8 @@ Then you'd need to setup symlinks in ```webroot``` for the ```li3b_core``` libra
 
 Note that everything in Blackprint works as a library and so everything you add to it will be located under the ```libraries``` 
 directory and if you have assets (CSS, JavaScript, images, etc.) you wish to expose to the webroot, you will need to symlink 
-them as you go along.
+them as you go along. The ```libraries``` directory is also under ```.gitignore``` just so you know. I'd suggest submodules or using 
+Composer packages.
 
 *Note to Windows users:* I'm so sorry for you. Things will work for you I'm sure, but I rely on symlinks so you're going to have to figure out 
 how to get around that on your own. See the ```config/media.php``` file and ensure it's included in the ```config/bootstrap.php``` file. 
