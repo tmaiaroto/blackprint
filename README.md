@@ -11,8 +11,10 @@
  * [Bower](http://bower.io/) (this means Node.js and NPM)
  * Git
 
-Note: Your target production system need not have Bower if you are committing everything to a repository that you 
-simply update from in production. Technically not even Composer if you force add the libraries to your own repository.
+Note: Your target production server need not have Bower or Composer if you force add the libraries and front-end assets under 
+```bower_components``` to your own repository. Understand by doing that your repository will need to update each dependency so 
+that your production server can get any new versions because at that point, using Bower or Composer may create conflicts for 
+your cloned Git repository on your production server. You may wish to branch that out or something. I leave deployment up to you.
 
 **Recommended**    
 It is also recommended that you use utilize an opcode cache solution such as APC, though it is not necessarily required (you'd
