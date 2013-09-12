@@ -1,5 +1,8 @@
 #!/bin/bash
 
+exec git clone git://github.com/tmaiaroto/blackprint.git .
+clear;
+
 echo "Blackprint Installer"
 echo "----------------------"
 echo ""
