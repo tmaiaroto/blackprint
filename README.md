@@ -4,8 +4,8 @@
 
 #### Requirements
 
- * PHP 5.3+ (Blackprint uses [Lithium PHP Framework](http://lithify.me))
- * MongoDB
+ * PHP 5.3+ (Blackprint uses the [Lithium PHP Framework](http://lithify.me))
+ * [MongoDB](http://www.mongodb.org/)
  * A web server of course (Nginx preferred)
  * [Composer](http://getcomposer.org/) (this will be downloaded for you if you don't have it when running ```install.sh```)
  * [Bower](http://bower.io/) (this means Node.js and NPM)
