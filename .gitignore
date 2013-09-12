@@ -3,3 +3,5 @@ composer.lock
 composer.phar
 /libraries
 /resources
+/webroot/bower_components
+/webroot/li3b_core
