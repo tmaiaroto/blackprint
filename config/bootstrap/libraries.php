@@ -148,8 +148,8 @@ Libraries::add('app', array('default' => true));
  */
 // Optional config.ini file sets some options.
 $uiDefaults = array(
-	'navbarTitle' => 'Lithium Bootstrap',
-	'adminNavbarTitle' => 'Lithium Bootstrap'
+	'navbarTitle' => 'Blackprint',
+	'adminNavbarTitle' => 'Blackprint'
 );
 $li3Options = array();
 if(file_exists(dirname(__DIR__) . '/config.ini')) {

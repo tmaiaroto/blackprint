@@ -20,8 +20,9 @@ else
 fi
 
 echo ""
-echo "Creating a symlink for li3b_core assets..."
+echo "Creating a few symlinks..."
 (cd webroot && ln -s ../libraries/li3b_core/webroot li3b_core)
+(cd webroot && ln -s ../libraries/blackprint/webroot blackprint)
 echo ""
 
 echo ""
