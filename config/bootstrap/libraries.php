@@ -163,4 +163,7 @@ if(isset($li3Options['general']['timezone'])) {
 }
 
 Libraries::add('li3b_core', array('symlinkAssets' => true, 'navbarTitle' => $uiOptions['navbarTitle'], 'adminNavbarTitle' => $uiOptions['adminNavbarTitle']));
+Libraries::add('li3_flash_message');
+Libraries::add('li3_access');
+Libraries::add('blackprint');
 ?>

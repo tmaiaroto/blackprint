@@ -1,10 +1,9 @@
-<?=$this->html->script('/li3b_users/js/bootstrapUserValidation', array('inline' => false)); ?>
+<?=$this->html->script('/blackprint/js/bootstrapUserValidation', array('inline' => false)); ?>
 <div class="row">
 	<div class="col-md-9">
 		<div class="row">
-			<h2 id="page-heading">Update User</h2>
+			<h2 id="page-heading">Create New User</h2>
 		</div>
-
 		<?=$this->BlackprintForm->create($document, array('id' => 'user-update-form', 'class' => 'form-horizontal', 'role' => 'form', 'onSubmit' => 'return submitCheck();')); ?>
 			<?=$this->security->requestToken(); ?>
 				<div class="row">
@@ -33,7 +32,7 @@
 
 				
 				<div class="row">
-					<?=$this->BlackprintForm->submit('Save', array('class' => 'btn btn-primary')); ?> <?=$this->html->link('Cancel', array('library' => 'li3b_users', 'admin' => true, 'controller' => 'users', 'action' => 'index'), array('class' => 'btn')); ?>
+					<?=$this->BlackprintForm->submit('Save', array('class' => 'btn btn-primary')); ?> <?=$this->html->link('Cancel', array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'index'), array('class' => 'btn')); ?>
 
 					<p><br /><em><strong>Note:</strong> There will be no e-mail sent to this user. You must let them know what their password is.</em></p>
 				</div>

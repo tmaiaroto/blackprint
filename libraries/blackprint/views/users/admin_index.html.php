@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-8">
-		<?=$this->html->link('<i class="icon-plus"></i> Create New User', array('library' => 'li3b_users', 'controller' => 'users', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
+		<?=$this->html->link('<i class="icon-plus"></i> Create New User', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
 	</div>
 	<div class="col-md-4">
 		<?=$this->blackprint->queryForm(array('placeholder' => 'name or e-mail...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
@@ -23,7 +23,7 @@
 			<tr>
 				<td>
 					<?php $active = ($user->active) ? 'active':'inactive'; ?>
-					<?=$this->html->link($user->email, array('library' => 'li3b_users', 'controller' => 'users', 'action' => 'read', 'admin' => null, 'args' => array($user->url)), array('class' => 'tip', 'title' => $user->firstName . ' ' . $user->lastName . ' (' . $active . ')')); ?>
+					<?=$this->html->link($user->email, array('library' => 'blackprint', 'controller' => 'users', 'action' => 'read', 'admin' => null, 'args' => array($user->url)), array('class' => 'tip', 'title' => $user->firstName . ' ' . $user->lastName . ' (' . $active . ')')); ?>
 				</td>
 				<td>
 					<?=$user->role; ?>
@@ -32,8 +32,8 @@
 					<?=$this->html->date($user->created->sec); ?>
 				</td>
 				<td>
-					<?=$this->html->link('Edit', array('library' => 'li3b_users', 'controller' => 'users', 'action' => 'update', 'admin' => true, 'args' => array($user->_id))); ?> |
-					<?=$this->html->link('Delete', array('library' => 'li3b_users', 'controller' => 'users', 'action' => 'delete', 'admin' => true, 'args' => array($user->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $user->email . '?\')')); ?>
+					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update', 'admin' => true, 'args' => array($user->_id))); ?> |
+					<?=$this->html->link('Delete', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'delete', 'admin' => true, 'args' => array($user->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $user->email . '?\')')); ?>
 				</td>
 			</tr>
 			<?php } ?>
