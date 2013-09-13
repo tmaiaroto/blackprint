@@ -13,7 +13,7 @@ $navbarTitle = isset($config['adminNavbarTitle']) ? $config['adminNavbarTitle']:
 		</button>
 
 		<div class="nav-collapse">
-			<?=$this->html->link($this->html->image('/img/blackprint-logo-square-white-64.png', array('style' => 'width: 32px; margin-top: 8px;')), '/admin', array('class' => 'brand pull-left', 'escape' => false)); ?>
+			<?=$this->html->link($this->html->image('/img/blackprint-logo-square-white-64.png', array('style' => 'width: 32px; margin-top: 8px;')), '/admin', array('class' => 'brand pull-left', 'escape' => false, 'style' => 'margin-right: 8px;')); ?>
 
 			<?=$this->blackprintMenu->render('admin', array('menuClass' => 'nav navbar-nav', 'activeClass' => 'active')); ?>
 

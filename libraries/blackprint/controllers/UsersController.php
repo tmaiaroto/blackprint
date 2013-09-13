@@ -246,6 +246,15 @@ class UsersController extends \lithium\action\Controller {
 	}
 
 	/**
+	 * Admin user dashboard.
+	 *
+	*/
+	public function admin_dashboard() {
+		$this->_render['layout'] = 'admin';
+		
+	}
+
+	/**
 	 * Registers a user.
 	*/
 	public function register() {
