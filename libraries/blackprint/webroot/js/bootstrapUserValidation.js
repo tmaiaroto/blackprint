@@ -73,7 +73,7 @@ $(document).ready(function() {
 
 	$('#UserEmail').change(function() {
 		if($('#UserEmail').val().length > 4 && validEmail($('#UserEmail').val())) {
-			$.get('/plugin/li3b_users/users/email_check/' + $('#UserEmail').val(), function(data) {
+			$.get('/plugin/blackprint/users/email_check/' + $('#UserEmail').val(), function(data) {
 				if(data == '1') {
 					$('#UserEmail').parent().siblings('.help-block').html('<p>Sorry, this e-mail address has already been registered to a user.</p>');
 					bootstrapError('#UserEmail');

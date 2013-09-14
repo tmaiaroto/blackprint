@@ -1,12 +1,11 @@
 <?php
 /**
- * Menu Helper
- * Copied from li3b_core, updated for Twitter Bootstrap v3+
+ * Menu Helper.
  *
 */
 namespace blackprint\extensions\helper;
 
-use li3b_core\models\BootstrapMenu;
+use blackprint\models\BlackprintMenu as Menu;
 use lithium\template\View;
 use lithium\util\Inflector;
 use lithium\storage\Cache;
@@ -40,20 +39,20 @@ class BlackprintMenu extends \lithium\template\Helper {
     }
 
     // Get the current URL (false excludes the domain)
-    $here = $this->_context->html->here(false);
+    $here = $this->_context->blackprint->here(false);
 
     // set the cache key for the menu
-    $cache_key = (empty($name)) ? 'li3b_menus.all':'li3b_menus.' . $name;
+    $cache_key = (empty($name)) ? 'blackprint_menus.all':'blackprint_menus.' . $name;
     $menu = false;
 
-    // if told to use the menu from cache (note: filters will not be applied for this call because BootstrapMenu::staticMenu() should not be called provided there's a copy in cache)
+    // if told to use the menu from cache (note: filters will not be applied for this call because Menu::staticMenu() should not be called provided there's a copy in cache)
     if(!empty($options['cache'])) {
       $menu = Cache::read('default', $cache_key);
     }
 
     // if the menu hasn't been set in cache or it was empty for some reason, get a fresh copy of its data
     if(empty($menu)) {
-      $menu = BootstrapMenu::staticMenu($name);
+      $menu = Menu::staticMenu($name);
     }
 
     // if using cache, write the menu data to the cache key

@@ -1,11 +1,13 @@
 /* Blackprint Admin Styles */
-p {
-	font-family: 'Raleway', sans-serif;
+html {
+	background: #222;
 }
 body {
 	font-family: 'Raleway', sans-serif;
 	padding-top: 70px;
-	padding-bottom: 40px;
+}
+p {
+	font-family: 'Raleway', sans-serif;
 }
 
 /* Form */
@@ -58,4 +60,17 @@ li a, li:focus, li a:focus {
 .search-query {
 	width: 200px;
 	margin-right: 5px;
+}
+
+/* Footer */
+footer {
+	clear: left;
+	background: #222;
+	color: #a6a6a7;
+	margin-top: 25px;
+	padding-bottom: 20px;
+
+}
+footer hr {
+	border-color: #333;
 }

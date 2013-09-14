@@ -1,14 +1,9 @@
 <?php
-/**
- * Blackprint forks the li3b_users library originally built for use with li3b_core.
- * There are a few changes, but putting the user system inside the Blackprint library
- * frees it up for a variety of needs in the future.
-*/
 namespace blackprint\controllers;
 
 use blackprint\models\User;
 use blackprint\models\Asset;
-use li3b_core\util\Util;
+use blackprint\util\Util;
 use li3_flash_message\extensions\storage\FlashMessage;
 use li3_access\security\Access;
 use lithium\security\validation\RequestToken;

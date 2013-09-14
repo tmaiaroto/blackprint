@@ -123,23 +123,21 @@ Libraries::add('lithium', array('path' => LITHIUM_LIBRARY_PATH . '/unionofrad/li
 Libraries::add('app', array('default' => true));
 
 /**
- * Add the Lithium Bootstrap core library.
+ * Add the Blackprint core library.
  * This CAN NOT be placed under config/bootstrap/libraries because
  * this core library would include itself then. That would be bad.
  * 
- * Note: If 'symlinkAssets' is set to true, then li3b_core will
+ * Note: If 'symlinkAssets' is set to true, then blackprint will
  * NOT include the filter on the Dispatcher that media.php calls.
  * This means all `webroot` directories for libraries will need 
  * to be symlinked to the main application's `webroot` directory.
  * 
  * If using symlinks for static assets, you will gain a little
- * bit of performance. Lithium Bootstrap will work either way
- * and upon library installation (with the Lithium Bootstrap
- * console command), a symlink will be created if `symlinkAssets`
- * is set to true here. Either way, a symlink for `li3b_core` has
- * likely already been added for you if you ran the setup.sh script.
- * So you can access core Lithium Bootstrap assets either way.
- * ie. /li3b_core/css/bootstrap.css OR /li3b_core/css/bootstrap.css
+ * bit of performance. Blackprint will work either way. However,
+ * the preferred method is to use symlinks.
+ *
+ * A symlink for `blackprint` has likely already been added for
+ * you if you ran the `install.sh` script.
  * 
  * Note: You can change this to false if you don't want to use symlinks.
  * BUT, if you flip this setting back and forth keep in mind that
@@ -151,19 +149,23 @@ $uiDefaults = array(
 	'navbarTitle' => 'Blackprint',
 	'adminNavbarTitle' => 'Blackprint'
 );
-$li3Options = array();
+$blackprintOptions = array();
 if(file_exists(dirname(__DIR__) . '/config.ini')) {
-	$li3Options = parse_ini_file(dirname(__DIR__) . '/config.ini', true);
+	$blackprintOptions = parse_ini_file(dirname(__DIR__) . '/config.ini', true);
 }
-$uiOptions = isset($li3Options['ui']) ? $li3Options['ui'] += $uiDefaults:$uiDefaults;
+$uiOptions = isset($blackprintOptions['ui']) ? $blackprintOptions['ui'] += $uiDefaults:$uiDefaults;
 
 // Optionally set the default timezone from the config file, ex. "America/Los_Angeles"
-if(isset($li3Options['general']['timezone'])) {
-	date_default_timezone_set($li3Options['general']['timezone']);
+if(isset($blackprintOptions['general']['timezone'])) {
+	date_default_timezone_set($blackprintOptions['general']['timezone']);
 }
 
-Libraries::add('li3b_core', array('symlinkAssets' => true, 'navbarTitle' => $uiOptions['navbarTitle'], 'adminNavbarTitle' => $uiOptions['adminNavbarTitle']));
+Libraries::add('blackprint', array(
+	'symlinkAssets' => true,
+	'navbarTitle' => $uiOptions['navbarTitle'],
+	'adminNavbarTitle' => $uiOptions['adminNavbarTitle']
+));
+
 Libraries::add('li3_flash_message');
 Libraries::add('li3_access');
-Libraries::add('blackprint');
 ?>

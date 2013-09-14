@@ -29,7 +29,7 @@
 					<?=$user->role; ?>
 				</td>
 				<td>
-					<?=$this->html->date($user->created->sec); ?>
+					<?=$this->blackprint->date($user->created->sec); ?>
 				</td>
 				<td>
 					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update', 'admin' => true, 'args' => array($user->_id))); ?> |
@@ -39,7 +39,7 @@
 			<?php } ?>
 		</table>
 
-		<?=$this->BootstrapPaginator->paginate(); ?>
+		<?=$this->BlackprintPaginator->paginate(); ?>
 		<div class="paging-text"><em>Showing page <?=$page; ?> of <?=$total_pages; ?>. <?=$total; ?> total record<?php echo ((int) $total > 1 || (int) $total == 0) ? 's':''; ?>.</em></div>
 	</div>
 </div>

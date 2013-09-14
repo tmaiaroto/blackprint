@@ -1,7 +1,7 @@
 <?php
 namespace blackprint\models;
 
-use li3b_core\util\Util;
+use blackprint\util\Util;
 use lithium\util\Validator;
 use lithium\storage\Cache;
 use lithium\util\Inflector;
@@ -12,7 +12,7 @@ use lithium\core\Libraries;
 use \MongoId;
 use \Exception;
 
-class User extends \li3b_core\models\BaseModel {
+class User extends \blackprint\models\BaseModel {
 
 	protected $_meta = array(
 		'locked' => true,

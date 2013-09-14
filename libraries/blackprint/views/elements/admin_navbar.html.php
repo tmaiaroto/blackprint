@@ -1,6 +1,6 @@
 <?php
 use lithium\core\Libraries;
-$config = Libraries::get('li3b_core');
+$config = Libraries::get('blackprint');
 $navbarTitle = isset($config['navbarTitle']) ? $config['navbarTitle']:'Blackprint';
 $navbarTitle = isset($config['adminNavbarTitle']) ? $config['adminNavbarTitle']:$navbarTitle;
 ?>
@@ -34,7 +34,6 @@ $navbarTitle = isset($config['adminNavbarTitle']) ? $config['adminNavbarTitle']:
 					
 						<ul class="dropdown-menu">
 							<li><?=$this->html->link('Settings', '/settings'); ?></li>
-							<li><?=$this->html->link('Profile', '/profile'); ?></li>
 							<li class="divider"></li>
 							<li><a href="/logout">Sign Out</a></li>
 						</ul>

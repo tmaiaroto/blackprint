@@ -12,7 +12,7 @@
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
-			'/li3b_core/css/jquery/tipsy.css',
+			'/blackprint/css/jquery/tipsy.css',
 			'/blackprint/css/admin'
 		), array('inline' => true));
 	?>
@@ -26,8 +26,7 @@
 		echo $this->html->script(array(
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
-			'/li3b_core/js/jquery/jquery.tipsy.js',
-			'/li3b_core/js/highlight.pack.js'
+			'/blackprint/js/jquery/jquery.tipsy.js'
 		), array('inline' => true));
 	?>
 	<?php
@@ -51,8 +50,8 @@
 	<?=$this->_render('element', 'admin_navbar', array('user' => $this->request()->user), array('library' => 'blackprint')); ?>
 	<div class="container content-container">
 		<?php echo $this->content(); ?>
-		<?=$this->_render('element', 'admin_footer', array(), array('library' => 'blackprint')); ?>
 	</div><!--/.container-->
+	<?=$this->_render('element', 'admin_footer', array(), array('library' => 'blackprint')); ?>
 	<script type="text/javascript">
 		$(function() {
 			// Tooltips
@@ -125,6 +124,6 @@
 		ga('send', 'pageview');
 	</script>
 	<?php } // end Google Analytics ?>
-	<?=$this->html->flash(); ?>
+	<?=$this->blackprint->flash(); ?>
 </body>
 </html>

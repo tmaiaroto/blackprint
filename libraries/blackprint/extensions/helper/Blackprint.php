@@ -2,7 +2,7 @@
 /**
  * General Blackprint helper.
  *
- * This helper includes some method overrides from li3b_core library's Html helper.
+ * This helper includes some method overrides from blackprint library's Html helper.
  * In fact, it extends Lithium's Html helper to provide some pretty useful methods
  * for view templates.
  *
@@ -51,7 +51,7 @@ class Blackprint extends \lithium\template\helper\Html {
 		));
 
 		return $view->render('all', array('options' => $options['options'], 'message' => $message), array(
-			'library' => 'li3b_core',
+			'library' => 'blackprint',
 			'template' => 'flash_message',
 			'type' => 'html',
 			'layout' => 'blank'
