@@ -10,6 +10,22 @@ class BlackprintMenu extends \lithium\core\StaticObject {
 	*/
 	static $staticMenus = array(
 		'admin' => array(
+			'content' => array(
+				'title' => 'Content <b class="caret"></b>',
+				'url' => '#',
+				'activeIf' => array('library' => 'blackprint', 'controller' => 'content'),
+				'options' => array('escape' => false),
+				'subItems' => array(
+					array(
+						'title' => 'List All',
+						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'content', 'action' => 'index')
+					),
+					array(
+						'title' => 'Create New',
+						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'content', 'action' => 'create')
+					)
+				)
+			),
 			'users' => array(
 				'title' => 'Users <b class="caret"></b>',
 				'url' => '#',
