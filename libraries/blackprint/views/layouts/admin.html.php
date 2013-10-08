@@ -26,6 +26,7 @@
 		echo $this->html->script(array(
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
+			'/bower_components/holderjs/holder.min.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
 		), array('inline' => true));
 	?>

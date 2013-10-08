@@ -569,6 +569,14 @@ class UsersController extends \lithium\action\Controller {
 			return $this->redirect('/');
 		}
 
+		// Special render case. Allow admin users to update their own profile from the admin layout.
+		// Since the admin_update() method is for updating OTHER users...We still use this method.
+		// We can't, of course, use 'admin' in the route for this method, so that's part of why we have
+		// the short and friendly "my-account" and "admin/my-account" routes.
+		if(strstr($this->request->url, 'admin')) {
+			$this->_render['layout'] = 'admin';
+		}
+
 		// Special rules for user creation (includes unique e-mail)
 		$rules = array(
 			'email' => array(

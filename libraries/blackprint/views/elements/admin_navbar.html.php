@@ -33,7 +33,7 @@ $navbarTitle = isset($config['adminNavbarTitle']) ? $config['adminNavbarTitle']:
 						</a>
 					
 						<ul class="dropdown-menu">
-							<li><?=$this->html->link('Settings', '/settings'); ?></li>
+							<li><?=$this->html->link('My Account', '/admin/my-account'); ?></li>
 							<li class="divider"></li>
 							<li><a href="/logout">Sign Out</a></li>
 						</ul>
