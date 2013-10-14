@@ -32,9 +32,9 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	
 	// Protect all admin methods except for login and logout.
 	if($request->admin === true && $action != 'login' && $action != 'logout') {
-		$action_access = Access::check('default', $user, $request, array('rules' => array('allowManagers')));
+		$action_access = Access::check('blackprint', $user, $request, array('rules' => array('allowManagers')));
 		if(!empty($action_access)) {
-			FlashMessage::write($action_access['message'], 'default');
+			FlashMessage::write($action_access['message'], 'blackprint');
 			if($user) {
 				header('Location: ' . Router::match($action_access['redirect']));
 			} else {
@@ -53,7 +53,7 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 });
 
 Access::config(array(
-	'default' => array(
+	'blackprint' => array(
 			'adapter' => 'Rules',
 			// optional filters applied for each configuration
 			'filters' => array(
@@ -69,7 +69,7 @@ Access::config(array(
 // Set some basic rules to be used from anywhere
 
 // Allow access for users with a role of "administrator" or "content_editor"
-Access::adapter('default')->add('allowManagers', function($user, $request, $options) {
+Access::adapter('blackprint')->add('allowManagers', function($user, $request, $options) {
 	if(($user) && ($user['role'] == 'administrator' || $user['role'] == 'content_editor')) {
 		return true;
 	}
@@ -78,7 +78,7 @@ Access::adapter('default')->add('allowManagers', function($user, $request, $opti
 
 // Restrict access to documents that have a published field marked as true 
 // (except for users with a role of "administrator" or "content_editor")
-Access::adapter('default')->add('allowIfPublished', function($user, $request, $options) {
+Access::adapter('blackprint')->add('allowIfPublished', function($user, $request, $options) {
 	if(isset($options['document']['published']) && $options['document']['published'] === true) {
 		return true;
 	}

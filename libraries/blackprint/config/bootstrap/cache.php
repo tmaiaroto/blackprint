@@ -34,12 +34,12 @@ if (!($apcEnabled = Apc::enabled()) && !is_writable($cachePath)) {
  * not, file caching will be used. Most of this code is for getting you up and running only, and
  * should be replaced with a hard-coded configuration, based on the cache(s) you plan to use.
  */
-$default = array('adapter' => 'File', 'strategies' => array('Serializer'));
+$blackprint = array('adapter' => 'File', 'strategies' => array('Serializer'));
 
 if ($apcEnabled) {
-	$default = array('adapter' => 'Apc');
+	$blackprint = array('adapter' => 'Apc');
 }
-Cache::config(compact('default'));
+Cache::config(compact('blackprint'));
 
 /**
  * Caches paths for auto-loaded and service-located classes.
@@ -47,14 +47,14 @@ Cache::config(compact('default'));
 Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	$key = md5(LITHIUM_APP_PATH) . '.core.libraries';
 
-	if ($cache = Cache::read('default', $key)) {
+	if ($cache = Cache::read('blackprint', $key)) {
 		$cache = (array) $cache + Libraries::cache();
 		Libraries::cache($cache);
 	}
 	$result = $chain->next($self, $params, $chain);
 
 	if ($cache != Libraries::cache()) {
-		Cache::write('default', $key, Libraries::cache(), '+1 day');
+		Cache::write('blackprint', $key, Libraries::cache(), '+1 day');
 	}
 	return $result;
 });

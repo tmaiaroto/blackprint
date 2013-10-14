@@ -33,7 +33,7 @@ $config = Session::config();
 $config += array(
 	'cookie' => array('adapter' => 'Cookie'),
 	'default' => array('adapter' => 'Php'),
-	//'default' => array('adapter' => 'Model', 'model' => 'app\models\Session'),
+	'blackprint' => array('adapter' => 'Model', 'model' => 'blackprint\models\Session'),
 	'flash_message' => array('adapter' => 'Php')
 );
 

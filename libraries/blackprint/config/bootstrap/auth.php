@@ -11,7 +11,7 @@ Auth::config(array(
 		//'password' => 'app\models\User::hashPassword'
 		),*/
 		'session' => array(
-			'options' => array('name' => 'default')
+			'options' => array('name' => 'blackprint')
 		)
 	)
 ));
