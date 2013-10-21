@@ -6,7 +6,7 @@ use lithium\core\Libraries;
 // set Logger confiurations without them being overwritten here.
 $config = Logger::config();
 $config += array(
-	'default' => array(
+	'blackprint' => array(
 		'adapter' => 'File',
 		'priority' => array(
 			'debug', 'alert', 'error'

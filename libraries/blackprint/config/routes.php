@@ -26,6 +26,7 @@ Router::connect("/my-account", array('library' => 'blackprint', 'controller' => 
 // Now, /admin will simply go to the user's personal dashboard instead of a static page. These dashboards can be customized.
 Router::connect("/admin", array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'dashboard'));
 Router::connect("/admin/my-account", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+Router::connect("/admin/login", array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'login'));
 
 // Convenient short routes for the DocumentationController (so the URL doesn't need to include "view" for the action).
 Router::connect("/documentation", array('library' => 'blackprint', 'admin' => true, 'controller' => 'documentation', 'action' => 'view', 'args' => array()), array('persist' => array(

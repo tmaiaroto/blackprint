@@ -165,7 +165,4 @@ Libraries::add('blackprint', array(
 	'navbarTitle' => $uiOptions['navbarTitle'],
 	'adminNavbarTitle' => $uiOptions['adminNavbarTitle']
 ));
-
-Libraries::add('li3_flash_message');
-Libraries::add('li3_access');
 ?>

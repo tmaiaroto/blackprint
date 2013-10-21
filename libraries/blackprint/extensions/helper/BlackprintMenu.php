@@ -49,7 +49,7 @@ class BlackprintMenu extends \lithium\template\Helper {
 
 		// if told to use the menu from cache (note: filters will not be applied for this call because Menu::staticMenu() should not be called provided there's a copy in cache)
 		if(!empty($options['cache'])) {
-			$menu = Cache::read('default', $cache_key);
+			$menu = Cache::read('blackprint', $cache_key);
 		}
 
 		// if the menu hasn't been set in cache or it was empty for some reason, get a fresh copy of its data
@@ -59,7 +59,7 @@ class BlackprintMenu extends \lithium\template\Helper {
 
 		// if using cache, write the menu data to the cache key
 		if(!empty($options['cache'])) {
-			Cache::write('default', $cache_key, $menu, $options['cache']);
+			Cache::write('blackprint', $cache_key, $menu, $options['cache']);
 		}
 
 		// Format the HTML for the menu

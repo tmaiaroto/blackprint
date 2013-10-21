@@ -25,7 +25,7 @@ class Blackprint extends \lithium\template\helper\Html {
 	*/
 	public function flash($options=array()) {
 		$defaults = array(
-			'key' => 'default',
+			'key' => 'blackprint',
 			// options for the layout template, some of these options are specifically for the pnotify jquery plugin
 			'options' => array(
 				'type' => 'growl',

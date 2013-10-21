@@ -12,6 +12,7 @@ use lithium\net\http\Router;
 use lithium\action\Response;
 use lithium\security\Auth;
 use lithium\core\Libraries;
+use lithium\storage\Session;
 
 use li3_access\security\Access;
 use li3_flash_message\extensions\storage\FlashMessage;
@@ -29,15 +30,38 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	$request = $params['request'];
 	$action = $request->action;
 	$user = Auth::check('blackprint');
-	
+
+	// This is a little bit hacky. FlashMessage storage seems to have an issue in our case here.
+	$accessFlash = Session::read('blackprintAccessMessage', array('name' => 'cookie'));
+	if($accessFlash) {
+		FlashMessage::write($accessFlash, 'blackprint');
+		Session::delete('blackprintAccessMessage');
+	}	
+
 	// Protect all admin methods except for login and logout.
 	if($request->admin === true && $action != 'login' && $action != 'logout') {
-		$action_access = Access::check('blackprint', $user, $request, array('rules' => array('allowManagers')));
-		if(!empty($action_access)) {
-			FlashMessage::write($action_access['message'], 'blackprint');
+		$actionAccess = Access::check('blackprint', $user, $request, array('rules' => array('allowManagers')));
+		if(!empty($actionAccess)) {
+			// NOTE & TODO: For some reason this doesn't work here with MongoDB based session storage...
+			// It seems to store, you can get the data back out immediately, but the redirects seem to remove the session data.
+			// However, using the Session class straight up seems to keep the data as expected. Maybe a bug or edge case with FlashMessage?
+			// In fact, I'm going to use Cookie instead. No sense in writing messages to the database for everyone.
+			// FlashMessage::write($actionAccess['message'], 'blackprint');
+			Session::write('blackprintAccessMessage', $actionAccess['message'], array('name' => 'cookie'));
 			if($user) {
-				header('Location: ' . Router::match($action_access['redirect']));
+				//$location = Router::match($actionAccess['redirect']);
+				//return new Response(compact('location', 'request'));
+				header('Location: ' . Router::match($actionAccess['redirect']));
 			} else {
+				// NOTE: Returning Response() would work if filtering the '_call' or 'run' method on the Dispatcher.
+				// I wanted to filter '_callable' for some reason or another...
+				// TODO: Look into that and maybe why.
+				// I believe it may have been done for execution order - this may be the earliest check available for access.
+				// Which would be better for performance (in theory) and security (or at least feels better for security).
+				// While "ugly" because it's not using Lithium's facilities, header() is a faster call. So maybe leave it.
+
+				//$location = array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login');
+				//return new Response(compact('location', 'request'));
 				header('Location: ' . Router::match(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login')));
 			}
 		// None shall pass.
