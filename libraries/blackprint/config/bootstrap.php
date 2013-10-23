@@ -1,5 +1,27 @@
 <?php
 /**
+ * This file contains configuration for cache. Most likely the main application
+ * will also have a similar file but, just in case, Blackprint creates its own
+ * configuration to use.
+ */
+require __DIR__ . '/bootstrap/cache.php';
+
+/**
+ * The connections file includes various database connection configurations
+ * from the main application's config/connections directory. To allow for
+ * a flexible configuration without Blackprint making any assumptions.
+ */
+require __DIR__ . '/bootstrap/connections.php';
+
+/**
+ * Load the configuration for Blackprint from the database.
+ * Obviously the database configuration can't come from here, but there
+ * are a bunch of configuration options that can be stored in the database
+ * and used during bootstrap.
+*/
+require __DIR__ . '/bootstrap/config.php';
+
+/**
  * The libraries file contains the loading instructions for all plugins, frameworks and other class
  * libraries used in the application, including the Lithium core, and the application itself. These
  * instructions include library names, paths to files, and any applicable class-loading rules. This
@@ -31,13 +53,6 @@ require __DIR__ . '/bootstrap/media.php';
  * Log files will be written to /resources/tmp/logs
  */
 require __DIR__ . '/bootstrap/logging.php';
-
-/**
- * The connections file includes various database connection configurations
- * from the main application's config/connections directory. To allow for
- * a flexible configuration without Blackprint making any assumptions.
- */
-require __DIR__ . '/bootstrap/connections.php';
 
 /**
  * The default Blackprint static menu.

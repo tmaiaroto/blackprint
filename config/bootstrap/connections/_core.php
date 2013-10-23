@@ -17,22 +17,32 @@
  * In the optional `config.ini` file under the `config` directory (create one
  * if it doesn't exist), ensure you have a [mongodb] section. Under that section
  * use the following keys:
- * database=
- * host=
+ * database= (required)
+ * host= (required)
  * timeout=
  * login=
  * password=
  * port=
  * devDatabase=
  * devHosts=
+ * replicaSet=
+ * readPreference=
  * 
  * devHosts is a comma separated string, for ex: localhost,www.mydevsite.com
  * Same goes for host. That key will be used for the MongoDB connection, so
  * when you are using replica sets, it is a comma separate string with optional
  * port numbers after each host name. See Mongo docs for more on that one.
+ *
+ * NOTE: When using replica sets, these host names must match EXACTLY.
+ * If you're unsure how Mongo sees those hostnames, simply use the mongo shell
+ * and issue the following command: `rs.conf()` and you'll see all the members
+ * with their hostname:port exactly as you need to specify.
+ * Even IF you have host aliases under /etc/hosts and can connect using those
+ * from command line, it still has to be exactly how MongoDB sees things.
  */
 use lithium\data\Connections;
 use lithium\core\Environment;
+use \MongoClient;
 
 // For CLI
 $env = 'production';
@@ -52,7 +62,7 @@ $defaults = array(
 	// this is a good value for remote MongoDB services such as MongoLab or MongoHQ or Object Rocket, etc.
 	// on a local server, this is obviously quite generous and could be lowered...
 	'timeout' => 81000,
-	'devHosts' => array('localhost', 'blackprint.dev.local')
+	'devHosts' => array('localhost', 'blackprint.dev.local', 'blackprint.localdev.com')
 );
 $options = $defaults;
 
@@ -82,6 +92,49 @@ $dbOptions = array(
 	'host' => $options['host'],
 	'timeout' => $options['timeout']
 );
+
+// For replica sets. This value should be the name of the replica set.
+if(isset($options['replicaSet']) && !empty($options['replicaSet'])) {
+	$dbOptions['replicaSet'] = $options['replicaSet'];
+}
+
+// For read preference (NOTE: All read preferences other than RP_PRIMARY may return stale data).
+if(isset($options['readPreference']) && !empty($options['readPreference'])) {
+	// Cover all our bases here and allow values that are similar in nature.
+	switch($options['readPreference']) {
+		case 'primary':
+		case 'RP_PRIMARY':
+		case 'rp_primary':
+		case 'MongoClient::RP_PRIMARY':
+		default:
+			$dbOptions['readPreference'] = MongoClient::RP_PRIMARY;
+			break;
+		case 'primary_perferred':
+		case 'RP_PRIMARY_PREFERRED':
+		case 'rp_primary_preferred':
+		case 'MongoClient::RP_PRIMARY_PREFERRED':
+			$dbOptions['readPreference'] = MongoClient::RP_PRIMARY_PREFERRED;
+			break;
+		case 'secondary':
+		case 'RP_SECONDARY':
+		case 'rp_secondary':
+		case 'MongoClient::RP_SECONDARY':
+			$dbOptions['readPreference'] = MongoClient::RP_SECONDARY;
+			break;
+		case 'secondary_preferred':
+		case 'RP_SECONDARY_PREFERRED':
+		case 'rp_secondary_preferred':
+		case 'MongoClient::RP_SECONDARY_PREFERRED':
+			$dbOptions['readPreference'] = MongoClient::RP_SECONDARY_PREFERRED;
+			break;
+		case 'nearest':
+		case 'RP_NEAREST':
+		case 'rp_nearest':
+		case 'MongoClient::RP_NEAREST':
+			$dbOptions['readPreference'] = MongoClient::RP_NEAREST;
+			break;
+	}
+}
 
 // Typically we firewall our MongoDB, but for those of you using a service or who just
 // like to have a username and password anyway....

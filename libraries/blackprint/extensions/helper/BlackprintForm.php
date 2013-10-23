@@ -29,6 +29,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			'helpClass' => '',
 			'class' => 'form-control',
 			'groupClass' => '',
+			'groupStyle' => '',
 			'size' => false,
 			'type' => 'text',
 			'options' => array() // select/radio options
@@ -41,6 +42,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		$helpElement = $options['helpElement'];
 		$helpClass = $options['helpClass'];
 		$groupClass = 'form-group ' . $options['groupClass'];
+		$groupStyle = $options['groupStyle'];
 		$size = $options['size'];
 		if($size) {
 			$groupClass .= ' col-md-' . $size;
@@ -56,6 +58,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		unset($options['helpClass']);
 		unset($options['options']);
 		unset($options['size']);
+		unset($options['groupStyle']);
 		
 		$prepend = isset($options['prepend']) ? $options['prepend']:'';
 		$append = isset($options['append']) ? $options['append']:'';
@@ -70,7 +73,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		unset($options['prepend']);
 		unset($options['append']);
 		
-		$options['template'] = '<div class="' . $groupClass . '" {:wrap}>{:label}<div class="' . $inputDivClass . '">' . $prepend . '{:input}' . $append . '</div>';
+		$options['template'] = '<div class="' . $groupClass . '" {:wrap}>{:label}<div class="' . $inputDivClass . '" style="' . $groupStyle . '">' . $prepend . '{:input}' . $append . '</div>';
 			if($help) {
 				$options['template'] .= '<' . $helpElement . ' class="' . $helpClass . '">' . $help . '</' . $helpElement . '>';
 			}

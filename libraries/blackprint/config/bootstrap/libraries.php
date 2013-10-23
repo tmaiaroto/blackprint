@@ -12,6 +12,7 @@ use lithium\core\Libraries;
 
 Libraries::add('li3_flash_message');
 Libraries::add('li3_access');
+Libraries::add('lusitanian', array('bootstrap' => 'oauth/src/OAuth/bootstrap.php'));
 
 $appConfig =  Libraries::get(true);
 $libd = $appConfig['path'] . '/config/bootstrap/libraries/*.php';

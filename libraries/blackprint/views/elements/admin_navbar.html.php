@@ -36,6 +36,9 @@ $user = $this->request()->user;
 						</a>
 					
 						<ul class="dropdown-menu">
+							<?php if($user['role'] == 'administrator'){ ?>
+								<li><?=$this->html->link('CMS Configuration', '/admin/config'); ?></li>
+							<?php } ?>
 							<li><?=$this->html->link('My Account', '/admin/my-account'); ?></li>
 							<li class="divider"></li>
 							<li><a href="/logout">Sign Out</a></li>

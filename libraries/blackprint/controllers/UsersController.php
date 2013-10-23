@@ -269,6 +269,26 @@ class UsersController extends \lithium\action\Controller {
 
 		$document = User::create();
 
+		// For users logging in, for the first time, via some external service such as Twitter or Facebook.
+		$externalRegistration = Session::read('externalRegistration', array('name' => 'blackprint'));
+		// Set any basic data from the service that Blackprint may want to be displayed in the registration form.
+		// Note: By having this registration process, the user must click "submit" after reviewing the information pulled
+		// from the external service. This satisfies the TOS for pretty much all of these services as far as I can tell.
+		// However, automatically storing the information without the user's consent is problematic.
+		// It is a shame that the user experience is "register" OR "login with xxxxx" while both take the user to register.
+		// Though it's important in the event a user decides to login using Twitter one day and then Facebook the next.
+		// This way, we can hit them with a registration again, they'll hopefully use the same e-mail and password and
+		// we can associate their new social media account with the same User document.
+		/*
+		if(!empty($externalRegistration)) {
+			if(!$this->request->data) {
+				$assumedName = explode(' ', $externalRegistration['name']);
+				$document->firstName = isset($assumedName[0]) ? $assumedName[0]:null;
+				$document->lastName = isset($assumedName[1]) ? $assumedName[1]:null;
+			}
+		}
+		*/
+
 		// Save
 		if ($this->request->data) {
 			// CSRF
@@ -276,16 +296,46 @@ class UsersController extends \lithium\action\Controller {
 				RequestToken::get(array('regenerate' => true));
 			} else {
 				$now = new MongoDate();
-				$this->request->data['created'] = $now;
+
+				// If the user is registering a new third party service to their existing account.
+				// Let them "register" but really it could be an update. So when setting data below,
+				// look for it from the $document first.
+				if(!empty($externalRegistration) && isset($externalRegistration['service'])) {
+					$service = $externalRegistration['service'];
+					unset($externalRegistration['service']);
+					
+					// All stuff that the user is not asked upon registration anyway. These settings can be changed later under "/my-account"
+					$this->request->data['utcOffset'] = (isset($externalRegistration['utcOffset']) && !empty($externalRegistration['utcOffset'])) ? $externalRegistration['utcOffset']:null;
+					$this->request->data['timezone'] = (isset($externalRegistration['timezone']) && !empty($externalRegistration['timezone'])) ? $externalRegistration['timezone']:null;
+					$this->request->data['locale'] = (isset($externalRegistration['locale']) && !empty($externalRegistration['locale'])) ? $externalRegistration['locale']:null;
+					$this->request->data['profilePicture'] = (isset($externalRegistration['profilePicture']) && !empty($externalRegistration['profilePicture'])) ? $externalRegistration['profilePicture']:null;
+
+					$existingUser = Auth::check('blackprint', $this->request);
+					if($existingUser) {
+						$document = User::find('first', array('conditions' => array('_id' => $existingUser['_id'])));
+					}
+					// Of course if not found, create a new document.
+					if(empty($document)) {
+						$document = User::create();
+					}
+
+					// For existing accounts, ensure we append to this field and not overwrite it.
+					if(!empty($document->externalAuthServices)) {
+						$this->request->data['externalAuthServices'] = $document->externalAuthServices->data();
+					}
+					$this->request->data['externalAuthServices'][$service] = $externalRegistration;
+				}
+
+				$this->request->data['created'] = (!empty($document->created)) ? $document->created:$now;
+				$this->request->data['active'] = (!empty($document->active)) ? $document->active:true;
 				$this->request->data['modified'] = $now;
 
-				$this->request->data['active'] = true;
-
 				// Set the pretty URL that gets used by a lot of front-end actions.
-				$this->request->data['url'] = $this->_generateUrl();
+				$this->request->data['url'] = (!empty($document->_id)) ? $this->_generateUrl($document->_id):$this->_generateUrl();
 
-				// Set the user's role...always hard coded and set.
-				$this->request->data['role'] = 'registered_user';
+				// Set the user's role...always hard coded and set to "registered_user" when using this action
+				// to register a NEW user. Otherwise, leave it set to whatever it was.
+				$this->request->data['role'] = (!empty($document->role)) ? $document->role:'registered_user';
 
 				// However, IF this is the first user ever created, then they will be an administrator.
 				$users = User::find('count');
@@ -301,6 +351,18 @@ class UsersController extends \lithium\action\Controller {
 
 				if($document->save($this->request->data, array('validate' => $rules))) {
 					FlashMessage::write('User registration successful.', 'blackprint');
+					// Delete this session data that was used during registration.
+					Session::delete('externalRegistration', array('name' => 'blackprint'));
+					// Not set on $this->request->data of course, but needed by authentation and this controller at various points.
+					$this->request->data['_id'] = $document->_id;
+					// Let everything looking at Auth data know which service the user linked when registering.
+					if(isset($service)) {
+						$this->request->data['socialLoginService'] = $service;
+					}
+					$user = Auth::set('blackprint', $this->request->data);
+					if($externalRegistration) {
+						return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+					}
 					$this->redirect('/');
 				} else {
 					$this->request->data['password'] = '';
@@ -308,7 +370,7 @@ class UsersController extends \lithium\action\Controller {
 			}
 		}
 
-		$this->set(compact('document'));
+		$this->set(compact('document', 'externalRegistration'));
 	}
 
 	/*
@@ -327,21 +389,52 @@ class UsersController extends \lithium\action\Controller {
 	 *
 	 * @return type
 	*/
-	public function login() {
-		$user = Auth::check('blackprint', $this->request);
+	public function login($service=null) {
+		if(empty($service)) {
+			// All users ultimately have to have a User document.
+			$user = Auth::check('blackprint', $this->request);
+		} else {
+			// But they can login using certain OAuth services like Twitter, Facebook, etc.
+			// Note: The service configuration name will be prefixed by "blackprint_" though we don't want
+			// that to be shown in the URL of course (and it's also not stored in the database).
+			// It's also going to be lowercase. Always. Since a configuration name of 'twitter' is going
+			// to be fairly common and perhaps even used by a third party add-on or something, prefix
+			// it to ensure there's no configuration naming conflicts.
+			$service = strtolower($service);
+			$serviceConfigName = 'blackprint_' . $service;
+			
+			// Of course, exceptions will be thrown if the configuration is not available. So check for it first.
+			$configurations = Auth::config();
+			if(!isset($configurations[$serviceConfigName])) {
+				return $this->redirect('/');
+			}
+			$user = Auth::check($serviceConfigName, $this->request);
+			// If so we get back less data (vs. a User document lookup), but that's ok.
+			// We use what we can get back from the service to lookup locally and automatically
+			// set authentication because we choose to trust these services in this case.
+			if($user && isset($user['socialLogin'])) {
+				// Of course, $user['socialLogin']['userId'] must be unique PER service.
+				$externalUserId = isset($user['socialLogin']['userId']) ? $user['socialLogin']['userId']:false;
+				$userDocument = User::find('first', array('conditions' => array('externalAuthServices.' . $service . '.userId' => $externalUserId)));
+				if(!empty($userDocument)) {
+					$userData = $userDocument->data();
+					// Don't set the user's password in the Auth data.
+					unset($userData['password']);
+					// Do set the service name that authenticated the user though. This lets anything looking at Auth data know how the user chose to log in this time.
+					$userData['socialLoginService'] = $service;
+					$user = Auth::set('blackprint', $userData);
+				} else {
+					// If the user hasn't fully registered yet, send them to do that now.
+					// Of course let's hang on to some of this data from the external OAuth service so they can login in the future.
+					Session::write('externalRegistration', $user['socialLogin'], array('name' => 'blackprint'));
+					return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register'));
+				}
+			}
+		}
+
 		// 'triedAuthRedirect' so we don't end up in a redirect loop
 		if (!Session::check('triedAuthRedirect', array('name' => 'cookie'))) {
 			Session::write('triedAuthRedirect', 'false', array('name' => 'cookie', 'expires' => '+1 hour'));
-		}
-
-		// Facebook returns a session querystring... We don't want to show this to the user.
-		// Just redirect back so it ditches the querystring. If the user is logged in, then
-		// it will redirect like expected using the $url variable that has been set below.
-		// Not sure why we need to do this, I'd figured $user would be set...And I think there's
-		// a session just fine if there was no redirect and the user navigated away...
-		// But for some reason it doesn't see $user and get to the redirect() part...
-		if(isset($_GET['session'])) {
-			$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login'));
 		}
 
 		if ($user) {
@@ -353,6 +446,9 @@ class UsersController extends \lithium\action\Controller {
 				case 'administrator':
 				case 'content_editor':
 					$url = '/admin';
+					break;
+				case 'new_user':
+					$url = '/register';
 					break;
 				default:
 					$url = '/';
@@ -377,10 +473,10 @@ class UsersController extends \lithium\action\Controller {
 			}
 
 			// Save last login IP and time
-			$user_document = User::find('first', array('conditions' => array('_id' => $user['_id'])));
+			$userDocument = User::find('first', array('conditions' => array('_id' => $user['_id'])));
 
-			if($user_document) {
-				$user_document->save(array('lastLoginIp' => $_SERVER['REMOTE_ADDR'], 'lastLoginTime' => new MongoDate()));
+			if($userDocument) {
+				$userDocument->save(array('lastLoginIp' => $_SERVER['REMOTE_ADDR'], 'lastLoginTime' => new MongoDate()));
 			}
 
 			// only set a flash message if this is a login. it could be a redirect from somewhere else that has restricted access
@@ -411,6 +507,17 @@ class UsersController extends \lithium\action\Controller {
 	*/
 	public function logout() {
 		Auth::clear('blackprint');
+		// Clear all Auth configurations.
+		$configurations = Auth::config();
+		foreach($configurations as $name => $config) {
+			// Prefixing the Auth config names with "blackprint_" also helps here.
+			// Now, only Blackprint Auth will be cleared upon logout. Other libraries
+			// using the Auth class will need to clear their own sessions and this logout()
+			// action won't clear any session data it shouldn't.
+			if(strstr($name, 'blackprint_')) {
+				Auth::clear($name);
+			}
+		}
 		FlashMessage::write('You\'ve successfully logged out.', 'blackprint');
 		$this->redirect('/');
 	}

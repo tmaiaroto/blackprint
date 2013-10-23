@@ -24,6 +24,10 @@ class User extends \blackprint\models\BaseModel {
 		'firstName' => array('type' => 'string'),
 		'lastName' => array('type' => 'string'),
 		'profilePicture' => array('type' => 'string'),
+		'utcOffset' => array('type' => 'number'),
+		'timezone' => array('type' => 'string'),
+		'locale' => array('type' => 'string'),
+		'externalAuthServices' => array('type' => 'object'),
 		'url' => array('type' => 'string'),
 		'email' => array('type' => 'string'),
 		'password' => array('type' => 'string'),
@@ -31,6 +35,7 @@ class User extends \blackprint\models\BaseModel {
 		'active' => array('type' => 'boolean'),
 		'lastLoginIp' => array('type' => 'string'),
 		'lastLoginTime' => array('type' => 'date'),
+		'modified' => array('type' => 'date'),
 		'created' => array('type' => 'date')
 	);
 

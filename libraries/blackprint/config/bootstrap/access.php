@@ -27,9 +27,23 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	// TODO: Perhaps allow this to be skipped...
 	$next = $chain->next($self, $params, $chain);
 	
+
 	$request = $params['request'];
 	$action = $request->action;
 	$user = Auth::check('blackprint');
+
+	// Special role for new visitors logging in and registering using OAuth from some other supported service such as Twitter or Facebook.
+	// Or, catch no role at all.
+	if($user && ((isset($user['role']) && $user['role'] == 'new_user') || !isset($user['role'])) && $action != 'register' && $action != 'logout') {
+		Session::write('blackprintAccessMessage', 'Please complete your registration.', array('name' => 'cookie'));
+		header('Location: ' . Router::match(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register')));
+		exit();
+	}
+
+	// Clear any temporary session data from the OAuth process (there would be cookies like "blackprint_twitter" otherwise and that's not needed after the user registers).
+	if(isset($user['socialLoginService'])) {
+		Session::delete('blackprint_' . $user['socialLoginService']);
+	}
 
 	// This is a little bit hacky. FlashMessage storage seems to have an issue in our case here.
 	$accessFlash = Session::read('blackprintAccessMessage', array('name' => 'cookie'));
