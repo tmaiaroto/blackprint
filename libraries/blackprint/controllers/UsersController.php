@@ -253,6 +253,11 @@ class UsersController extends \lithium\action\Controller {
 	 * Registers a user.
 	*/
 	public function register() {
+		// Don't let a logged in user register again. That would be silly.
+		if(isset($this->request->user) && !empty($this->request->user)) {
+			return $this->redirect('/');
+		}
+
 		// Special rules for registration
 		$rules = array(
 			'email' => array(
