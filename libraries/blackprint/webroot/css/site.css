@@ -52,3 +52,35 @@ footer {
 footer hr {
 	border-color: #333;
 }
+
+/* Vertical Margins */
+.mg-top-5 {
+	margin-top: 5px;
+}
+.mg-top-10 {
+	margin-top: 10px;
+}
+.mg-top-15 {
+	margin-top: 15px;
+}
+.mg-top-20 {
+	margin-top: 20px;
+}
+.mg-top-25 {
+	margin-top: 25px;
+}
+.mg-bottom-5 {
+	margin-bottom: 5px;
+}
+.mg-bottom-10 {
+	margin-bottom: 10px;
+}
+.mg-bottom-15 {
+	margin-bottom: 15px;
+}
+.mg-bottom-20 {
+	margin-bottom: 20px;
+}
+.mg-bottom-25 {
+	margin-bottom: 25px;
+}

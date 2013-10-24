@@ -1,55 +1,103 @@
 <?=$this->html->script('/blackprint/js/bootstrapUserValidation', array('inline' => false)); ?>
 <div class="row">
-	<div class="span12">
-		<h2 id="page-heading">Registration</h2>
+	<div class="col-md-6">
+	<?=$this->BlackprintForm->create($document, array('class' => 'form-horizontal', 'id' => 'register-form', 'onSubmit' => 'return submitCheck();')); ?>
+		<?=$this->security->requestToken(); ?>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<?php if(!empty($externalRegistration)) { ?>
+					<span id="complete-registration-text">Complete Your Registration</span> <small class="pull-right"><a href="#" id="already-have-account-link" onClick="linkNewAccount();">I already have an account</a></small>
+				<?php } else { ?>
+					Register
+				<?php } ?>
+			</div>
+			<div class="container">
+				<?php if(!empty($externalRegistration)) { ?>
+					<div id="register-new-service" class="mg-top-10" style="display:none;">
+						Login using your existing account on this site and link your account from <?=$externalRegistration['serviceName']; ?>.
+					</div>
+				<?php } ?>
+				<div id="register-fields">
+					<div class="row mg-top-10">
+						<?=$this->BlackprintForm->field('firstName', array('type' => 'text', 'label' => 'First Name', 'groupClass' => 'col-md-6')); ?>
+						<?=$this->BlackprintForm->field('lastName', array('type' => 'text', 'label' => 'Last Name', 'groupClass' => 'col-md-6')); ?>
+					</div>
+					<div class="row mg-top-10">
+						<?=$this->BlackprintForm->field('email', array('type' => 'text', 'label' => 'E-mail Address', 'groupClass' => 'col-md-12')); ?>
+					</div>
+					<div class="row mg-top-10 mg-bottom-15">
+						<?=$this->BlackprintForm->field('password', array('type' => 'password', 'placeholder' => 'Not your dog\'s name', 'label' => 'Password', 'help' => 'Must be at least 6 characters long.', 'groupClass' => 'col-md-6')); ?>
+						<?=$this->BlackprintForm->field('passwordConfirm', array('type' => 'password', 'label' => 'Confirm Password', 'help' => 'Just to be sure, type the password again.', 'groupClass' => 'col-md-6')); ?>
+					</div>
+				</div>
+				<?php if(!empty($externalRegistration)) { ?>
+					<div id="register-new-service-fields" style="display:none;">
+						<div class="row mg-top-10 mg-bottom-10">
+							<?=$this->BlackprintForm->field('emailLogin', array('type' => 'text', 'label' => 'E-mail Address', 'groupClass' => 'col-md-6')); ?>
+							<?=$this->BlackprintForm->field('passwordLogin', array('type' => 'password', 'label' => 'Password', 'groupClass' => 'col-md-6')); ?>
+						</div>
+						<div class="row mg-bottom-15" style="padding-left: 15px;">
+							<small><a href="#" id="register-new-account-link" onClick="registerNewAccount();">I don't have an account on this site yet.</a></small>
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+			<div class="panel-footer">
+				<?=$this->BlackprintForm->submit('Submit', array('class' => 'btn btn-primary pull-right')); ?> <?=$this->html->link('Cancel', array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'index'), array('class' => 'btn pull-right')); ?>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
 		<?php if(!empty($externalRegistration)) { ?>
+			<h2>Register Using <?=$externalRegistration['serviceName']; ?></h2>
 			<p>
-				You logged in via <?=$externalRegistration['serviceName']; ?>, but you still need to register your account. All that's required is your name, e-mail address, and your desired password. While <?=$externalRegistration['serviceName']; ?> is authenticating you, it is possible that you will want to login using a different service in the future. This allows you to use and login with multiple social media accounts with your single user here. Of course you will also be able to login using your e-mail address and chosen password as well.
+				You logged in via <?=$externalRegistration['serviceName']; ?>, but you still need to register locally. This way you can associate multiple 3rd party services in the future if you choose (for example if you wanted to login with Facebook today and Twitter tomorrow). Otherwise, you would have multiple user accounts on this site.
 			</p>
+		<?php } else { ?>
+			<h2>Register a New Account</h2>
 			<p>
-				<strong>Note:</strong> If you have already logged in using a different service (Facebook, Google, Instagram, etc.) and registered, you should use the same e-mail address and password below that you used before. This will link the new third party service with your account here. In that case, you're not registering so much as you are adding a new login option. Alternatively, you can also link your other accounts from third party services from your account settings page if you were logged in.
+				To register, simply fill out the form on the left. There's only some basic information that's required to login but, once registered, you will be able to manage this information and additional details regarding your account.
 			</p>
 		<?php } ?>
-		<br />
-		<?=$this->form->create($document, array('class' => 'form-horizontal', 'onSubmit' => 'return submitCheck();')); ?>
-			<?=$this->security->requestToken(); ?>
-				<div class="control-group">
-					<?=$this->form->label('UserFirstName', 'First Name', array('class' => 'control-label')); ?>
-					<div class="controls">
-						<?=$this->form->field('firstName', array('label' => false, 'placeholder' => 'John', 'class' => 'input-xlarge'));?>
-					</div>
-				</div>
-				<div class="control-group">
-					<?=$this->form->label('UserLastName', 'Last Name', array('class' => 'control-label')); ?>
-					<div class="controls">
-						<?=$this->form->field('lastName', array('label' => false, 'placeholder' => 'Doe', 'class' => 'input-xlarge'));?>
-					</div>
-				</div>
-				<div class="control-group">
-					<?=$this->form->label('UserEmail', 'E-mail', array('class' => 'control-label')); ?>
-					<div class="controls">
-						<?=$this->form->field('email', array('label' => false, 'class' => 'input-xlarge'));?>
-						<p class="help-block">Provide an e-mail address to login with.</p>
-					</div>
-				</div>
-				<div class="control-group">
-					<?=$this->form->label('UserPassword', 'Password', array('class' => 'control-label')); ?>
-					<div class="controls">
-						<?=$this->form->field('password', array('type' => 'password', 'label' => false, 'placeholder' => 'Not your dog\'s name', 'class' => 'input-xlarge'));?>
-						<p class="help-block">Choose a password at least 6 characters long.</p>
-					</div>
-				</div>
-				<div class="control-group">
-					<?=$this->form->label('UserPasswordConfirm', 'Confirm Password', array('class' => 'control-label')); ?>
-					<div class="controls">
-						<?=$this->form->field('passwordConfirm', array('type' => 'password', 'label' => false, 'class' => 'input-xlarge'));?>
-						<p class="help-block">Just to be sure, type the password again.</p>
-					</div>
-				</div>
-				
-				<div class="form-actions">
-					<?=$this->form->submit('Submit', array('class' => 'btn btn-primary')); ?> <?=$this->html->link('Cancel', array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'index'), array('class' => 'btn')); ?>
-				</div>
-			<?=$this->form->end(); ?>
 	</div>
+	<?=$this->BlackprintForm->end(); ?>
 </div>
+
+<?php if(!empty($externalRegistration)) { ?>
+<script type="text/javascript">
+var linkNewAccount = function() {
+	$('#register-fields').hide();
+	$('#register-new-service').show();
+	$('#register-new-service-fields').show();
+	$('#register-form').attr('onSubmit', '');
+	$('#already-have-account-link').hide();
+	$('#register-new-account-link').show();
+	$('#complete-registration-text').text('Link New Account From Another Service');
+	$('#UserPassword').val('');
+	$('#UserPasswordConfirm').val('');
+	$('#UserEmail').val('');
+	$('#UserFirstName').val('');
+	$('#UserLastName').val('');
+};
+var registerNewAccount = function() {
+	$('#register-fields').show();
+	$('#register-new-service').hide();
+	$('#register-new-service-fields').hide();
+	$('#register-form').attr('onSubmit', 'return submitCheck();');
+	$('#already-have-account-link').show();
+	$('#register-new-account-link').hide();
+	$('#complete-registration-text').text('Complete Your Registration');
+	$('#UserPassword').val('');
+	$('#UserPasswordConfirm').val('');
+	$('#UserEmail').val('');
+	$('#UserFirstName').val('');
+	$('#UserLastName').val('');
+
+	$('#UserEmailLogin').val('');
+	$('#UserPasswordLogin').val('');
+};
+
+</script>
+<?php } ?>

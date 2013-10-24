@@ -310,6 +310,20 @@ class UsersController extends \lithium\action\Controller {
 					$this->request->data['locale'] = (isset($externalRegistration['locale']) && !empty($externalRegistration['locale'])) ? $externalRegistration['locale']:null;
 					$this->request->data['profilePicture'] = (isset($externalRegistration['profilePicture']) && !empty($externalRegistration['profilePicture'])) ? $externalRegistration['profilePicture']:null;
 
+					// Just keeping form data straight. While we could use "email" and "password" to login from the form in the template...
+					// The form fields appear twice on the page. So by using completely different form field names, we avoid any possibility
+					// of passing along incorrect or empty information due to multiple fields with the same name. Alternatively, the JavaScript
+					// in the register template could change to completely remove form fields...But let's do it here to cover all the bases.
+					// Maybe a template override will work differently. This provides a consistent "emailLogin" and "passwordLogin" convention
+					// for this particular scenario.
+					if(isset($this->request->data['emailLogin']) && !empty($this->request->data['emailLogin'])) {
+						$this->request->data['email'] = $this->request->data['emailLogin'];
+						unset($this->request->data['emailLogin']); // don't technically need to unset, model schema won't allow save and it shouldn't affect Auth:check()
+					}
+					if(isset($this->request->data['passwordLogin']) && !empty($this->request->data['passwordLogin'])) {
+						$this->request->data['password'] = $this->request->data['passwordLogin'];
+						unset($this->request->data['passwordLogin']);
+					}
 					$existingUser = Auth::check('blackprint', $this->request);
 					if($existingUser) {
 						$document = User::find('first', array('conditions' => array('_id' => $existingUser['_id'])));
@@ -317,6 +331,16 @@ class UsersController extends \lithium\action\Controller {
 					// Of course if not found, create a new document.
 					if(empty($document)) {
 						$document = User::create();
+					} else {
+						// It is possible the user is linking a new 3rd party account and did not enter their name in again.
+						// Why make them do that if they already have an account? In that case, unset the values from the form,
+						// which are empty, so the user doesn't clear out their name upon save.
+						if(!empty($document->firstName) && empty($this->request->data['firstName'])) {
+							unset($this->request->data['firstName']);
+						}
+						if(!empty($document->lastName) && empty($this->request->data['lastName'])) {
+							unset($this->request->data['lastName']);
+						}
 					}
 
 					// For existing accounts, ensure we append to this field and not overwrite it.
@@ -359,9 +383,14 @@ class UsersController extends \lithium\action\Controller {
 					if(isset($service)) {
 						$this->request->data['socialLoginService'] = $service;
 					}
-					$user = Auth::set('blackprint', $this->request->data);
+					$existingDocData = array();
+					if(!empty($document)) {
+						$existingDocData = $document->data();
+					}
+					$user = Auth::set('blackprint', $existingDocData += $this->request->data);
 					if($externalRegistration) {
-						return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+						FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.', 'blackprint');
+						$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 					}
 					$this->redirect('/');
 				} else {

@@ -28,7 +28,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			'help' => false,
 			'helpClass' => '',
 			'class' => 'form-control',
-			'groupClass' => '',
+			'groupClass' => 'form-group',
 			'groupStyle' => '',
 			'size' => false,
 			'type' => 'text',
@@ -41,7 +41,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		$help = $options['help'];
 		$helpElement = $options['helpElement'];
 		$helpClass = $options['helpClass'];
-		$groupClass = 'form-group ' . $options['groupClass'];
+		$groupClass = $options['groupClass'];
 		$groupStyle = $options['groupStyle'];
 		$size = $options['size'];
 		if($size) {
