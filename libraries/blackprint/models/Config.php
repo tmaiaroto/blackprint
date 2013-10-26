@@ -14,6 +14,8 @@
 */
 namespace blackprint\models;
 
+use lithium\storage\Cache;
+
 class Config extends \lithium\data\Model {
 
 	protected $_meta = array(
@@ -34,6 +36,27 @@ class Config extends \lithium\data\Model {
 		'modified' => array('type' => 'date'),
 		'created' => array('type' => 'date')
 	);
+
+	/**
+	 * Get the configuration (from cache is possible).
+	*/
+	public static function get($name=null) {
+		// Just one for now
+		$name = 'default';
+
+		$configData = array();
+
+		if($cache = Cache::read('blackprint', 'blackprintConfig')) {
+			$configData = $cache;
+		} else {
+			$configDoc = Config::find('first', array('conditions' => array('name' => 'default')));
+			if(!empty($configDoc)) {
+				$configData = $configDoc->data();
+			}
+		}
+
+		return $configData;
+	}
 	
 }
 ?>

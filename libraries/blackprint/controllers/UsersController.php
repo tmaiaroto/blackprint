@@ -3,6 +3,7 @@ namespace blackprint\controllers;
 
 use blackprint\models\User;
 use blackprint\models\Asset;
+use blackprint\models\Config;
 use blackprint\util\Util;
 use li3_flash_message\extensions\storage\FlashMessage;
 use li3_access\security\Access;
@@ -253,8 +254,36 @@ class UsersController extends \lithium\action\Controller {
 	 * Registers a user.
 	*/
 	public function register() {
+		// For users logging in, for the first time, via some external service such as Twitter or Facebook.
+		// Or the first time with the external service.
+		$externalRegistration = Session::read('externalRegistration', array('name' => 'blackprint'));
+
 		// Don't let a logged in user register again. That would be silly.
 		if(isset($this->request->user) && !empty($this->request->user)) {
+			// Unless they are linking a new external OAuth service.
+			if(isset($this->request->user) && !empty($this->request->user)) {
+				$document = User::find('first', array('conditions' => array('_id' => $this->request->user['_id'])));
+				if(!empty($document)) {
+					$updateData = array(
+						'modified' => new MongoDate()
+					);
+					$docData = $document->data();
+					if(!empty($document->externalAuthServices)) {
+						$updateData['externalAuthServices'] = $document->externalAuthServices->data();
+					}
+					// Double check to make sure we have the 'service' key (if not, the auth adapter didn't pass it along, which would be an error in the adapter).
+					if(isset($externalRegistration['service'])) {
+						$updateData['externalAuthServices'][$externalRegistration['service']] = $externalRegistration;
+						if($document->save($updateData, array('validate' => false))) {
+							FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.', 'blackprint');
+							unset($docData['password']); // Don't set this in the Auth session data.
+							Auth::set('blackprint', $updateData += $docData);
+							return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+						}
+					}
+				}
+			}
+
 			return $this->redirect('/');
 		}
 
@@ -274,8 +303,6 @@ class UsersController extends \lithium\action\Controller {
 
 		$document = User::create();
 
-		// For users logging in, for the first time, via some external service such as Twitter or Facebook.
-		$externalRegistration = Session::read('externalRegistration', array('name' => 'blackprint'));
 		// Set any basic data from the service that Blackprint may want to be displayed in the registration form.
 		// Note: By having this registration process, the user must click "submit" after reviewing the information pulled
 		// from the external service. This satisfies the TOS for pretty much all of these services as far as I can tell.
@@ -392,7 +419,7 @@ class UsersController extends \lithium\action\Controller {
 					if(!empty($document)) {
 						$existingDocData = $document->data();
 					}
-					$user = Auth::set('blackprint', $existingDocData += $this->request->data);
+					$user = Auth::set('blackprint', $this->request->data += $existingDocData);
 					if($externalRegistration) {
 						FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.', 'blackprint');
 						$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
@@ -458,7 +485,7 @@ class UsersController extends \lithium\action\Controller {
 					$userData['socialLoginService'] = $service;
 					$user = Auth::set('blackprint', $userData);
 				} else {
-					// If the user hasn't fully registered yet, send them to do that now.
+					// If the user hasn't fully registered yet (or it's a new OAuth service being linked), send them to do that now.
 					// Of course let's hang on to some of this data from the external OAuth service so they can login in the future.
 					Session::write('externalRegistration', $user['socialLogin'], array('name' => 'blackprint'));
 					return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register'));
@@ -847,7 +874,55 @@ class UsersController extends \lithium\action\Controller {
 			}
 		}
 
-		$this->set(compact('document'));
+		// Get all currently available third party authentication services.
+		$config = Config::get('default');
+		$externalAuthServices = array();
+		if(isset($config['externalAuthServices']) && !empty($config['externalAuthServices'])) {
+			foreach($config['externalAuthServices'] as $service => $v) {
+				$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+			}
+		}
+
+		$this->set(compact('document', 'externalAuthServices'));
+	}
+
+	/**
+	 * Allows a user to revoke access to a third party OAuth service.
+	 * This would also prevent them from logging in using that service.
+	*/
+	public function revoke_service($service=null) {
+		if(!$this->request->user || empty($service)) {
+			FlashMessage::write('You must be logged in to do that.', 'blackprint');
+			return $this->redirect('/');
+		}
+
+		$service = strtolower($service);
+		$serviceName = $service;
+		$document = User::find('first', array('conditions' => array('_id' => $this->request->user['_id'])));
+		if(!empty($document)) {
+			if(!empty($document->externalAuthServices)) {
+				$updateData = array(
+					'modified' => new MongoDate()
+				);
+				$updateData['externalAuthServices'] = $document->externalAuthServices->data();
+				foreach($updateData['externalAuthServices'] as $k => $v) {
+					if($k == $service) {
+						$serviceName = isset($updateData['externalAuthServices'][$k]['serviceName']) ? $updateData['externalAuthServices'][$k]['serviceName']:$serviceName;
+						unset($updateData['externalAuthServices'][$k]);
+					}
+				}
+
+				if($document->save($updateData, array('validate' => false))) {
+					$docData = $document->data();
+					unset($docData['password']);
+					Auth::set('blackprint', $updateData += $docData);
+					FlashMessage::write('You have revoked access to ' . $serviceName . '.', 'blackprint');
+					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+				}
+			}
+		}
+		FlashMessage::write('Invalid service or there was a problem revoking access, please try again.', 'blackprint');
+		$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 	}
 
 	/**
@@ -872,12 +947,15 @@ class UsersController extends \lithium\action\Controller {
 			return json_encode($response);
 		}
 
-		if(!$this->request->user || !isset($this->request->data['url'])) {
+		$url = isset($this->request->data['url']) ? $this->request->data['url']:false;
+		$url = isset($this->request->query['url']) ? $this->request->query['url']:$url;
+
+		if(!$this->request->user || !$url) {
 			return $response;
 		}
 
 		// Don't allow the URL to be used if it returns a 404.
-		$ch = curl_init($this->request->data['url']);
+		$ch = curl_init($url);
 		curl_setopt($ch,  CURLOPT_RETURNTRANSFER, TRUE);
 		$response = curl_exec($ch);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -900,7 +978,7 @@ class UsersController extends \lithium\action\Controller {
 			// query
 			array(
 				'$set' => array(
-					'profilePicture' => $this->request->data['url']
+					'profilePicture' => $url
 				)
 			),
 			$conditions,
@@ -910,7 +988,7 @@ class UsersController extends \lithium\action\Controller {
 			if(!empty($existingProfilePicId)) {
 				Asset::remove(array('_id' => $existingProfilePicId));
 			}
-			$response = array('success' => true, 'result' => $this->request->data['url']);
+			$response = array('success' => true, 'result' => $url);
 		}
 
 		return $response;

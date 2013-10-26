@@ -1,4 +1,8 @@
-<?=$this->html->script('/blackprint/js/bootstrapUserValidation', array('inline' => false)); ?>
+<?php
+$user = $this->request()->user;
+$usersExternalServices = isset($user['externalAuthServices']) ? $user['externalAuthServices']:array();
+?>
+<?=$this->html->script('/blackprint/js/manageUser', array('inline' => false)); ?>
 <div class="row">
 	<div class="col-md-9">
 		<div class="row">
@@ -57,7 +61,41 @@
 					You may need to log out and back in again in order to see the changes you make.
 				</p>
 			</div>
-
 		</div>
+
+		<?php if(count($externalAuthServices) > 0) { ?>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Third Party Services
+			</div>
+			<div class="container">
+				<p class="mg-top-10">You can login using your account from the following services:</p>
+				<?php foreach($externalAuthServices as $k => $v) { ?>
+					<div class="row mg-bottom-10">
+						<div class="col-md-3">
+							<?php
+							if(isset($usersExternalServices[$k]['profilePicture']) && !empty($usersExternalServices[$k]['profilePicture'])) {
+								echo '<img src="' . $usersExternalServices[$k]['profilePicture'] . '" width="50" style="margin: 5px 0;" />';
+							}
+							?>
+						</div>
+						<div class="col-md-9">
+							<?php echo $v['logo']; ?> <?=$v['name']; ?><br />
+							<?=$this->html->link('Revoke', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'revoke_service', 'args' => array($k)), array('class' => 'btn btn-small btn-default')); ?> 
+							<?php 
+							if(!isset($usersExternalServices[$k]) || empty($usersExternalServices[$k])) {
+								echo $this->html->link('Link', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login', 'args' => array($k)), array('class' => 'btn btn-small btn-primary'));
+							} else {
+								if(isset($usersExternalServices[$k]['profilePicture']) && !empty($usersExternalServices[$k]['profilePicture'])) {
+									echo '<br /><a href="#" onClick="setProfilePictureFromUrl(\'' . $usersExternalServices[$k]['profilePicture'] . '\');" class="small">Use for Profile Picture</a>';
+								}
+							} ?>
+						</div>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+		<?php } ?>
+
 	</div>
 </div>

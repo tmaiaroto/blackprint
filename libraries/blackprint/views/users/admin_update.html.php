@@ -1,4 +1,4 @@
-<?=$this->html->script('/blackprint/js/bootstrapUserValidation', array('inline' => false)); ?>
+<?=$this->html->script('/blackprint/js/manageUser', array('inline' => false)); ?>
 <div class="row">
 	<div class="col-md-9">
 		<div class="row">

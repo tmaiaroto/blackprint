@@ -54,6 +54,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.facebook.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.facebook.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.facebook.name', array('type' => 'hidden', 'value' => 'Facebook')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.facebook.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-facebook"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.facebook.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -69,6 +71,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.foursquare.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.foursquare.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.foursquare.name', array('type' => 'hidden', 'value' => 'Foursquare')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.foursquare.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-foursquare"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.foursquare.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -84,6 +88,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.github.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.github.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.github.name', array('type' => 'hidden', 'value' => 'GitHub')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.github.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-github"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.github.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -99,6 +105,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.google.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.google.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.google.name', array('type' => 'hidden', 'value' => 'Google')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.google.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-google-plus"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.google.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -114,6 +122,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.instagram.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.instagram.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.instagram.name', array('type' => 'hidden', 'value' => 'Instagram')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.instagram.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-instagram"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.instagram.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -129,6 +139,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.linkedin.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.linkedin.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.linkedin.name', array('type' => 'hidden', 'value' => 'LinkedIn')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.linkedin.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-linkedin"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.linkedin.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -144,6 +156,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.microsoft.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.microsoft.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.microsoft.name', array('type' => 'hidden', 'value' => 'Microsoft')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.microsoft.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-windows"></i>')); ?>
 								</div>
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.microsoft.scope', array('type' => 'text', 'label' => 'Scope', 'size' => '6', 'help' => 'Optional, if you don\'t know what to put, leave it blank.')); ?>
@@ -159,6 +173,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.twitter.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.twitter.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.twitter.name', array('type' => 'hidden', 'value' => 'Twitter')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.twitter.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-twitter"></i>')); ?>
 								</div>
 							</div>
 						</div>
@@ -171,6 +187,8 @@
 								<div class="row">
 									<?=$this->BlackprintForm->field('externalAuthServices.tumblr.key', array('type' => 'text', 'label' => 'API Key', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?> 
 									<?=$this->BlackprintForm->field('externalAuthServices.tumblr.secret', array('type' => 'text', 'label' => 'API Secret', 'size' => '6')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.tumblr.name', array('type' => 'hidden', 'value' => 'Tumblr')); ?>
+									<?=$this->BlackprintForm->field('externalAuthServices.tumblr.logo', array('type' => 'hidden', 'value' => '<i class="fa fa-tumblr"></i>')); ?>
 								</div>
 							</div>
 						</div>

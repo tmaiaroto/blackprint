@@ -10,6 +10,16 @@ p {
 	font-family: 'Raleway', sans-serif;
 }
 
+.panel-container {
+	margin: 10px;
+}
+.small {
+	font-size: 11px;
+}
+.micro {
+	font-size: 10px;
+}
+
 /* Tooltips */
 a.help-tooltip {
 	font-weight: normal;
@@ -51,6 +61,22 @@ footer {
 }
 footer hr {
 	border-color: #333;
+}
+
+/* Buttons */
+.btn-small {
+	padding: 2px 10px;
+	font-size: 12px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.btn-micro {
+	padding: 1px 5px;
+	font-size: 10px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;	
 }
 
 /* Vertical Margins */
