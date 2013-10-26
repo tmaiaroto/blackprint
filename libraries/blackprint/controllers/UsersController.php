@@ -469,7 +469,11 @@ class UsersController extends \lithium\action\Controller {
 			if(!isset($configurations[$serviceConfigName])) {
 				return $this->redirect('/');
 			}
+			// Check against a user who is potentially already logged in.
+			$currentlyLoggedInUser = isset($this->request->user) && !empty($this->request->user)  ? $this->request->user:false;
+
 			$user = Auth::check($serviceConfigName, $this->request);
+
 			// If so we get back less data (vs. a User document lookup), but that's ok.
 			// We use what we can get back from the service to lookup locally and automatically
 			// set authentication because we choose to trust these services in this case.
@@ -478,6 +482,16 @@ class UsersController extends \lithium\action\Controller {
 				$externalUserId = isset($user['socialLogin']['userId']) ? $user['socialLogin']['userId']:false;
 				$userDocument = User::find('first', array('conditions' => array('externalAuthServices.' . $service . '.userId' => $externalUserId)));
 				if(!empty($userDocument)) {
+					// Check to ensure the User document that has already linked the service is the same as the currently logged in user (if the user is currently logged in)
+					// This will be the case in situations where a user links an external service to another local account. We can't link to more than one because
+					// we wouldn't know which to use when loggined in using the service in the future if there were multiple User documents matching the conditions.
+					if($currentlyLoggedInUser) {
+						if($currentlyLoggedInUser['_id'] !== (string)$userDocument->_id) {
+							FlashMessage::write('Another user already linked this service and only one user can link a third party service at a time.', 'blackprint');
+							return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+						}
+					}
+
 					$userData = $userDocument->data();
 					// Don't set the user's password in the Auth data.
 					unset($userData['password']);
