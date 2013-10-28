@@ -4,7 +4,7 @@ namespace blackprint\controllers;
 use blackprint\models\Content;
 use blackprint\models\Asset;
 use blackprint\util\Util;
-use li3_flash_message\extensions\storage\FlashMessage;
+use blackprint\extensions\storage\FlashMessage;
 use lithium\security\validation\RequestToken;
 use lithium\util\Inflector;
 use lithium\core\Libraries;
@@ -220,7 +220,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 				
 				// Save
 				if($document->save($this->request->data)) {
-					FlashMessage::write('The content has been created successfully.', 'blackprint');
+					FlashMessage::write('The content has been created successfully.');
 					
 					// Special redirect if the form has passed one, for example...edit and return to the form.
 					if($redirect) {
@@ -238,7 +238,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 					}
 					$this->redirect(array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'admin' => true));
 				} else {
-					FlashMessage::write('The content could not be created, please try again.', 'blackprint');
+					FlashMessage::write('The content could not be created, please try again.');
 					// change back the requseted _publicId if there was a conflict...this is a little bit hacky for validation
 					if(isset($this->request->data['_publicId']) && $this->request->data['_publicId'] == '!___conflict___!') {
 						$document->_publicId = $requestedPublicId;
@@ -257,7 +257,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 	 */
 	public function admin_update($id=null, $viewContext=null) {
 		if(empty($id)) {
-			FlashMessage::write('You must provide a content id to update.', 'blackprint');
+			FlashMessage::write('You must provide a content id to update.');
 			return $this->redirect(array('admin' => true, 'library' => 'blackprint', 'controller' => 'content', 'action' => 'index'));
 		}
 		$this->_render['layout'] = 'admin';
@@ -435,7 +435,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 			
 			// if($document->save($this->request->data)) { // <--- this creates problems with FAQ content and likely any other field that has an array/object. It appends (even duplicates) instead of updates.
 			if(Content::update($this->request->data, array('_id' => $id))) {
-				FlashMessage::write('The content has been successfully updated.', 'blackprint');
+				FlashMessage::write('The content has been successfully updated.');
 				
 				// Special redirect if the form has passed one, for example...edit and return to the form.
 				if($redirect) {
@@ -453,7 +453,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 				}
 				return $this->redirect(array('admin' => true, 'library' => 'blackprint', 'controller' => 'content', 'action' => 'index'));
 			} else {
-				FlashMessage::write('There was a problem updating the content, please try again.', 'blackprint');
+				FlashMessage::write('There was a problem updating the content, please try again.');
 				// change back the requseted _publicId if there was a conflict...this is a little bit hacky for validation
 				if(isset($this->request->data['_publicId']) && $this->request->data['_publicId'] == '!___conflict___!') {
 					$document->_publicId = $requestedPublicId;
@@ -525,7 +525,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 
 		// Redirect if invalid content
 		if(empty($document)) {
-			FlashMessage::write('That content was not found.', 'blackprint');
+			FlashMessage::write('That content was not found.');
 			return $this->redirect(array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'admin' => true));
 		}
 
@@ -539,7 +539,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 				// Remove any thumbnails if this was an image asset (or other types of children files)
 				Asset::remove(array('_parent' => new MongoId($k)));
 			}
-			FlashMessage::write('The content has been deleted.', 'blackprint');
+			FlashMessage::write('The content has been deleted.');
 		}
 
 		return $this->redirect(array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'admin' => true));
@@ -604,7 +604,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 		$document = Content::find('first', array('conditions' => $conditions));
 
 		if(empty($document) || !$document->published) {
-			FlashMessage::write('Sorry, that content does not exist or is not published.', 'blackprint');
+			FlashMessage::write('Sorry, that content does not exist or is not published.');
 			return $this->redirect('/');
 		}
 

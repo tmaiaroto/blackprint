@@ -7,15 +7,15 @@
  * requirements of the application.
  * 
 */
+use blackprint\extensions\storage\FlashMessage;
+use li3_access\security\Access;
+
 use lithium\action\Dispatcher;
 use lithium\net\http\Router;
 use lithium\action\Response;
 use lithium\security\Auth;
 use lithium\core\Libraries;
 use lithium\storage\Session;
-
-use li3_access\security\Access;
-use blackprint\extensions\storage\FlashMessage;
 
 // Adding the library here if it hasn't already been added.
 if(!class_exists('li3_access\security\Access')) {

@@ -420,11 +420,16 @@ class UsersController extends \lithium\action\Controller {
 						$existingDocData = $document->data();
 					}
 					$user = Auth::set('blackprint', $this->request->data += $existingDocData);
+					// Redirect URL after registering is always to the update action. Users can fill out more details of their profile there.
+					$url = array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update');
+					// ...watch for admin users
+					if($user['role'] == 'administrator') {
+						$url = array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update', 'admin' => true);
+					}
 					if($externalRegistration) {
 						FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.');
-						$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 					}
-					$this->redirect('/');
+					$this->redirect($url);
 				} else {
 					$this->request->data['password'] = '';
 				}
@@ -488,7 +493,11 @@ class UsersController extends \lithium\action\Controller {
 					if($currentlyLoggedInUser) {
 						if($currentlyLoggedInUser['_id'] !== (string)$userDocument->_id) {
 							FlashMessage::write('Another user already linked this service and only one user can link a third party service at a time.');
-							return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+							$url = array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update');
+							if($currentlyLoggedInUser['role'] == 'administrator') {
+								$url = '/admin/my-account';
+							}
+							return $this->redirect($url);
 						}
 					}
 
@@ -514,38 +523,7 @@ class UsersController extends \lithium\action\Controller {
 
 		if ($user) {
 			// Users will be redirected after logging in, but where to?
-			$url = '/';
-
-			// Default redirects for certain user roles
-			switch($user['role']) {
-				case 'administrator':
-				case 'content_editor':
-					$url = '/admin';
-					break;
-				case 'new_user':
-					$url = '/register';
-					break;
-				default:
-					$url = '/';
-					break;
-			}
-
-			// Second, look to see if a cookie was set. The could have ended up at the login page
-			// because he/she tried to go to a restricted area. That URL was noted in a cookie.
-			if (Session::check('beforeAuthURL', array('name' => 'cookie'))) {
-				$url = Session::read('beforeAuthURL', array('name' => 'cookie'));
-
-				// 'triedAuthRedirect' so we don't end up in a redirect loop
-				$triedAuthRedirect = Session::read('triedAuthRedirect', array('name' => 'cookie'));
-				if($triedAuthRedirect == 'true') {
-					$url = '/';
-					Session::delete('triedAuthRedirect', array('name' => 'cookie'));
-				} else {
-					Session::write('triedAuthRedirect', 'true', array('name' => 'cookie', 'expires' => '+1 hour'));
-				}
-
-				Session::delete('beforeAuthURL', array('name' => 'cookie'));
-			}
+			$url = $this->_getUserLoginRedirect($user);
 
 			// Save last login IP and time
 			$userDocument = User::find('first', array('conditions' => array('_id' => $user['_id'])));
@@ -757,6 +735,8 @@ class UsersController extends \lithium\action\Controller {
 		// the short and friendly "my-account" and "admin/my-account" routes.
 		if(strstr($this->request->url, 'admin')) {
 			$this->_render['layout'] = 'admin';
+			// We  can use this same cookie here too in order to redirect to the admin layout.
+			Session::write('beforeAuthURL', '/admin/my-account', array('name' => 'cookie'));
 		}
 
 		// Special rules for user creation (includes unique e-mail)
@@ -880,7 +860,12 @@ class UsersController extends \lithium\action\Controller {
 				// Save
 				if($document->save($this->request->data, array('validate' => $rules))) {
 					FlashMessage::write('You have successfully updated your user settings.');
-					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
+					$url = array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update');
+					if(Session::check('beforeAuthURL', array('name' => 'cookie'))) {
+						$url = Session::read('beforeAuthURL', array('name' => 'cookie'));
+						Session::delete('beforeAuthURL', array('name' => 'cookie'));
+					}
+					$this->redirect($url);
 				} else {
 					$this->request->data['password'] = '';
 					FlashMessage::write('There was an error trying to update your user settings, please try again.');
@@ -1006,6 +991,49 @@ class UsersController extends \lithium\action\Controller {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Figures out where to redirect users based on various conditions.
+	 * TODO: Allow CMS configuration options to set these as well...
+	*/
+	public function _getUserLoginRedirect($user=null) {
+		$url = '/';
+
+		if(!empty($user)) {
+			// Default redirects for certain user roles
+			switch($user['role']) {
+				case 'administrator':
+				case 'content_editor':
+					$url = '/admin';
+					break;
+				case 'new_user':
+					$url = '/register';
+					break;
+				default:
+					$url = '/';
+					break;
+			}
+		}
+
+		// Look to see if a cookie was set. The could have ended up at the login page
+		// because he/she tried to go to a restricted area. That URL was noted in a cookie.
+		if (Session::check('beforeAuthURL', array('name' => 'cookie'))) {
+			$url = Session::read('beforeAuthURL', array('name' => 'cookie'));
+
+			// 'triedAuthRedirect' so we don't end up in a redirect loop
+			$triedAuthRedirect = Session::read('triedAuthRedirect', array('name' => 'cookie'));
+			if($triedAuthRedirect == 'true') {
+				$url = '/';
+				Session::delete('triedAuthRedirect', array('name' => 'cookie'));
+			} else {
+				Session::write('triedAuthRedirect', 'true', array('name' => 'cookie', 'expires' => '+1 hour'));
+			}
+
+			Session::delete('beforeAuthURL', array('name' => 'cookie'));
+		}
+
+		return $url;
 	}
 
 	/**

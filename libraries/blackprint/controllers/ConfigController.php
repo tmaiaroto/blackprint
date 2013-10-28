@@ -2,7 +2,7 @@
 namespace blackprint\controllers;
 
 use blackprint\models\Config;
-use li3_flash_message\extensions\storage\FlashMessage;
+use blackprint\extensions\storage\FlashMessage;
 use lithium\security\validation\RequestToken;
 use \MongoDate;
 
@@ -40,10 +40,10 @@ class ConfigController extends \lithium\action\Controller {
 
 				// Save
 				if($document->save($this->request->data)) {
-					FlashMessage::write('The configuration has been updated successfully.', 'blackprint');
+					FlashMessage::write('The configuration has been updated successfully.');
 					return $this->redirect(array('library' => 'blackprint', 'controller' => 'config', 'action' => 'update', 'admin' => true));
 				} else {
-					FlashMessage::write('The configuration could not be updated, please try again.', 'blackprint');
+					FlashMessage::write('The configuration could not be updated, please try again.');
 				}
 			}
 		}

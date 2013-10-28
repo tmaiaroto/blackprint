@@ -10,7 +10,6 @@ use lithium\core\Libraries;
  * this one, which could also lead to conflicts and other issues.
 */
 
-Libraries::add('li3_flash_message');
 Libraries::add('li3_access');
 Libraries::add('lusitanian', array('bootstrap' => 'oauth/src/OAuth/bootstrap.php'));
 

@@ -6,7 +6,6 @@
     "require": {
         "unionofrad/lithium": "1.0-beta",
     	"tmaiaroto/li3_access": "dev-master",
-    	"michaelhue/li3_flash_message": "dev-master",
     	"lusitanian/oauth": "~0.2"
     }
 }
