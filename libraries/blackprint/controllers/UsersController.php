@@ -5,7 +5,7 @@ use blackprint\models\User;
 use blackprint\models\Asset;
 use blackprint\models\Config;
 use blackprint\util\Util;
-use li3_flash_message\extensions\storage\FlashMessage;
+use blackprint\extensions\storage\FlashMessage;
 use li3_access\security\Access;
 use lithium\security\validation\RequestToken;
 use lithium\security\Auth;
@@ -117,11 +117,11 @@ class UsersController extends \lithium\action\Controller {
 
 				// Save
 				if($document->save($this->request->data, array('validate' => $rules))) {
-					FlashMessage::write('The user has been created successfully.', 'blackprint');
+					FlashMessage::write('The user has been created successfully.');
 					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'index', 'admin' => true));
 				} else {
 					$this->request->data['password'] = '';
-					FlashMessage::write('The user could not be created, please try again.', 'blackprint');
+					FlashMessage::write('The user could not be created, please try again.');
 				}
 			}
 		}
@@ -154,7 +154,7 @@ class UsersController extends \lithium\action\Controller {
 
 		// Redirect if invalid user
 		if(empty($document)) {
-			FlashMessage::write('That user was not found.', 'blackprint');
+			FlashMessage::write('That user was not found.');
 			return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'index', 'admin' => true));
 		}
 
@@ -198,11 +198,11 @@ class UsersController extends \lithium\action\Controller {
 
 				// Save
 				if($document->save($this->request->data, array('validate' => $rules))) {
-					FlashMessage::write('The user has been updated successfully.', 'blackprint');
+					FlashMessage::write('The user has been updated successfully.');
 					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'index', 'admin' => true));
 				} else {
 					$this->request->data['password'] = '';
-					FlashMessage::write('The user could not be updated, please try again.', 'blackprint');
+					FlashMessage::write('The user could not be updated, please try again.');
 				}
 			}
 		}
@@ -224,18 +224,18 @@ class UsersController extends \lithium\action\Controller {
 
 		// Redirect if invalid user
 		if(empty($document)) {
-			FlashMessage::write('That user was not found.', 'blackprint');
+			FlashMessage::write('That user was not found.');
 			return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'index', 'admin' => true));
 		}
 
 		if($this->request->user['_id'] != (string) $document->_id) {
 			if($document->delete()) {
-				FlashMessage::write('The user has been deleted.', 'blackprint');
+				FlashMessage::write('The user has been deleted.');
 			} else {
-				FlashMessage::write('The could not be deleted, please try again.', 'blackprint');
+				FlashMessage::write('The could not be deleted, please try again.');
 			}
 		} else {
-			FlashMessage::write('You can\'t delete yourself!', 'blackprint');
+			FlashMessage::write('You can\'t delete yourself!');
 		}
 
 		return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'index', 'admin' => true));
@@ -275,7 +275,7 @@ class UsersController extends \lithium\action\Controller {
 					if(isset($externalRegistration['service'])) {
 						$updateData['externalAuthServices'][$externalRegistration['service']] = $externalRegistration;
 						if($document->save($updateData, array('validate' => false))) {
-							FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.', 'blackprint');
+							FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.');
 							unset($docData['password']); // Don't set this in the Auth session data.
 							Auth::set('blackprint', $updateData += $docData);
 							return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
@@ -406,7 +406,7 @@ class UsersController extends \lithium\action\Controller {
 				}
 
 				if($document->save($this->request->data, array('validate' => $rules))) {
-					FlashMessage::write('User registration successful.', 'blackprint');
+					FlashMessage::write('User registration successful.');
 					// Delete this session data that was used during registration.
 					Session::delete('externalRegistration', array('name' => 'blackprint'));
 					// Not set on $this->request->data of course, but needed by authentation and this controller at various points.
@@ -421,7 +421,7 @@ class UsersController extends \lithium\action\Controller {
 					}
 					$user = Auth::set('blackprint', $this->request->data += $existingDocData);
 					if($externalRegistration) {
-						FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.', 'blackprint');
+						FlashMessage::write('You have successfully linked your ' . $externalRegistration['serviceName'] . ' account.');
 						$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 					}
 					$this->redirect('/');
@@ -487,7 +487,7 @@ class UsersController extends \lithium\action\Controller {
 					// we wouldn't know which to use when loggined in using the service in the future if there were multiple User documents matching the conditions.
 					if($currentlyLoggedInUser) {
 						if($currentlyLoggedInUser['_id'] !== (string)$userDocument->_id) {
-							FlashMessage::write('Another user already linked this service and only one user can link a third party service at a time.', 'blackprint');
+							FlashMessage::write('Another user already linked this service and only one user can link a third party service at a time.');
 							return $this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 						}
 					}
@@ -555,14 +555,14 @@ class UsersController extends \lithium\action\Controller {
 			}
 
 			// only set a flash message if this is a login. it could be a redirect from somewhere else that has restricted access
-			// $flash_message = FlashMessage::read('blackprint');
-			// if(!isset($flash_message['message']) || empty($flash_message['message'])) {
-				FlashMessage::write('You\'ve successfully logged in.', 'blackprint');
+			// $flashMessage = FlashMessage::read();
+			// if(empty($flashMessage)) {
+				FlashMessage::write('You\'ve successfully logged in.');
 			// }
 			$this->redirect($url);
 		} else {
 			if($this->request->data) {
-				FlashMessage::write('You entered an incorrect username and/or password.', 'blackprint');
+				FlashMessage::write('You entered an incorrect username and/or password.');
 			}
 		}
 		$data = $this->request->data;
@@ -593,7 +593,7 @@ class UsersController extends \lithium\action\Controller {
 				Auth::clear($name);
 			}
 		}
-		FlashMessage::write('You\'ve successfully logged out.', 'blackprint');
+		FlashMessage::write('You\'ve successfully logged out.');
 		$this->redirect('/');
 	}
 
@@ -747,7 +747,7 @@ class UsersController extends \lithium\action\Controller {
 	 */
 	public function update() {
 		if(!$this->request->user) {
-			FlashMessage::write('You must be logged in to do that.', 'blackprint');
+			FlashMessage::write('You must be logged in to do that.');
 			return $this->redirect('/');
 		}
 
@@ -775,7 +775,7 @@ class UsersController extends \lithium\action\Controller {
 
 		// Redirect if invalid user...This should not be possible.
 		if(empty($document)) {
-			FlashMessage::write('You must be logged in to do that.', 'blackprint');
+			FlashMessage::write('You must be logged in to do that.');
 			return $this->redirect('/');
 		}
 
@@ -879,11 +879,11 @@ class UsersController extends \lithium\action\Controller {
 
 				// Save
 				if($document->save($this->request->data, array('validate' => $rules))) {
-					FlashMessage::write('You have successfully updated your user settings.', 'blackprint');
+					FlashMessage::write('You have successfully updated your user settings.');
 					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 				} else {
 					$this->request->data['password'] = '';
-					FlashMessage::write('There was an error trying to update your user settings, please try again.', 'blackprint');
+					FlashMessage::write('There was an error trying to update your user settings, please try again.');
 				}
 			}
 		}
@@ -906,7 +906,7 @@ class UsersController extends \lithium\action\Controller {
 	*/
 	public function revoke_service($service=null) {
 		if(!$this->request->user || empty($service)) {
-			FlashMessage::write('You must be logged in to do that.', 'blackprint');
+			FlashMessage::write('You must be logged in to do that.');
 			return $this->redirect('/');
 		}
 
@@ -930,12 +930,12 @@ class UsersController extends \lithium\action\Controller {
 					$docData = $document->data();
 					unset($docData['password']);
 					Auth::set('blackprint', $updateData += $docData);
-					FlashMessage::write('You have revoked access to ' . $serviceName . '.', 'blackprint');
+					FlashMessage::write('You have revoked access to ' . $serviceName . '.');
 					$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 				}
 			}
 		}
-		FlashMessage::write('Invalid service or there was a problem revoking access, please try again.', 'blackprint');
+		FlashMessage::write('Invalid service or there was a problem revoking access, please try again.');
 		$this->redirect(array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 	}
 
@@ -1027,7 +1027,7 @@ class UsersController extends \lithium\action\Controller {
 		$user = User::find('first', array('conditions' => $conditions));
 
 		if(empty($user)) {
-			FlashMessage::write('Sorry, that user does not exist.', 'blackprint');
+			FlashMessage::write('Sorry, that user does not exist.');
 			return $this->redirect('/');
 		}
 

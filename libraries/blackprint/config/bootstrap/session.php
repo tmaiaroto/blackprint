@@ -33,8 +33,7 @@ $config = Session::config();
 $config += array(
 	'cookie' => array('adapter' => 'Cookie'),
 	'default' => array('adapter' => 'Php'),
-	'blackprint' => array('adapter' => 'Model', 'model' => 'blackprint\models\Session'),
-	'flash_message' => array('adapter' => 'Php')
+	'blackprint' => array('adapter' => 'Model', 'model' => 'blackprint\models\Session')
 );
 
 // Allow the session configuration to be set in the Libraries::add() call for blackprint.

@@ -15,7 +15,7 @@ use lithium\core\Libraries;
 use lithium\storage\Session;
 
 use li3_access\security\Access;
-use li3_flash_message\extensions\storage\FlashMessage;
+use blackprint\extensions\storage\FlashMessage;
 
 // Adding the library here if it hasn't already been added.
 if(!class_exists('li3_access\security\Access')) {
@@ -45,23 +45,11 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 		Session::delete('blackprint_' . $user['socialLoginService']);
 	}
 
-	// This is a little bit hacky. FlashMessage storage seems to have an issue in our case here.
-	$accessFlash = Session::read('blackprintAccessMessage', array('name' => 'cookie'));
-	if($accessFlash) {
-		FlashMessage::write($accessFlash, 'blackprint');
-		Session::delete('blackprintAccessMessage');
-	}	
-
 	// Protect all admin methods except for login and logout.
 	if($request->admin === true && $action != 'login' && $action != 'logout') {
 		$actionAccess = Access::check('blackprint', $user, $request, array('rules' => array('allowManagers')));
 		if(!empty($actionAccess)) {
-			// NOTE & TODO: For some reason this doesn't work here with MongoDB based session storage...
-			// It seems to store, you can get the data back out immediately, but the redirects seem to remove the session data.
-			// However, using the Session class straight up seems to keep the data as expected. Maybe a bug or edge case with FlashMessage?
-			// In fact, I'm going to use Cookie instead. No sense in writing messages to the database for everyone.
-			// FlashMessage::write($actionAccess['message'], 'blackprint');
-			Session::write('blackprintAccessMessage', $actionAccess['message'], array('name' => 'cookie'));
+			FlashMessage::write($actionAccess['message']);
 			if($user) {
 				//$location = Router::match($actionAccess['redirect']);
 				//return new Response(compact('location', 'request'));

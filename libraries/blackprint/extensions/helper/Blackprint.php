@@ -9,7 +9,7 @@
 */
 namespace blackprint\extensions\helper;
 
-use li3_flash_message\extensions\storage\FlashMessage;
+use blackprint\extensions\storage\FlashMessage;
 
 use lithium\template\View;
 use lithium\core\Libraries;
@@ -25,7 +25,7 @@ class Blackprint extends \lithium\template\helper\Html {
 	*/
 	public function flash($options=array()) {
 		$defaults = array(
-			'key' => 'blackprint',
+			'key' => 'flashMessage',
 			// options for the layout template, some of these options are specifically for the pnotify jquery plugin
 			'options' => array(
 				'type' => 'growl',
@@ -37,9 +37,9 @@ class Blackprint extends \lithium\template\helper\Html {
 
 		$message = '';
 
-		$flash = FlashMessage::read($options['key']);
-		if (!empty($flash)) {
-			$message = $flash['message'];
+		$flashMessage = FlashMessage::read($options['key']);
+		if (!empty($flashMessage)) {
+			$message = $flashMessage;
 			FlashMessage::clear($options['key']);
 		}
 
