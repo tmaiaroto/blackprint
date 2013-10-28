@@ -854,7 +854,7 @@ class UsersController extends \lithium\action\Controller {
 						}
 					}
 				} else {
-					$this->request->data['profilePicture'] = null;
+					$this->request->data['profilePicture'] = $document->profilePicture;
 				}
 
 				// Save
