@@ -217,7 +217,7 @@ class BlackprintAsset extends \lithium\template\helper\Html {
 	
 	public function styles($config=array()) {
 		$config += array(
-			'optimize' => false,
+			'optimize' => true,
 			'compression' => true, // possible values: "tidy", true, false
 			'tidyTemplate' => 'highest_compression', // possible values: "high_compression", "highest_compression", "low_compression", or "default"
 			'lessDebug' => false, // sends lessphp error message to a log file, possible values: true, false

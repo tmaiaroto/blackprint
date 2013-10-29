@@ -8,13 +8,13 @@
 	<meta name="description" content="Blackprint Admin Dashboard">
 	<meta name="author" content="Shift8Creative">
 	<?php
-		echo $this->html->style(array(
+		$this->blackprintAsset->style(array(
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
 			'/blackprint/css/jquery/tipsy.css',
 			'/blackprint/css/site'
-		), array('inline' => true));
+		), array('inline' => false));
 	?>
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -23,16 +23,16 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="/js/jquery-1.10.2.min.js"><\/script>')</script>
 	<?php
-		echo $this->html->script(array(
+		$this->blackprintAsset->script(array(
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
-		), array('inline' => true));
+		), array('inline' => false));
 	?>
 	<?php
-		echo $this->scripts();
-		echo $this->styles();
+		echo $this->blackprintAsset->scripts(array('optimize' => true));
+		echo $this->blackprintAsset->styles(array('optimize' => true));
 	?>
 	<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700,100' rel='stylesheet' type='text/css'>

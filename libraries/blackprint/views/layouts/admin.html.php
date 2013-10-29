@@ -12,7 +12,7 @@
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
-			'/bower_components/bootstrap-wysihtml5/dist/bootstrap-wysihtml5-*.css',
+			'/blackprint/css/wysihtml5/blackprint-wysihtml5.css',
 			'/blackprint/css/jquery/tipsy.css',
 			'/blackprint/css/site',
 			'/blackprint/css/admin'
@@ -29,7 +29,7 @@
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
 			'/bower_components/wysihtml5/dist/wysihtml5-*.min.js',
-			'/bower_components/bootstrap-wysihtml5/dist/bootstrap-wysihtml5-*.min.js',
+			'/blackprint/js/wysihtml5/blackprint-wysihtml5.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
 		), array('inline' => false));
@@ -38,8 +38,6 @@
 	<?php
 		echo $this->blackprintAsset->scripts(array('optimize' => false));
 		echo $this->blackprintAsset->styles(array('optimize' => false));
-		//echo $this->scripts();
-		//echo $this->styles();
 	?>
 	<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700,100' rel='stylesheet' type='text/css'>
@@ -66,7 +64,7 @@
 			$('.tip').tooltip({html: true});
 			$('.tip-small').tooltip({html: true});
 
-			$('.wysihtml5').wysihtml5();
+			$('.wysihtml5').wysihtml5({html: true,color: true, code:true, insertAnything:true});
 		});
 	</script>
 	<?php
