@@ -5,3 +5,6 @@ composer.phar
 /resources
 /webroot/bower_components
 /webroot/li3b_core
+/webroot/js/optimized
+/webroot/css/optimized
+/webroot/img/optimized

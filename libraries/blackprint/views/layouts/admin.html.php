@@ -8,14 +8,15 @@
 	<meta name="description" content="Blackprint Admin Dashboard">
 	<meta name="author" content="Shift8Creative">
 	<?php
-		echo $this->html->style(array(
+		$this->blackprintAsset->style(array(
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
+			'/bower_components/bootstrap-wysihtml5/dist/bootstrap-wysihtml5-*.css',
 			'/blackprint/css/jquery/tipsy.css',
 			'/blackprint/css/site',
 			'/blackprint/css/admin'
-		), array('inline' => true));
+		), array('inline' => false));
 	?>
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,16 +25,21 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="/js/jquery-1.10.2.min.js"><\/script>')</script>
 	<?php
-		echo $this->html->script(array(
+		$this->blackprintAsset->script(array(
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
+			'/bower_components/wysihtml5/dist/wysihtml5-*.min.js',
+			'/bower_components/bootstrap-wysihtml5/dist/bootstrap-wysihtml5-*.min.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
-		), array('inline' => true));
+		), array('inline' => false));
+
 	?>
 	<?php
-		echo $this->scripts();
-		echo $this->styles();
+		echo $this->blackprintAsset->scripts(array('optimize' => false));
+		echo $this->blackprintAsset->styles(array('optimize' => false));
+		//echo $this->scripts();
+		//echo $this->styles();
 	?>
 	<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700,100' rel='stylesheet' type='text/css'>
@@ -59,6 +65,8 @@
 			// Tooltips
 			$('.tip').tooltip({html: true});
 			$('.tip-small').tooltip({html: true});
+
+			$('.wysihtml5').wysihtml5();
 		});
 	</script>
 	<?php
