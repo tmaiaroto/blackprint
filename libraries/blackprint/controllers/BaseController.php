@@ -9,7 +9,7 @@
 namespace blackprint\controllers;
 
 use blackprint\models\Asset;
-use blackprint\util\Util;
+use blackprint\extensions\Util;
 use lithium\util\Inflector;
 use lithium\core\Libraries;
 use lithium\net\http\Router;

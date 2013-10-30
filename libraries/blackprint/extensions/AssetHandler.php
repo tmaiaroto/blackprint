@@ -5,7 +5,7 @@
  *
  */
 
-namespace li3_assets\extensions;
+namespace blackprint\extensions;
 
 use \SplFileInfo;
 

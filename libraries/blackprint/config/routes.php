@@ -1,12 +1,112 @@
 <?php
+use blackprint\models\Asset;
+use blackprint\extensions\util\Thumbnail;
+
 use lithium\net\http\Router;
 use lithium\core\Environment;
 use lithium\action\Dispatcher;
+use \lithium\action\Response;
 
 // Set the evironment
 if($_SERVER['HTTP_HOST'] == 'blackprint.dev.local' || $_SERVER['HTTP_HOST'] == 'blackprint.local' || $_SERVER['HTTP_HOST'] == 'localhost') {
 	Environment::set('development');
 }
+
+/**
+ * Asset routes
+ *
+ * A file can be loaded from GridFS with the following URLs:
+ * /asset/527155186432660d1783cf9f.xxx <-- the MongoId with extension (extension could actually be anything)
+ * /asset/Thomass-MacBook-Pro.local.52715518c8b39.jpg <-- the actual filename in the document (extension must match)
+ *
+ * The {:ext} is actually not currently used. However it is captured in the request for use if needed.
+ *
+ * A file can be loaded without an extension in most web browsers, but it would be a good idea to use the proper extension,
+ * especially if visitors need to download the files.
+*/
+Router::connect('/asset/{:args}.{:ext}', array(), function($request) {
+	$document = false;
+	if(isset($request->params['args'][0])) {
+		if(preg_match('/^[0-9a-fA-F]{24}$/i', $request->params['args'][0])) {
+			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'file', 'length')));	
+		} else {
+			$filename = $request->params['args'][0] . '.' . $request->params['ext'];
+			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'file', 'length')));
+		}
+	}
+	
+	if(!$document || !$document->file){
+		header("Status: 404 Not Found");
+		header("HTTP/1.0 404 Not Found");
+		die;
+	}
+
+	return new Response(array(
+		'headers' => array('Content-type' => $document->contentType),
+		'body' => $document->file->getBytes()
+	));
+});
+
+// Allow thumbnails to be generated (just for images of course).
+Router::connect('/asset/thumbnail/{:width:[0-9]+}/{:height:[0-9]+}/{:args}.{:ext:(jpe?g|png|gif)}', array(), function($request) {
+	$document = false;
+	if(isset($request->params['args'][0])) {
+		if(preg_match('/^[0-9a-fA-F]{24}$/i', $request->params['args'][0])) {
+			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'file', 'length')));	
+		} else {
+			$filename = $request->params['args'][0] . '.' . $request->params['ext'];
+			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'file', 'length')));
+		}
+	}
+
+	if(!$document || !$document->file) {
+		header("Status: 404 Not Found");
+		header("HTTP/1.0 404 Not Found");
+		die;
+	}
+
+	$width = isset($request->params['width']) ? (int)$request->params['width']:100;
+	$height = isset($request->params['height']) ? (int)$request->params['height']:100;
+
+	$options = array(
+		'size' => array($width, $height),
+		'ext' => $document->fileExt
+	);
+
+	$options['letterbox'] = isset($request->query['letterbox']) ? $request->query['letterbox']:null;
+	$options['forceLetterboxColor'] = isset($request->query['forceLetterboxColor']) ? (bool)$request->query['forceLetterboxColor']:false;
+	$options['crop'] = isset($request->query['crop']) ? (bool)$request->query['crop']:false;
+	$options['sharpen'] = isset($request->query['sharpen']) ? (bool)$request->query['sharpen']:false;
+	$options['quality'] = isset($request->query['quality']) ? (int)$request->query['quality']:85;
+
+	// EXAMPLE REMOTE IMAGE with local disk cache and database cache.
+	//$document = 'http://oddanimals.com/images/lime-cat.jpg';
+	//$file = Thumbnail::create($document, LITHIUM_APP_PATH . '/webroot/img/_thumbnails', $options);
+	//$file = Thumbnail::create($document, 'grid.fs', $options);
+
+	// EXAMPLE IMAGE FROM DISK with local disk cache and database cache.
+	//$file = Thumbnail::create(LITHIUM_APP_PATH . '/webroot/img/glyphicons-halflings.png', LITHIUM_APP_PATH . '/webroot/img/_thumbnails', $options);
+	//$file = Thumbnail::create(LITHIUM_APP_PATH . '/webroot/img/glyphicons-halflings.png', 'grid.fs', $options);
+
+	// EXAMPLE IMAGE FROM MONGODB with local disk cache and database cache.
+	//$file = Thumbnail::create($document->file, LITHIUM_APP_PATH . '/webroot/img/_thumbnails', $options);
+
+	$file = Thumbnail::create($document->file, 'grid.fs', $options);
+	// The path will be a path on disk for a route if the destination was a cache in MonoDB.
+	// Handle both.
+	if(file_exists($file['path'])) {
+		return new Response(array(
+			'headers' => array('Content-type' => $file['mimeType']),
+			'body' => file_get_contents($file['path'])
+		));
+	}
+
+	// Technically, a redirect.
+	return new Response(array(
+		'location' => $file['path']
+	));
+
+});
 
 /**
  * Dispatcher rules to rewrite admin actions.

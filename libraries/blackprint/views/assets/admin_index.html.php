@@ -3,7 +3,7 @@
 		<?=$this->html->link('<i class="icon-plus"></i> Upload New Asset', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
 	</div>
 	<div class="col-md-4">
-		<?=$this->blackprint->queryForm(array('placeholder' => 'title...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
+		<?=$this->blackprint->queryForm(array('placeholder' => 'filename...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
 	</div>
 </div>
 

@@ -1,7 +1,7 @@
 <?php
 namespace blackprint\models;
 
-use blackprint\util\Util;
+use blackprint\extensions\Util;
 use lithium\util\Validator;
 use lithium\storage\Cache;
 use lithium\util\Inflector;

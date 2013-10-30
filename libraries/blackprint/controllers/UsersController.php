@@ -4,7 +4,7 @@ namespace blackprint\controllers;
 use blackprint\models\User;
 use blackprint\models\Asset;
 use blackprint\models\Config;
-use blackprint\util\Util;
+use blackprint\extensions\Util;
 use blackprint\extensions\storage\FlashMessage;
 use li3_access\security\Access;
 use lithium\security\validation\RequestToken;

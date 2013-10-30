@@ -3,7 +3,7 @@ namespace blackprint\controllers;
 
 use blackprint\models\Content;
 use blackprint\models\Asset;
-use blackprint\util\Util;
+use blackprint\extensions\Util;
 use blackprint\extensions\storage\FlashMessage;
 use lithium\security\validation\RequestToken;
 use lithium\util\Inflector;

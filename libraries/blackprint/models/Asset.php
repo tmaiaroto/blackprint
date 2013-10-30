@@ -46,7 +46,7 @@ class Asset extends \lithium\data\Model {
 	public static $validate = array();
 
 	public $search_schema = array(
-		'filename' => array(
+		'originalFilename' => array(
 			'weight' => 1
 		)
 	);
