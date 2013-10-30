@@ -1,4 +1,7 @@
 <?php
+/**
+ * Handles file assets for the system stored in MongoDB's GridFS.
+*/
 namespace blackprint\models;
 
 use lithium\util\Validator;
@@ -7,13 +10,26 @@ use \MongoDate;
 
 class Asset extends \lithium\data\Model {
 
-	// Use the gridfs in MongoDB
+	// Use GridFS in MongoDB
 	protected $_meta = array(
+		'locked' => true,
 		'source' => 'fs.files'
 	);
 
-	// I get appended to with the plugin's Asset model (a good way to add extra meta data).
+	/**
+	 * There is only some very basic information stored on this document.
+	 * That is basically the file itself and any exif data specific to the file.
+	 * 
+	 * The files stored in GridFS should contain as little extra data possible.
+	 * This allows the file assets to be re-used more easily within the system.
+	 *
+	 * For example: Maybe there's an image that belongs to multiple galleries,
+	 * but in each gallery the image has a different name and description.
+	*/
 	public static $fields = array(
+		// non-unique filename, this is the name of the file that was sent and may be better suited for display to users
+		'originalFilename' => array('type' => 'string'),
+		'exif' => array('type' => 'object'),
 		'_thumbnail' => array('type' => 'boolean'),
 		// not technically required, but is common.
 		'filename' => array('type' => 'string'),
@@ -22,6 +38,7 @@ class Asset extends \lithium\data\Model {
 		// the mime-type
 		'contentType' => array('type' => 'string'),
 		// This represents the 'type' of asset, or what it's associated to.
+		// NOTE: These fields may no longer be used?
 		'ref' => array('type' => 'string'),
 		'file' => array('label' => 'Profile Image', 'type' => 'file')
 	);
@@ -53,6 +70,48 @@ class Asset extends \lithium\data\Model {
 			$class::_object()->search_schema = $schema;
 		}
 		return (isset($class::_object()->search_schema) && !empty($class::_object()->search_schema)) ? $class::_object()->search_schema:array();
+	}
+
+	/**
+	 * Stores in GridFS.
+	 * Call this insetad of save()
+	 *
+	 * @return mixed False on fail, ObjectId on success
+	*/
+	public static function store($filename=false, $metadata=array()) {
+		if(!$filename) {
+			return false;
+		}
+
+		$ext = isset($metadata['fileExt']) ? strtolower($metadata['fileExt']):null;
+		switch($ext) {
+			default:
+				$mimeType = 'text/plain';
+				break;
+			case 'jpg':
+			case 'jpeg':
+				$mimeType = 'image/jpeg';
+				break;
+			case 'png':
+				$mimeType = 'image/png';
+				break;
+			case 'gif':
+				$mimeType = 'image/gif';
+				break;
+		}
+		$metadata['contentType'] = $mimeType;
+
+		if(file_exists($filename)) {
+			// Get the database connection
+			$db = self::connection();
+			// Connect to it
+			$db->connect();
+			// ...And then get the GridFS
+			$grid = $db->connection->getGridFS();
+			// ...To then store the file
+			return $grid->storeFile($filename, $metadata);
+		}
+		return false;
 	}
 
 }

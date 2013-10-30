@@ -9,6 +9,18 @@ use \MongoDate;
 /**
  * This controller is used for working with all assets in the system.
  * Media files stored in GridFS, etc.
+ *
+ * It would be nice to just store everything in GridFS and then send
+ * assets off to S3 or some other CDN...While that would be very convenient
+ * for backups, migrations, etc. Larger assets such as HD videos could
+ * quickly take up a lot of space in the database requiring one to shard
+ * before they might want/need to.
+ *
+ * So assets will have a "service" field that tells us where they are stored.
+ * By default this will be "mongo" - meaning the file data is stored in GridFS.
+ * However, in the future there will be other options such as "S3" and even "disk"
+ * and the "source" field then would be different depending on the service.
+ *
  */
 class AssetsController extends \lithium\action\Controller {
 	
@@ -53,5 +65,99 @@ class AssetsController extends \lithium\action\Controller {
 		return compact('documents', 'total', 'page', 'limit', 'totalPages');
 	}
 	
+	/**
+	 * Allows admins to create/upload new assets.
+	 *
+	 * @return
+	 */
+	public function admin_create() {
+		$this->_render['layout'] = 'admin';
+
+		if($this->request->data) {
+			$now = new MongoDate();
+			$data = array();
+
+			// If there was only one file uploaded, stick it into a multi-dimensional array.
+			// It's just easier to always run the foreach() and code the processing stuff once and here.
+			// For now...while we're saving to disk.
+			if(!isset($this->request->data['Filedata'][0]['error'])) {
+				$this->request->data['Filedata'] = array($this->request->data['Filedata']);
+			}
+
+			foreach($this->request->data['Filedata'] as $file) {
+				// Save file to gridFS
+				if ($file['error'] == UPLOAD_ERR_OK) {
+					$ext = substr(strrchr($file['name'], '.'), 1);
+					switch(strtolower($ext)) {
+						case 'jpg':
+						case 'jpeg':
+						case 'png':
+						case 'gif':
+						case 'png':
+							// Asset::store() works much like the mongo PHP driver. Filename first, then metadata.
+							// We are creating a unique file name as well, otherwise we'd overwrite stuff or have failed saves.
+							$gridFileId = Asset::store(
+								$file['tmp_name'],
+								array(
+									'filename' => (string)uniqid(php_uname('n') . '.') . '.'.$ext,
+									'fileExt' => $ext,
+									'exif' => exif_read_data($file['tmp_name']),
+									'originalFilename' => $file['name']
+									)
+								);
+							break;
+						default:
+							//exit();
+							break;
+					}
+				}
+			}
+			return;
+		}
+		FlashMessage::write('Sorry, there was seemingly nothing to upload, please add some files and try again.');
+	}
+
+	/**
+	 * Allows admins to view the details of an asset.
+	 *
+	 * @param string $id The asset id
+	*/
+	public function admin_read($id=null) {
+		$this->_render['layout'] = 'admin';
+
+		// Get the document from the db to edit
+		$conditions = array('_id' => $id);
+		$document = Asset::find('first', array('conditions' => $conditions));
+
+		return compact('document');
+	}
+
+	/**
+	 * Allows admins to delete assets.
+	 *
+	 * @param string $id The asset id
+	*/
+	public function admin_delete($id=null) {
+		$this->_render['layout'] = 'admin';
+
+		// Get the document from the db to edit
+		$conditions = array('_id' => $id);
+		$document = Asset::find('first', array('conditions' => $conditions));
+
+		// Redirect if not found
+		if(empty($document)) {
+			FlashMessage::write('That asset was not found.');
+			return $this->redirect(array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'admin' => true));
+		}
+
+		if($document->delete()) {
+			FlashMessage::write('The asset has been deleted.');
+		} else {
+			FlashMessage::write('The asset could not be deleted, please try again.');
+		}
+
+		return $this->redirect(array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'admin' => true));
+	}
+
 }
 ?>

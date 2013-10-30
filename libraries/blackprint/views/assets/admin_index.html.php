@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-8">
-		<?php // $this->html->link('<i class="icon-plus"></i> Create New Asset', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
+		<?=$this->html->link('<i class="icon-plus"></i> Upload New Asset', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
 	</div>
 	<div class="col-md-4">
 		<?=$this->blackprint->queryForm(array('placeholder' => 'title...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
@@ -32,38 +32,29 @@
 					<th class="left">
 					<?php
 					$titleArrow = '';
-					if($currentSortField == 'title') {
+					if($currentSortField == 'originalFilename') {
 						$titleArrow = ($currentSortDirection == 'desc') ? ' <i class="icon-caret-down"></i>':' <i class="icon-caret-up"></i>';
 					}
 					?>
-					<?=$this->html->link('Title' . $titleArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'title,' . $sortDirection), array('escape' => false)); ?>
+					<?=$this->html->link('Filename' . $titleArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'originalFilename,' . $sortDirection), array('escape' => false)); ?>
 					</th>
 					<th>
 					<?php
 					$typeArrow = '';
-					if($currentSortField == 'type') {
+					if($currentSortField == 'contentType') {
 						$typeArrow = ($currentSortDirection == 'desc') ? ' <i class="icon-caret-down"></i>':' <i class="icon-caret-up"></i>';
 					}
 					?>
-					<?=$this->html->link('Type' . $typeArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => '_type,' . $sortDirection), array('escape' => false)); ?>
-					</th>
-					<th>
-					<?php
-					$activeArrow = '';
-					if($currentSortField == 'published') {
-						$activeArrow = ($currentSortDirection == 'desc') ? ' <i class="icon-caret-down"></i>':' <i class="icon-caret-up"></i>';
-					}
-					?>
-					<?=$this->html->link('Published' . $activeArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'published,' . $sortDirection), array('escape' => false)); ?>
+					<?=$this->html->link('Content Type' . $typeArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'contentType,' . $sortDirection), array('escape' => false)); ?>
 					</th>
 					<th>
 					<?php
 					$createdArrow = '';
-					if($currentSortField == 'created') {
+					if($currentSortField == 'uploadDate') {
 						$createdArrow = ($currentSortDirection == 'desc') ? ' <i class="icon-caret-down"></i>':' <i class="icon-caret-up"></i>';
 					}
 					?>
-					<?=$this->html->link('Created' . $createdArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'created,' . $sortDirection), array('escape' => false)); ?>	
+					<?=$this->html->link('Upload Date' . $createdArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'page' => $page, 'sort' => 'uploadDate,' . $sortDirection), array('escape' => false)); ?>	
 					</th>
 					<th class="right">Actions</th>
 				</tr>
@@ -71,21 +62,18 @@
 			<?php foreach($documents as $document) { ?>
 			<tr>
 				<td>
-					<?php $active = ($document->published) ? 'active':'inactive'; ?>
-					<?=$this->html->link($document->title, array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?>
+					<?=$document->originalFilename; ?>
+					<?php // $this->html->link($document->filename, array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?>
 				</td>
 				<td>
-					<?=$document->_type; ?>
+					<?=$document->contentType; ?>
 				</td>
 				<td>
-					<?php echo ($document->published) ? '<i class="icon-ok" style="color: green"></i>':'<i class="icon-remove" style="color: red"></i>'; ?>
+					<?=$this->blackprint->date($document->uploadDate->sec); ?>
 				</td>
 				<td>
-					<?=$this->blackprint->date($document->created->sec); ?>
-				</td>
-				<td>
-					<?php //$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?> |
-					<?php //$this->html->link('Delete', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'delete', 'admin' => true, 'args' => array($document->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $document->title . '?\')')); ?>
+					<?=$this->html->link('View Details', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'read', 'admin' => true, 'args' => array($document->_id))); ?> |
+					<?=$this->html->link('Delete', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'delete', 'admin' => true, 'args' => array($document->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $document->title . '?\')')); ?>
 				</td>
 			</tr>
 			<?php } ?>

@@ -232,7 +232,7 @@ class UsersController extends \lithium\action\Controller {
 			if($document->delete()) {
 				FlashMessage::write('The user has been deleted.');
 			} else {
-				FlashMessage::write('The could not be deleted, please try again.');
+				FlashMessage::write('The user could not be deleted, please try again.');
 			}
 		} else {
 			FlashMessage::write('You can\'t delete yourself!');
