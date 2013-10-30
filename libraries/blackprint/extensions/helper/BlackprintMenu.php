@@ -79,7 +79,7 @@ class BlackprintMenu extends \lithium\template\Helper {
 			foreach($menu as $parent) {
 				$title = (isset($parent['title']) && !empty($parent['title'])) ? $parent['title']:false;
 				$url = (isset($parent['url']) && !empty($parent['url'])) ? $parent['url']:false;
-				$activeIf = (isset($parent['activeIf']) && !empty($parent['activeIf'])) ? $parent['activeIf']:array();
+				$activeIfConditions = (isset($parent['activeIf']) && !empty($parent['activeIf'])) ? $parent['activeIf']:array();
 				$options = (isset($parent['options']) && is_array($parent['options'])) ? $parent['options']:array();
 				$sub_items = (isset($parent['subItems']) && is_array($parent['subItems'])) ? $parent['subItems']:array();
 				if($title && $url) {
@@ -96,60 +96,67 @@ class BlackprintMenu extends \lithium\template\Helper {
 
 					// This plus the Router::match() above really needs some love.
 					// Less if statements...Should be some shorter/nicer way to write it.
-					if(!empty($activeIf)) {
-						// Get all the pieces here to check.
-						$currentLibrary = isset($this->_context->request()->params['library']) ? strtolower($this->_context->request()->params['library']):null;
-						$currentController = isset($this->_context->request()->params['controller']) ? strtolower($this->_context->request()->params['controller']):null;
-						$currentAction = isset($this->_context->request()->params['action']) ? strtolower($this->_context->request()->params['action']):null;
-						$currentArgs = isset($this->_context->request()->params['args']) ? $this->_context->request()->params['args']:null;
-
-						$activeIfLibrary = isset($activeIf['library']) ? strtolower($activeIf['library']):null; // This is the only one that can default to null
-						$activeIfController = isset($activeIf['controller']) ? strtolower($activeIf['controller']):false;
-						$activeIfAction = isset($activeIf['action']) ? strtolower($activeIf['action']):false;
-						$activeIfArgs = false;
-						if(isset($activeIf['args']) && !empty($activeIf['args'])) {
-							$activeIfArgs = array();
-							foreach($activeIf['args'] as $arg) {
-								$activeIfArgs[] = strtolower($arg);
-							}
+					if(!empty($activeIfConditions)) {
+						if(is_array($activeIfConditions) && (!isset($activeIfConditions[0]) || !is_array($activeIfConditions[0]))) {
+							$activeIfConditions =  array($activeIfConditions);
 						}
-						$activeIfUrl = is_string($activeIf) ? strtolower($activeIf):false;
 
-						// 5 Situations here.
-						// Everything in route's array format including `args` array
-						if($activeIfLibrary && $activeIfController && $activeIfAction && $activeIfArgs) {
-							if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController && $activeIfAction == $currentAction) {
-								if(!empty($currentArgs) && is_array($currentArgs)) {
-									$differences = array_diff($currentArgs, $activeIfArgs);
-									if(empty($differences)) {
-										$activeClass = $activeClassName;
+						foreach($activeIfConditions as $activeIf) {
+							// Get all the pieces here to check.
+							$currentLibrary = isset($this->_context->request()->params['library']) ? strtolower($this->_context->request()->params['library']):null;
+							$currentController = isset($this->_context->request()->params['controller']) ? strtolower($this->_context->request()->params['controller']):null;
+							$currentAction = isset($this->_context->request()->params['action']) ? strtolower($this->_context->request()->params['action']):null;
+							$currentArgs = isset($this->_context->request()->params['args']) ? $this->_context->request()->params['args']:null;
+
+							$activeIfLibrary = isset($activeIf['library']) ? strtolower($activeIf['library']):null; // This is the only one that can default to null
+							$activeIfController = isset($activeIf['controller']) ? strtolower($activeIf['controller']):false;
+							$activeIfAction = isset($activeIf['action']) ? strtolower($activeIf['action']):false;
+							$activeIfArgs = false;
+							if(isset($activeIf['args']) && !empty($activeIf['args'])) {
+								$activeIfArgs = array();
+								foreach($activeIf['args'] as $arg) {
+									$activeIfArgs[] = strtolower($arg);
+								}
+							}
+							$activeIfUrl = is_string($activeIf) ? strtolower($activeIf):false;
+
+							// 5 Situations here.
+							// Everything in route's array format including `args` array
+							if($activeIfLibrary && $activeIfController && $activeIfAction && $activeIfArgs) {
+								if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController && $activeIfAction == $currentAction) {
+									if(!empty($currentArgs) && is_array($currentArgs)) {
+										$differences = array_diff($currentArgs, $activeIfArgs);
+										if(empty($differences)) {
+											$activeClass = $activeClassName;
+										}
 									}
 								}
 							}
-						}
 
-						// Library/Controller/Action
-						if($activeIfLibrary && $activeIfController && $activeIfAction && !$activeIfArgs) {
-							if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController && $activeIfAction == $currentAction) {
+							// Library/Controller/Action
+							if($activeIfLibrary && $activeIfController && $activeIfAction && !$activeIfArgs) {
+								if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController && $activeIfAction == $currentAction) {
+									$activeClass = $activeClassName;
+								}
+							}
+
+							// Library/Controller
+							if($activeIfLibrary && $activeIfController && !$activeIfAction && !$activeIfArgs) {
+								if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController) {
+									$activeClass = $activeClassName;
+								}
+							}
+
+							// Library only
+							if($activeIfLibrary && !$activeIfController && !$activeIfAction && !$activeIfArgs && $activeIfLibrary == $currentLibrary) {
 								$activeClass = $activeClassName;
 							}
-						}
 
-						// Library/Controller
-						if($activeIfLibrary && $activeIfController && !$activeIfAction && !$activeIfArgs) {
-							if($activeIfLibrary == $currentLibrary && $activeIfController == $currentController) {
+							// Exact URL string (and I mean exact)
+							if($activeIfUrl && $activeIfUrl == strtolower($this->_context->request()->url)) {
 								$activeClass = $activeClassName;
 							}
-						}
 
-						// Library only
-						if($activeIfLibrary && !$activeIfController && !$activeIfAction && !$activeIfArgs && $activeIfLibrary == $currentLibrary) {
-							$activeClass = $activeClassName;
-						}
-
-						// Exact URL string (and I mean exact)
-						if($activeIfUrl && $activeIfUrl == strtolower($this->_context->request()->url)) {
-							$activeClass = $activeClassName;
 						}
 					}
 

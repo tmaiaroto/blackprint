@@ -13,9 +13,13 @@ class BlackprintMenu extends \lithium\core\StaticObject {
 			'content' => array(
 				'title' => 'Content <b class="caret"></b>',
 				'url' => '#',
-				'activeIf' => array('library' => 'blackprint', 'controller' => 'content'),
+				'activeIf' => array(array('library' => 'blackprint', 'controller' => 'content'), array('library' => 'blackprint', 'controller' => 'assets')),
 				'options' => array('escape' => false),
 				'subItems' => array(
+					array(
+						'title' => 'Asset Manager',
+						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'assets', 'action' => 'index')
+					),
 					array(
 						'title' => 'List All',
 						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'content', 'action' => 'index')

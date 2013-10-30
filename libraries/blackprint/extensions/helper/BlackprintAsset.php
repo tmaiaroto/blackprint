@@ -335,9 +335,14 @@ class BlackprintAsset extends \lithium\template\helper\Html {
 	}
 	
 	/*
-	 * Call this method at the top of a view template to apply a filter to return all images called with the Html::image() helper
-	 * in that template as base64 data URIs. Note: IE6 & 7 do not support data URIs. 
+	 * Call this method at the top of a view template to apply a filter to return all images called with the Html::image() helper,
+	 * in that template, as base64 data URIs. Note: IE6 & 7 do not support data URIs. 
 	 *
+	 * The benefit here is more data is on the single HTML page and the web browser does not need to make as many requests
+	 * for resources. This can increase page load speed for users in some cases. However, it could come at the cost of server
+	 * throughput because the extra work here and page size. Splitting requests up can help a server to serve more traffic.
+	 * These data URIs may also not cache, so think about the use of this and of course your milage may vary.
+	 * 
 	*/ 
 	public function images($config=array()) {
 		$this->_context->Html->applyFilter('image', function($self, $params, $chain) {
