@@ -1,6 +1,9 @@
 <?php
 /**
- * Thumbnail generation class.
+ * Generic thumbnail generation class.
+ *
+ * This classes uses the GD library which is pretty common
+ * to PHP installs these days.
  *
  */
 namespace blackprint\extensions;
@@ -8,6 +11,7 @@ namespace blackprint\extensions;
 use blackprint\models\Asset;
 use lithium\analysis\Logger;
 use lithium\action\Response;
+use lithium\net\http\Media;
 use \MongoId;
 use \MongoDate;
 use \MongoGridFSFile;
@@ -79,8 +83,8 @@ class Thumbnail extends \lithium\core\StaticObject {
 		$options['letterbox'] = is_string($options['letterbox']) ? static::_html2rgb($options['letterbox']):$options['letterbox'];
 
 		// If realpath() isn't used to pass the image, and it's just a part of the route to the image.
-		if(is_string($source) && substr($source, 0, 8) == '/li3b_gallery') {
-			$source = LITHIUM_APP_PATH . '/libraries/li3b_gallery/webroot' . substr($source, 8);
+		if(is_string($source) && substr($source, 0, 4) !== 'http') {
+			$source = Media::webroot(true) . $source;
 		}
 
 		// Round the thumbnail quality in case a decimal was provided.
@@ -128,6 +132,7 @@ class Thumbnail extends \lithium\core\StaticObject {
 				$sourceInfo = new SplFileInfo(static::$_source);
 				static::$_image->ext = $sourceInfo->getExtension();
 				static::$_image->filename = $sourceInfo->getFilename();
+				static::$_image->originalFilename = $sourceInfo->getFilename();
 				static::$_image->lastModified = $sourceInfo->getMTime();
 				static::$_image->sourceId = hash('md5', $source);
 
@@ -149,6 +154,7 @@ class Thumbnail extends \lithium\core\StaticObject {
 			case ($source instanceof MongoGridFSFile):
 				static::$_image->ext = $source->file['fileExt'];
 				static::$_image->filename = $source->file['filename'];
+				static::$_image->originalFilename = $source->file['originalFilename'];
 				static::$_image->lastModified = strtotime($source->file['uploadDate']);
 				static::$_image->sourceId = hash('md5', (string)$source->file['_id']);
 				static::$_source = $source;
@@ -169,6 +175,7 @@ class Thumbnail extends \lithium\core\StaticObject {
 				}
 				static::$_image->ext = $asset->fileExt;
 				static::$_image->filename = $asset->filename;
+				static::$_image->originalFilename = $asset->originalFilename;
 				static::$_image->lastModified = $asset->uploadDate;
 				static::$_image->sourceId = hash('md5', (string)$source->_id);
 				static::$_source = $asset->file;
@@ -209,6 +216,7 @@ class Thumbnail extends \lithium\core\StaticObject {
 				// Don't forget to re-add the extension.
 				$sourceHash = hash('md5', $source);
 				static::$_image->filename = $sourceHash . '.' . static::$_image->ext;
+				static::$_image->originalFilename = $sourceHash . '.' . static::$_image->ext;
 				static::$_image->lastModified = (isset($headers['Last-Modified'])) ? strtotime($headers['Last-Modified']):time();
 				static::$_image->sourceId = $sourceHash;
 				static::_setDestination();
@@ -778,7 +786,7 @@ class Thumbnail extends \lithium\core\StaticObject {
 			$thumbSizeAsString = static::$_options['size']['x'] . 'x' . static::$_options['size']['y'];
 			$image = Asset::find('first', array('conditions' => array('filename' => sys_get_temp_dir() . '/' . static::$_image->sourceId . '_' . $thumbSizeAsString)));
 			if($image && $image->uploadDate->sec > static::$_image->lastModified) {
-				return '/li3b_gallery/images/' . $image->_id . '.' . $image->fileExt;
+				return '/asset/' . $image->_id . '.' . $image->fileExt;
 			}
 		}
 
@@ -897,7 +905,8 @@ class Thumbnail extends \lithium\core\StaticObject {
 				array(
 					'fileExt' => static::$_image->ext,
 					'ref' => static::$_image->sourceId,
-					'_thumbnail' => true
+					'_thumbnail' => true,
+					'originalFilename' => static::$_image->originalFilename,
 				)
 			);
 
@@ -906,8 +915,8 @@ class Thumbnail extends \lithium\core\StaticObject {
 
 			// Set the destination so we we can use the newly created cache image.
 			// NOTE: If routes.php changes, this will need to as well.
-			// static::$_destination = '/li3b_gallery/images/' . (string)$gridFile->_id . '.' . static::$_image->ext;
-			static::$_destination = '/li3b_gallery/images/' . (string)$gridFileId . '.' . static::$_image->ext;
+			// static::$_destination = '/asset/' . (string)$gridFile->_id . '.' . static::$_image->ext;
+			static::$_destination = '/asset/' . (string)$gridFileId . '.' . static::$_image->ext;
 
 			if($gridFileId) {
 				return true;

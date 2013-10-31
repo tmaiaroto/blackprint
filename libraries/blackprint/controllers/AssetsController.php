@@ -2,6 +2,8 @@
 namespace blackprint\controllers;
 
 use blackprint\models\Asset;
+use blackprint\models\Config;
+use blackprint\extensions\Thumbnail;
 use blackprint\extensions\storage\FlashMessage;
 use lithium\security\validation\RequestToken;
 use \MongoDate;
@@ -31,7 +33,7 @@ class AssetsController extends \lithium\action\Controller {
 	public function admin_index() {
 		$this->_render['layout'] = 'admin';
 	
-		$conditions = array();
+		$conditions = array('_thumbnail' => false);
 		if((isset($this->request->query['q'])) && (!empty($this->request->query['q']))) {
 			$search_schema = Asset::searchSchema();
 			$search_conditions = array();
@@ -82,39 +84,41 @@ class AssetsController extends \lithium\action\Controller {
 			// For now...while we're saving to disk.
 			if(!isset($this->request->data['Filedata'][0]['error'])) {
 				$this->request->data['Filedata'] = array($this->request->data['Filedata']);
+			} else {
+				FlashMessage::write('Sorry, there was seemingly nothing to upload, please add some files and try again.');
 			}
+
+			$allowedFileExtensions = Config::getAllowedFileExtensions();
 
 			foreach($this->request->data['Filedata'] as $file) {
 				// Save file to gridFS
 				if ($file['error'] == UPLOAD_ERR_OK) {
 					$ext = substr(strrchr($file['name'], '.'), 1);
-					switch(strtolower($ext)) {
-						case 'jpg':
-						case 'jpeg':
-						case 'png':
-						case 'gif':
-						case 'png':
-							// Asset::store() works much like the mongo PHP driver. Filename first, then metadata.
-							// We are creating a unique file name as well, otherwise we'd overwrite stuff or have failed saves.
-							$gridFileId = Asset::store(
-								$file['tmp_name'],
-								array(
-									'filename' => (string)uniqid(php_uname('n') . '.') . '.'.$ext,
-									'fileExt' => $ext,
-									'exif' => exif_read_data($file['tmp_name']),
-									'originalFilename' => $file['name']
-									)
-								);
-							break;
-						default:
-							//exit();
-							break;
+					if(in_array($ext, $allowedFileExtensions)) {
+						// Asset::store() works much like the mongo PHP driver. Filename first, then metadata.
+						// We are creating a unique file name as well, otherwise we'd overwrite stuff or have failed saves.
+						$gridFileId = Asset::store(
+							$file['tmp_name'],
+							array(
+								'filename' => (string)uniqid(php_uname('n') . '.') . '.'.$ext,
+								'fileExt' => $ext,
+								'exif' => exif_read_data($file['tmp_name']),
+								'originalFilename' => $file['name'],
+								// Always be sure to set this to false when storing assets that are not thumbnails as the index listing
+								// has query conditions specifically set for _thumbnail: false
+								'_thumbnail' => false
+							)
+						);
+						if($gridFileId) {
+							FlashMessage::write('The file was successfully uploaded.');
+							return $this->redirect(array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'admin' => true)); 
+						}
+					} else {
+						FlashMessage::write('That file type is not allowed to be uploaded.');
 					}
 				}
 			}
-			return;
 		}
-		FlashMessage::write('Sorry, there was seemingly nothing to upload, please add some files and try again.');
 	}
 
 	/**
@@ -129,7 +133,22 @@ class AssetsController extends \lithium\action\Controller {
 		$conditions = array('_id' => $id);
 		$document = Asset::find('first', array('conditions' => $conditions));
 
-		return compact('document');
+		// Image extensions that allow for thumbnails using the Thumbnail class.
+		$thumbnails = false;
+		$imageExtensions = array('jpg', 'jpeg', 'gif', 'png');
+		if(in_array($document->fileExt, $imageExtensions) && $document->_thumbnail !== true) {
+			// Thumbnails always have a "ref" field which is an md5 reference to the source. Which in this case will be the MongoId.
+			// Thumbnails could be made from an image hosted elsewhere and the "ref" would be the md5 of a URL. That source image would
+			// not need to be stored in the database.
+			$thumbnails = Asset::find('all', array(
+				'conditions' => array(
+					'_thumbnail' => true,
+					'ref' => hash('md5', (string)$document->_id)
+				)
+			));
+		}
+
+		return compact('document', 'thumbnails');
 	}
 
 	/**
@@ -156,6 +175,24 @@ class AssetsController extends \lithium\action\Controller {
 			FlashMessage::write('The asset could not be deleted, please try again.');
 		}
 
+		return $this->redirect(array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'admin' => true));
+	}
+
+	/**
+	 * Allows admins to clear the thumbnail image cache.
+	 * This will remove all images from GridFS where the field "_thumbnail" is true.
+	 *
+	 * @return
+	*/
+	public function admin_clear_thumbnail_cache() {
+		if(Thumbnail::clearCache()) {
+			FlashMessage::write('The image thumbnail cache has been cleared.');
+		} else {
+			FlashMessage::write('Could not clear the image thumbnail cache, please try again.');
+		}
+		if(isset($this->request->query['redirect'])) {
+			return $this->redirect($this->request->query['redirect']);
+		}
 		return $this->redirect(array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'index', 'admin' => true));
 	}
 

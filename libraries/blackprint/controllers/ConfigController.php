@@ -48,7 +48,9 @@ class ConfigController extends \lithium\action\Controller {
 			}
 		}
 
-		$this->set(compact('document'));
+		$defaultAllowedExtensions = Config::$allowedFileExtensions;
+
+		$this->set(compact('document', 'defaultAllowedExtensions'));
 	}
 	
 }

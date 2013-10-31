@@ -74,3 +74,8 @@ footer {
 footer hr {
 	border-color: #333;
 }
+
+/* Index Listing Styles */
+tr.valign-middle-row td {
+	vertical-align: middle !important;
+}

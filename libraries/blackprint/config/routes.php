@@ -1,6 +1,6 @@
 <?php
 use blackprint\models\Asset;
-use blackprint\extensions\util\Thumbnail;
+use blackprint\extensions\Thumbnail;
 
 use lithium\net\http\Router;
 use lithium\core\Environment;
@@ -28,10 +28,10 @@ Router::connect('/asset/{:args}.{:ext}', array(), function($request) {
 	$document = false;
 	if(isset($request->params['args'][0])) {
 		if(preg_match('/^[0-9a-fA-F]{24}$/i', $request->params['args'][0])) {
-			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'file', 'length')));	
+			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'file', 'length', 'fileExt', 'uploadDate')));	
 		} else {
 			$filename = $request->params['args'][0] . '.' . $request->params['ext'];
-			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'file', 'length')));
+			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'file', 'length', 'fileExt', 'uploadDate')));
 		}
 	}
 	
@@ -48,25 +48,27 @@ Router::connect('/asset/{:args}.{:ext}', array(), function($request) {
 });
 
 // Allow thumbnails to be generated (just for images of course).
-Router::connect('/asset/thumbnail/{:width:[0-9]+}/{:height:[0-9]+}/{:args}.{:ext:(jpe?g|png|gif)}', array(), function($request) {
+Router::connect('/thumbnail/{:width:[0-9]+}/{:height:[0-9]+}/{:args}.{:ext}', array(), function($request) {
 	$document = false;
 	if(isset($request->params['args'][0])) {
 		if(preg_match('/^[0-9a-fA-F]{24}$/i', $request->params['args'][0])) {
-			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'file', 'length')));	
+			$document = Asset::find('first', array('conditions' => array('_id' => $request->params['args'][0]), 'fields' => array('contentType', 'filename', 'originalFilename', 'file', 'length', 'fileExt', 'uploadDate')));	
 		} else {
 			$filename = $request->params['args'][0] . '.' . $request->params['ext'];
-			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'file', 'length')));
+			$document = Asset::find('first', array('conditions' => array('filename' => $filename, 'fileExt' => $request->params['ext']), 'fields' => array('contentType', 'filename', 'originalFilename', 'file', 'length', 'fileExt', 'uploadDate')));
 		}
-	}
-
-	if(!$document || !$document->file) {
-		header("Status: 404 Not Found");
-		header("HTTP/1.0 404 Not Found");
-		die;
 	}
 
 	$width = isset($request->params['width']) ? (int)$request->params['width']:100;
 	$height = isset($request->params['height']) ? (int)$request->params['height']:100;
+	$requestedExtension = isset($request->params['ext']) ? $request->params['ext']:null;
+	$resizeableExtensions = array('jpg', 'jpeg', 'gif', 'png');
+
+	if(!$document || !$document->file || !in_array($requestedExtension, $resizeableExtensions)) {
+		header("Status: 404 Not Found");
+		header("HTTP/1.0 404 Not Found");
+		die;
+	}
 
 	$options = array(
 		'size' => array($width, $height),
@@ -105,8 +107,9 @@ Router::connect('/asset/thumbnail/{:width:[0-9]+}/{:height:[0-9]+}/{:args}.{:ext
 	return new Response(array(
 		'location' => $file['path']
 	));
-
 });
+
+Router::connect('/admin/clear-thumbnail-cache', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'clear_thumbnail_cache', 'admin' => true));
 
 /**
  * Dispatcher rules to rewrite admin actions.

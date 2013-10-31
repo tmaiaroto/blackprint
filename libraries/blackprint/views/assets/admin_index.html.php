@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-8">
-		<?=$this->html->link('<i class="icon-plus"></i> Upload New Asset', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
+		<?=$this->html->link('<i class="fa fa-plus"></i> Upload New Asset', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?> <?=$this->html->link('<small>Clear Image Thumbnail Cache</small>', array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'clear_thumbnail_cache', 'admin' => true), array('class' => 'text-muted', 'style' => 'margin-left: 10px', 'onClick' => 'return confirm(\'Are you sure you want to clear the thumbnail cache?\')', 'escape' => false)); ?>
 	</div>
 	<div class="col-md-4">
 		<?=$this->blackprint->queryForm(array('placeholder' => 'filename...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
@@ -30,6 +30,8 @@
 			<thead>
 				<tr>
 					<th class="left">
+					</th>
+					<th>
 					<?php
 					$titleArrow = '';
 					if($currentSortField == 'originalFilename') {
@@ -60,7 +62,17 @@
 				</tr>
 			</thead>
 			<?php foreach($documents as $document) { ?>
-			<tr>
+			<tr class="valign-middle-row">
+				<td>
+					<?php
+					$resizeableExtensions = array('jpg', 'jpeg', 'gif', 'png');
+					if(!in_array($document->fileExt, $resizeableExtensions)) {
+					?>
+						<?=$this->html->image('holder.js/100x100/text: N/A'); ?>
+					<?php } else { ?>
+						<?=$this->html->image('/thumbnail/100/100/' . (string)$document->_id . '.' . $document->fileExt); ?>
+					<?php } ?>
+				</td>
 				<td>
 					<?=$document->originalFilename; ?>
 					<?php // $this->html->link($document->filename, array('library' => 'blackprint', 'controller' => 'assets', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?>

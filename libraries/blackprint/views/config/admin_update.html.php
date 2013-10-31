@@ -14,6 +14,7 @@
 
 			<ul class="nav nav-tabs">
 				<li><a href="#general" data-toggle="tab">General</a></li>
+				<li><a href="#assets" data-toggle="tab">Assets</a></li>
 				<li><a href="#thirdPartyAuth" data-toggle="tab">3rd Party Authentication</a></li>
 			</ul>
 
@@ -33,6 +34,43 @@
 						</div>
 						<div class="row">
 							<?=$this->BlackprintForm->field('termsOfServiceUrl', array('type' => 'text', 'label' => 'Terms of Service URL', 'size' => '6')); ?>
+						</div>
+					</div>
+				</div>
+
+				<?php // ASSETS ?>
+				<div class="tab-pane" id="assets">
+					<div class="container">
+						<br />
+						<div class="row mg-bottom-10">
+							<?=$this->html->link('Clear Image Thumbnail Cache', '/admin/clear-thumbnail-cache?redirect=' . $this->blackprint->here(false), array('class' => 'btn btn-warning', 'onClick' => 'return confirm(\'Are you sure you want to clear the thumbnail cache?\')', 'escape' => false)); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('assets.allowedExtensions', array('type' => 'text', 'label' => 'Allowed File Extensions', 'size' => '12', 'help' => 'A comma separated list of extensions that limits what type of files can be uploaded to the site.')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('assets.appendToAllowedExtensionsDefault', array('type' => 'checkbox', 'label' => 'Append to Default Allowed Extensions', 'size' => '8', 'help' => 'If checked, the extensions you provided above will be appended to the list of file extensions allowed by default.')); ?>
+						</div>
+						<div class="row">
+							<h4>Default File Extensions Allowed to be Uploaded</h4>
+							<p>
+								A restrictive set of file types are allowed to be uploaded by default. This includes various media files, documents, compressed files, and a few application files that are not Linux binaries (you should really zip any executable file). While files are stored in the database, which helps protect the system from malicious files being executed, this restrictive set of files further increases security. The allowed file extensions by default are as follows:
+							</p>
+							<p>
+								<strong>
+								<?php 
+								$i=1;
+								$extCount=count($defaultAllowedExtensions);
+								foreach($defaultAllowedExtensions as $ext) {
+									echo $ext;
+									if($i < $extCount) {
+										echo ', ';
+									}
+									$i++;
+								}
+								?>
+								</strong>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -202,13 +240,5 @@
 	</div>
 	
 	<div class="col-md-3">
-		<div class="well" style="padding: 8px 0;">
-			<div style="padding: 8px;">
-				<p>
-					Blackprint configuration notes...
-				</p>
-			</div>
-			
-		</div>
 	</div>
 </div>

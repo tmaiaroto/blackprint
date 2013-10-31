@@ -150,4 +150,14 @@ Asset::applyFilter('validates', function($self, $params, $chain) {
 	$params['options']['rules'] = Asset::$validate;
 	return $chain->next($self, $params, $chain);
 });
+
+// Filter when deleting, also remove thumbnails
+Asset::applyFilter('delete', function($self, $params, $chain) {
+	if(!isset($params['entity']->_thumbnail) || empty($params['entity']->_thumbnail)) {
+		$thumbnailRef = hash('md5', (string)$params['entity']->_id);
+		Asset::remove(array('ref' => $thumbnailRef));
+	}
+	
+	return $chain->next($self, $params, $chain);
+});
 ?>

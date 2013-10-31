@@ -32,15 +32,36 @@ class Config extends \lithium\data\Model {
 		'privacyPolicyUrl' => array('type' => 'string'),
 		'termsOfServiceUrl' => array('type' => 'string'),
 		'externalAuthServices' => array('type' => 'object'),
+		'assets' => array('type' => 'object'),
 
 		'modified' => array('type' => 'date'),
 		'created' => array('type' => 'date')
 	);
 
+	/*
+	 * A safe set of allowed file extensions by default.
+	*/
+	public static $allowedFileExtensions = array(
+		// images, fonts, icons, and adobe app files
+		'jpg', 'jpeg', 'png', 'gif', 'pdf', 'svg', 'bmp', 'tif', 'tiff', 'tga', 'thm', 'pspimage', 'ico', 'icns', 'pct', 'psd', 'ps', 'indd', 'eps', 'ai', 'yuv', 'dds', 'dwg', 'dxf', 'ttf', 'fnt', 'fon', 'otf', '3ds', 'max', '3dm', 'obj', 
+		// flash and flash media
+		'swf', 'flv', 'f4v', 'fvp', 'f4a', 'f4b',
+		// audio and video
+		'avi', 'xvid', 'xmv', 'mp4', 'mov', 'qtm', 'mpg', 'mpeg', 'mp3', 'wma', 'wav', 'mid', 'aif', 'mpa', 'm4a', 'm4v', 'wmv', 'ogg', 'ogx', 'ogv', 'oga',
+		// documents, vCard, ebooks, calendar, etc.
+		'csv', 'xml', 'vcf', 'ibooks', 'mobi', 'epub', 'txt', 'rtf', 'wps', 'wpd', 'odt', 'pages', 'tex', 'doc', 'docx', 'xls', 'xlsx', 'xlr', 'ppt', 'pps', 'pptx', 'ics',
+		// compressed files
+		'zip', 'zipx', 'tar', 'rar', 'gzip', 'gz', 'bz2', '7z', 'pkg', 'sitx', 'iso', 'dmg',
+		// log files, database files, configuration files
+		'log', 'msg', 'sql', 'mdb', 'db', 'accdb', 'ini', 'cfg', 'rss',
+		// executables/apps (no linux binaries, no cgi, no java executables -- apps should be zipped first for distribution anyway)
+		'apk', 'app', 'msi'
+	);
+
 	/**
 	 * Get the configuration (from cache is possible).
 	*/
-	public static function get($name=null) {
+	public static function get($name=null, $fields=array()) {
 		// Just one for now
 		$name = 'default';
 
@@ -49,13 +70,38 @@ class Config extends \lithium\data\Model {
 		if($cache = Cache::read('blackprint', 'blackprintConfig')) {
 			$configData = $cache;
 		} else {
-			$configDoc = Config::find('first', array('conditions' => array('name' => 'default')));
+			if(!empty($fields) && is_array($fields)) {
+				$configDoc = Config::find('first', array('conditions' => array('name' => 'default'), 'fields' => $fields));
+			} else {
+				$configDoc = Config::find('first', array('conditions' => array('name' => 'default')));
+			}
 			if(!empty($configDoc)) {
 				$configData = $configDoc->data();
 			}
 		}
 
 		return $configData;
+	}
+
+	/**
+	 * Returns an array of allowed file extensions, safe for upload.
+	*/
+	public static function getAllowedFileExtensions($append=false) {
+		$allowedFileExtensions = self::$allowedFileExtensions;
+		$assetsConfig = Config::get('default', array('assets'));
+		
+		// Allow $append to be forced true by argument or use the config setting if set
+		$append = (isset($assetsConfig['appendToAllowedExtensionsDefault']) && is_bool($assetsConfig['appendToAllowedExtensionsDefault']) && $append !== true) ? $assetsConfig['appendToAllowedExtensionsDefault']:$append;
+		
+		if(isset($assetsConfig['allowedExtensions'])) {
+			if($append) {
+				$allowedFileExtensions += explode(',', $assetsConfig['allowedFileExtensions']);
+			} else {
+				$allowedFileExtensions = explode(',', $assetsConfig['allowedFileExtensions']);
+			}
+		}
+
+		return $allowedFileExtensions;
 	}
 	
 }
