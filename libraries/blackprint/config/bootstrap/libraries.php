@@ -12,6 +12,8 @@ use lithium\core\Libraries;
 
 Libraries::add('li3_access');
 Libraries::add('lusitanian', array('bootstrap' => 'oauth/src/OAuth/bootstrap.php'));
+Libraries::add('swiftmailer', array('bootstrap' => 'swiftmailer/lib/swift_required.php'));
+Libraries::add('li3_swiftmailer');
 
 $appConfig =  Libraries::get(true);
 $libd = $appConfig['path'] . '/config/bootstrap/libraries/*.php';

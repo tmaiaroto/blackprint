@@ -6,6 +6,8 @@
     "require": {
         "unionofrad/lithium": "1.0-beta",
     	"tmaiaroto/li3_access": "dev-master",
-    	"lusitanian/oauth": "~0.2"
+    	"lusitanian/oauth": "~0.2",
+    	"swiftmailer/swiftmailer": "5.1.*@dev",
+        "djordje/li3_swiftmailer": "dev-master"
     }
 }

@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-9">
 		<div class="row">
-			<h2 id="page-heading">CMS Configuration</h2>
+			<h2 id="page-heading">System Configuration</h2>
 		</div>
 
 		<?=$this->BlackprintForm->create($document, array('class' => 'form-horizontal', 'role' => 'form')); ?>
@@ -15,6 +15,7 @@
 			<ul class="nav nav-tabs">
 				<li><a href="#general" data-toggle="tab">General</a></li>
 				<li><a href="#assets" data-toggle="tab">Assets</a></li>
+				<li><a href="#communications" data-toggle="tab">Communications</a></li>
 				<li><a href="#thirdPartyAuth" data-toggle="tab">3rd Party Authentication</a></li>
 			</ul>
 
@@ -27,7 +28,8 @@
 							<?=$this->BlackprintForm->field('siteName', array('type' => 'text', 'label' => 'Site Name', 'size' => '6')); ?>
 						</div>
 						<div class="row">
-							<?=$this->BlackprintForm->field('adminEmail', array('type' => 'text', 'label' => 'Administrator\'s E-mail', 'size' => '6')); ?>
+							<?=$this->BlackprintForm->field('adminEmail', array('type' => 'text', 'label' => 'Administrator\'s E-mail', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('adminName', array('type' => 'text', 'label' => 'Administrator\'s Name', 'size' => '6')); ?>
 						</div>
 						<div class="row">
 							<?=$this->BlackprintForm->field('privacyPolicyUrl', array('type' => 'text', 'label' => 'Privacy Policy URL', 'size' => '6')); ?>
@@ -72,6 +74,38 @@
 								</strong>
 							</p>
 						</div>
+					</div>
+				</div>
+
+				<?php // COMMUNICATONS ?>
+				<div class="tab-pane" id="communications">
+					<div class="container">
+						<br />
+						<div class="row mg-bottom-10">
+							<p>
+								The system can send and receive messages through a variety of means by default (e-mail, SMS, and so on). Below you can configure the services.
+							</p>
+						</div>
+						<div class="row mg-bottom-10">
+							<?=$this->html->link('Send Test E-mail', array('library' => 'blackprint', 'controller' => 'config', 'action' => 'test_email', 'admin' => true), array('class' => 'btn btn-default', 'target' => '_blank', 'escape' => false)); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('communications.smtp.host', array('type' => 'text', 'label' => 'SMTP Host Address', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.port', array('type' => 'text', 'label' => 'SMTP Port', 'size' => '6', 'help' => 'This will default to port 25 and port 587 by default if using TLS.')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('communications.smtp.tls', array('type' => 'checkbox', 'label' => 'Use Transport Layer Security (TLS)', 'size' => '6', 'help' => 'If your SMTP server requires TLS, check this box.')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.domain', array('type' => 'text', 'label' => 'SMTP Domain', 'size' => '6', 'help' => 'The domain from where you are sending e-mail from.')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('communications.smtp.username', array('type' => 'text', 'label' => 'SMTP Username', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.password', array('type' => 'text', 'label' => 'SMTP Password', 'size' => '6')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('communications.smtp.fromAddress', array('type' => 'text', 'label' => 'E-mail Address', 'size' => '6', 'groupStyle' => 'margin-right: 10px;', 'help' => 'The e-mail address messages come from (if different than the username above).')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.fromName', array('type' => 'text', 'label' => 'Name', 'size' => '6', 'help' => 'A friendly name for this address.')); ?>
+						</div>
+
 					</div>
 				</div>
 

@@ -29,10 +29,15 @@ class Config extends \lithium\data\Model {
 		'name' => array('type' => 'string'),
 		'siteName' => array('type' => 'string'),
 		'adminEmail' => array('type' => 'string'),
+		'adminName' => array('type' => 'string'),
 		'privacyPolicyUrl' => array('type' => 'string'),
 		'termsOfServiceUrl' => array('type' => 'string'),
+		// Facebook, Twitter, etc. If you can login via OAuth, the system can authenticate you that way too.
 		'externalAuthServices' => array('type' => 'object'),
+		// What's allowed to be uploaded, etc.
 		'assets' => array('type' => 'object'),
+		// E-mail server info, SMS API, etc. All settings related to how the system sends/receives messages.
+		'communications' => array('type' => 'object'),
 
 		'modified' => array('type' => 'date'),
 		'created' => array('type' => 'date')

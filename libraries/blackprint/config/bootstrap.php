@@ -74,6 +74,11 @@ require __DIR__ . '/bootstrap/auth.php';
 require __DIR__ . '/bootstrap/access.php';
 
 /**
+ * Communications bootstrap, which allows the system to send/receive messages.
+*/
+require __DIR__ . '/bootstrap/communications.php';
+
+/**
  * Last, but not least, the template override filter.
  * It allows you to override any library's templates with your own.
  * This way, you can take any given library that may contain the 
