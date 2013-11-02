@@ -57,8 +57,6 @@ $usersExternalServices = isset($user['externalAuthServices']) ? $user['externalA
 				<p>
 					<strong>Notes</strong><br />
 					If you change your password, you will not be e-mailed any sort of confirmation. Please do not forget your password.
-					<br /><br />
-					You may need to log out and back in again in order to see the changes you make.
 				</p>
 			</div>
 		</div>

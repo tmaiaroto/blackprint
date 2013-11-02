@@ -5,7 +5,7 @@
 	<?php $title = $this->title() ? $this->title():''; ?>
 	<title><?=$title ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Blackprint Admin Dashboard">
+	<meta name="description" content="Blackprint">
 	<meta name="author" content="Shift8Creative">
 	<?php
 		$this->blackprintAsset->style(array(
@@ -37,7 +37,6 @@
 	<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700,100' rel='stylesheet' type='text/css'>
 	<?php echo $this->html->link('Icon', '/img/blackprint-favicon.png', array('type' => 'icon')); ?>
-
 </head>
 <body>
 	<?=$this->_render('element', 'navbar', array('user' => $this->request()->user), array('library' => 'blackprint')); ?>

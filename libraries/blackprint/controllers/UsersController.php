@@ -4,6 +4,7 @@ namespace blackprint\controllers;
 use blackprint\models\User;
 use blackprint\models\Asset;
 use blackprint\models\Config;
+use blackprint\extensions\Email;
 use blackprint\extensions\Util;
 use blackprint\extensions\storage\FlashMessage;
 use li3_access\security\Access;
@@ -14,6 +15,7 @@ use lithium\security\Password;
 use lithium\util\Set;
 use lithium\util\String;
 use lithium\util\Inflector;
+use lithium\net\http\Router;
 use MongoDate;
 use MongoId;
 
@@ -529,7 +531,7 @@ class UsersController extends \lithium\action\Controller {
 			$userDocument = User::find('first', array('conditions' => array('_id' => $user['_id'])));
 
 			if($userDocument) {
-				$userDocument->save(array('lastLoginIp' => $_SERVER['REMOTE_ADDR'], 'lastLoginTime' => new MongoDate()));
+				$userDocument->save(array('lastLoginIp' => Util::visitorIp(), 'lastLoginTime' => new MongoDate()));
 			}
 
 			// only set a flash message if this is a login. it could be a redirect from somewhere else that has restricted access
@@ -545,7 +547,20 @@ class UsersController extends \lithium\action\Controller {
 		}
 		$data = $this->request->data;
 
-		return compact('data');
+		// SMTP e-mail must be setup for users to reset their passwords.
+		$canResetPassword = Email::isAvailable('blackprint_smtp');
+
+		// Get all external auth services.
+		$config = Config::get('default');
+		$externalAuthServices = array();
+		if(isset($config['externalAuthServices']) && !empty($config['externalAuthServices'])) {
+			foreach($config['externalAuthServices'] as $service => $v) {
+				$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+			}
+		}
+
+
+		return compact('data', 'canResetPassword', 'externalAuthServices');
 	}
 
 	/**
@@ -883,6 +898,153 @@ class UsersController extends \lithium\action\Controller {
 		}
 
 		$this->set(compact('document', 'externalAuthServices'));
+	}
+
+	/**
+	 * Allows users to recover their lost password, by resetting it,
+	 * via an e-mail link.
+	 *
+	 * NOTE: This method will only be available if the server can
+	 * send e-mails an SMTP server was setup in the configuration.
+	*/
+	public function reset_password($email=null, $resetCode=null) {
+		// The admin must have provided SMTP credentials in the system configuration.
+		if(!Email::isAvailable('blackprint_smtp')) {
+			return $this->redirect('/');
+		}
+
+		$document = null;
+
+		// If using a reset code.
+		if(!empty($resetCode) && !empty($email)) {
+			$now = new MongoDate();
+			$document = User::find('first', array('conditions' => array('email' => $email, 'resetCode' => $resetCode)));
+			if(empty($document)) {
+				FlashMessage::write('Invalid e-mail address or reset code.');
+				return $this->redirect('/forgot-password');
+			}
+
+			if(!empty($document->resetExpiration) && !empty($document->resetExpiration->sec)) {
+				if($document->resetExpiration->sec < $now->sec) {
+					FlashMessage::write('For security purposes, that reset request has expired. Please request another password reset.');
+					return $this->redirect('/forgot-password');
+				}
+			}
+
+			if($document && $this->request->data) {
+				// Validation rules.
+				$rules = array(
+					'email' => array(
+						array('notEmpty', 'message' => 'E-mail cannot be empty.'),
+						array('email', 'message' => 'E-mail is not valid.')
+					)
+				);
+
+				$this->request->data['modified'] = $now;
+
+				// Add validation rules for the password IF the password and passwordConfirm field were passed
+				if((isset($this->request->data['password']) && isset($this->request->data['passwordConfirm'])) &&
+					(!empty($this->request->data['password']) && !empty($this->request->data['passwordConfirm']))) {
+					$rules['password'] = array(
+						array('notEmpty', 'message' => 'Password cannot be empty.'),
+						array('notEmptyHash', 'message' => 'Password cannot be empty.'),
+						array('moreThanFive', 'message' => 'Password must be at least 6 characters long.')
+					);
+
+					// ...and of course hash the password
+					$this->request->data['password'] = Password::hash($this->request->data['password']);
+				} else {
+					// Otherwise, set the password to the current password.
+					$this->request->data['password'] = $document->password;
+				}
+
+				// Set the pretty URL that gets used by a lot of front-end actions.
+				// Pass the document _id so that it doesn't change the pretty URL on an update.
+				$this->request->data['url'] = $this->_generateUrl($document->_id);
+
+				// Do not let roles or user active status to be adjusted via this method.
+				if(isset($this->request->data['role'])) {
+					unset($this->request->data['role']);
+				}
+				if(isset($this->request->data['active'])) {
+					unset($this->request->data['active']);
+				}
+
+				// Ditch the reset code. It's a single use thing.
+				$this->request->data['resetCode'] = null;
+
+				if($document->save($this->request->data, array('validate' => $rules))) {
+					FlashMessage::write('You have successfully reset your password.');
+					$docData = $document->data();
+					unset($docData['password']);
+					Auth::set('blackprint', $this->request->data += $docData);
+
+					if($document->role == 'administrator') {
+						return $this->redirect('/admin/my-account');	
+					}
+					return $this->redirect('/my-account');
+				}
+			}
+		}
+
+		$config = Config::get('default');
+		$siteName = isset($config['siteName']) && !empty($config['siteName']) ? $config['siteName']:$_SERVER['HTTP_HOST'];
+
+		// If requesting a reset code.
+		if($this->request->data && empty($resetCode)) {
+			if(!empty($this->request->data['email'])) {
+				// Get the User document so that it can be adjusted to allow a password reset.
+				$userDocument = User::find('first', array('conditions' => array('email' => $this->request->data['email'])));
+				if($userDocument) {
+					// Anti-spam. Check to see if the User document already had an open request. Users should be able to make more than one
+					// request to reset their password, but only within a certain period of time. Otherwise, it could lead to abuse or waste.
+					if(isset($userDocument->resetRequestedDate) && !empty($userDocument->resetRequestedDate)) {
+						if(strtotime('-5 minutes') < $userDocument->resetRequestedDate->sec === true) {
+							FlashMessage::write('Please check your e-mail for further instructions. It may take a few minutes to receive the e-mail.');
+							return $this->redirect('/');
+						}
+					}
+
+					$resetData = array(
+						'resetCode' => String::uuid(),
+						// Users will have three days to reset their password before needing to request a new reset. Should be plenty of time.
+						// This helps protect against any sort of brute force attempts to guess the resetCode which is pretty hard to guess anyway.
+						'resetExpiration' => new MongoDate(strtotime(('+3 days'))),
+						// For security auditing purposes...May be useful in determining if there is a malicious user.
+						'resetRequests' => is_int($userDocument->resetRequests) ? ($userDocument->resetRequests + 1):1,
+						'resetRequestedFromIp' => Util::visitorIp(),
+						'resetRequestedDate' => new MongoDate()
+					);
+
+					$resetLink = Util::siteAddress(true) . '/' . $this->request->data['email'] . '/' . $resetData['resetCode'];
+
+					if($userDocument->save($resetData, array('validate' => false))) {
+						$userName = $userDocument->firstName . ' ' . $userDocument->lastName;
+						$userName = trim($userName);
+						if(empty($userName)) {
+							$userName = 'Hello';
+						}
+						try {
+							if(Email::send(array(
+								'to' => array($userDocument->email => $userName),
+								'subject' => 'Password Reset Requested',
+								'body' => '<html><p>' . $userName . ',</p><p>You, or someone else, has requested that your password be reset on ' . $siteName . '. If you did not make this request, you can safely ignore this message. If you did want to reset your password, simply follow this link:</p><p><pre>' . $resetLink . '</pre></p></html>'
+							))) {
+								FlashMessage::write('Please check your e-mail for further instructions.');
+								return $this->redirect('/');
+							}
+						} catch(\Exception $error) {
+							FlashMessage::write('Sorry, something went wrong, please try again.');
+							return $this->redirect(Util::siteAddress(true));
+						}
+					}
+				} else {
+					return $this->redirect('/forgot-password');
+				}
+			}
+		}
+
+		$this->set(compact('document'));
 	}
 
 	/**

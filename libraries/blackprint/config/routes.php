@@ -124,6 +124,7 @@ Dispatcher::config(array(
 Router::connect("/login/{:args}", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login'));
 Router::connect("/logout", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'logout'));
 Router::connect("/register", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register'));
+Router::connect("/forgot-password/{:args}", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'reset_password'));
 Router::connect("/my-account", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 Router::connect("/set-profile-picture-from-url.json", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'set_profile_picture_from_url', 'type' => 'json'));
 

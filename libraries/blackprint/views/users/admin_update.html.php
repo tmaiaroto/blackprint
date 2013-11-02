@@ -35,7 +35,7 @@
 				<div class="row">
 					<?=$this->BlackprintForm->submit('Save', array('class' => 'btn btn-primary')); ?> <?=$this->html->link('Cancel', array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'index'), array('class' => 'btn')); ?>
 
-					<p><br /><em><strong>Note:</strong> There will be no e-mail sent to this user. You must let them know what their password is.</em></p>
+					<p><br /><em><strong>Note:</strong> There will be no e-mail sent to this user. If you change their password, you'll need to let them know what it is.</em></p>
 				</div>
 			
 			<?=$this->BlackprintForm->end(); ?>

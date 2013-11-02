@@ -140,5 +140,40 @@ class Util {
 		return array();
 	}
 
+	/**
+	 * Returns the visitor's IP address.
+	 * Check from a variety of variables.
+	 *
+	 * @return mixed String or null on failure
+	*/
+	public static function visitorIp() {
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR']:null;
+		$ip = isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) ? $_SERVER['HTTP_X_CLUSTER_CLIENT_IP']:$ip;
+		$ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR']:$ip;
+		return $ip;
+	}
+
+	/**
+	 * Useful in returning the full http://www.site.com address for this site.
+	 *
+	 * @param boolean $includeCurrentPath Whether or not to include the current path
+	 * @return string
+	*/
+	public static function siteAddress($includeCurrentPath=false) {
+		$siteAddress = 'http';
+		if ((isset($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] == 'on')) {$siteAddress .= 's';}
+		$siteAddress .= '://';
+		if ($_SERVER['SERVER_PORT'] != '80') {
+			$siteAddress .= $_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+		} else {
+			$siteAddress .= $_SERVER['HTTP_HOST'];
+		}
+
+		if($includeCurrentPath) {
+			$siteAddress .= $_SERVER['REQUEST_URI'];
+		}
+		return $siteAddress;
+	}
+
 }
 ?>

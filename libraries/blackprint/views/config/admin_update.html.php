@@ -103,7 +103,7 @@
 						</div>
 						<div class="row">
 							<?=$this->BlackprintForm->field('communications.smtp.fromAddress', array('type' => 'text', 'label' => 'E-mail Address', 'size' => '6', 'groupStyle' => 'margin-right: 10px;', 'help' => 'The e-mail address messages come from (if different than the username above).')); ?>
-							<?=$this->BlackprintForm->field('communications.smtp.fromName', array('type' => 'text', 'label' => 'Name', 'size' => '6', 'help' => 'A friendly name for this address.')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.fromName', array('type' => 'text', 'label' => 'Name', 'size' => '6', 'help' => 'A name for this address (John Doe, System Admin, etc.) it is seen by recipients.')); ?>
 						</div>
 
 					</div>
