@@ -11,7 +11,7 @@
 					Register
 				<?php } ?>
 			</div>
-			<div class="container">
+			<div class="panel-container">
 				<?php if(!empty($externalRegistration)) { ?>
 					<div id="register-new-service" class="mg-top-10" style="display:none;">
 						Login using your existing account on this site and link your account from <?=$externalRegistration['serviceName']; ?>.
@@ -25,7 +25,7 @@
 					<div class="row mg-top-10">
 						<?=$this->BlackprintForm->field('email', array('type' => 'text', 'label' => 'E-mail Address', 'groupClass' => 'col-md-12')); ?>
 					</div>
-					<div class="row mg-top-10 mg-bottom-15">
+					<div class="row mg-top-10 mg-bottom-10">
 						<?=$this->BlackprintForm->field('password', array('type' => 'password', 'placeholder' => 'Not your dog\'s name', 'label' => 'Password', 'help' => 'Must be at least 6 characters long.', 'groupClass' => 'col-md-6')); ?>
 						<?=$this->BlackprintForm->field('passwordConfirm', array('type' => 'password', 'label' => 'Confirm Password', 'help' => 'Just to be sure, type the password again.', 'groupClass' => 'col-md-6')); ?>
 					</div>

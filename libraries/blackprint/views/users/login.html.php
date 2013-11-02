@@ -1,15 +1,14 @@
 <div class="row">
 	<div class="col-md-6">
-	<?=$this->BlackprintForm->create(null, array('class' => 'form-horizontal')); ?>
+		<?=$this->BlackprintForm->create(null, array('class' => 'form-horizontal')); ?>
 		<div class="panel panel-default">
-			<div class="container panel-container">
+			<div class="panel-container">
 				<div class="row mg-top-10">
-					<?=$this->BlackprintForm->field('email', array('label' => 'E-mail Address', 'size' => '12')); ?>
+					<?=$this->BlackprintForm->field('email', array('label' => 'E-mail Address', 'groupClass' => 'col-md-12')); ?>
 				</div>
-				<div class="row">
-					<?=$this->BlackprintForm->field('password', array('label' => 'Password', 'type' => 'password', 'size' => '12')); ?>
+				<div class="row mg-top-10 mg-bottom-10">
+					<?=$this->BlackprintForm->field('password', array('label' => 'Password', 'type' => 'password', 'groupClass' => 'col-md-12')); ?>
 				</div>
-				
 			</div>
 			<div class="panel-footer">
 				<?=$this->BlackprintForm->submit('Log in', array('class' => 'btn btn-primary pull-right')); ?>

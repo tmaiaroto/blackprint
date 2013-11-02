@@ -66,7 +66,7 @@ $usersExternalServices = isset($user['externalAuthServices']) ? $user['externalA
 			<div class="panel-heading">
 				Third Party Services
 			</div>
-			<div class="container">
+			<div class="panel-container">		
 				<p class="mg-top-10">You can login using your account from the following services:</p>
 				<?php foreach($externalAuthServices as $k => $v) { ?>
 					<div class="row mg-bottom-10">

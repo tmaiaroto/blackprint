@@ -31,8 +31,8 @@
 		), array('inline' => false));
 	?>
 	<?php
-		echo $this->blackprintAsset->scripts(array('optimize' => true));
-		echo $this->blackprintAsset->styles(array('optimize' => true));
+		echo $this->blackprintAsset->scripts(array('optimize' => false));
+		echo $this->blackprintAsset->styles(array('optimize' => false));
 	?>
 	<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700,100' rel='stylesheet' type='text/css'>
