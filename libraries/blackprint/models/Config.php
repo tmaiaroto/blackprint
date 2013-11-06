@@ -38,6 +38,12 @@ class Config extends \lithium\data\Model {
 		'assets' => array('type' => 'object'),
 		// E-mail server info, SMS API, etc. All settings related to how the system sends/receives messages.
 		'communications' => array('type' => 'object'),
+		// Default OpenGraph tags
+		'og' => array('type' => 'object'),
+		// App IDs, and other data, for social media apps (Facebook's JS SDK will need this for example and it gets included in the layout template)
+		'socialApps' => array('type' => 'object'),
+		// Other web page meta data
+		'meta' => array('type' => 'object'),
 
 		'modified' => array('type' => 'date'),
 		'created' => array('type' => 'date')

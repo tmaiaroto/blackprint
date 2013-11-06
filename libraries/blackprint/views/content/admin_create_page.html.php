@@ -8,9 +8,6 @@
 					<?=$this->BlackprintForm->field('title', array('label' => 'Title', 'size' => '9')); ?>
 				</div>
 				<div class="row">
-					<?=$this->BlackprintForm->field('summary', array('type' => 'textarea', 'label' => 'Summary', 'size' => '12', 'help' => 'This is an optional field. If you don\'t provide specific summary copy, a portion from the body copy may be used. It depends on the site design.')); ?>
-				</div>
-				<div class="row">
 					<?=$this->BlackprintForm->field('body', array('type' => 'textarea', 'label' => 'Body', 'size' => '12', 'style' => 'width: 100%; height: 400px;', 'class' => 'wysiwyg wysihtml5')); ?>
 				</div>
 				<?php 

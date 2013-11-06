@@ -73,7 +73,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		unset($options['prepend']);
 		unset($options['append']);
 		
-		$options['template'] = '<div class="' . $groupClass . '" {:wrap}>{:label}<div class="' . $inputDivClass . '" style="' . $groupStyle . '">' . $prepend . '{:input}' . $append . '</div>';
+		$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass . '">' . $prepend . '{:input}' . $append . '</div>';
 			if($help) {
 				$options['template'] .= '<' . $helpElement . ' class="' . $helpClass . '">' . $help . '</' . $helpElement . '>';
 			}
@@ -82,7 +82,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		// Format for checkboxes.
 		if($options['type'] == 'checkbox') {
 			$options['class'] = ''; // no input class for checkboxes
-			$options['template'] = '<div class="' . $groupClass . '"><strong>{:label}</strong><div class="checkbox" {:wrap}><label>{:input}';
+			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"><strong>{:label}</strong><div class="checkbox" {:wrap}><label>{:input}';
 				if($help) {
 					$options['template'] .= $help;
 				}
@@ -93,7 +93,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		// Format for radio buttons.
 		if($options['type'] == 'radio') {
 			$options['class'] = ''; // no input class for radio buttons
-			$options['template'] = '<div class="' . $groupClass . '" {:wrap}><div>{:label}';
+			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '" {:wrap}><div>{:label}';
 				$i = 1;
 				foreach($list as $value => $valueLabel) {
 					$rOptions = $options;
@@ -125,7 +125,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			unset($selectOptions['label']);
 			unset($selectOptions['type']);
 			
-			$options['template'] = '<div class="' . $groupClass . '" {:wrap}>';
+			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '" {:wrap}>';
 			$label = isset($options['label']) ? $options['label']:Inflector::humanize(preg_replace('/[\[\]\.]/', '_', $name));
 			$options['template'] .= parent::label($name, $label);
 			$options['template'] .= parent::select($name, $list, $selectOptions);

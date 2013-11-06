@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-9">
+	<div class="col-md-12">
 		<div class="row">
 			<h2 id="page-heading">System Configuration</h2>
 		</div>
@@ -17,6 +17,8 @@
 				<li><a href="#assets" data-toggle="tab">Assets</a></li>
 				<li><a href="#communications" data-toggle="tab">Communications</a></li>
 				<li><a href="#thirdPartyAuth" data-toggle="tab">3rd Party Authentication</a></li>
+				<li><a href="#social" data-toggle="tab">Social</a></li>
+				<li><a href="#analytics" data-toggle="tab">Analytics</a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -32,9 +34,7 @@
 							<?=$this->BlackprintForm->field('adminName', array('type' => 'text', 'label' => 'Administrator\'s Name', 'size' => '6')); ?>
 						</div>
 						<div class="row">
-							<?=$this->BlackprintForm->field('privacyPolicyUrl', array('type' => 'text', 'label' => 'Privacy Policy URL', 'size' => '6')); ?>
-						</div>
-						<div class="row">
+							<?=$this->BlackprintForm->field('privacyPolicyUrl', array('type' => 'text', 'label' => 'Privacy Policy URL', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
 							<?=$this->BlackprintForm->field('termsOfServiceUrl', array('type' => 'text', 'label' => 'Terms of Service URL', 'size' => '6')); ?>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 							<?=$this->BlackprintForm->field('communications.smtp.port', array('type' => 'text', 'label' => 'SMTP Port', 'size' => '6', 'help' => 'This will default to port 25 and port 587 by default if using TLS.')); ?>
 						</div>
 						<div class="row">
-							<?=$this->BlackprintForm->field('communications.smtp.tls', array('type' => 'checkbox', 'label' => 'Use Transport Layer Security (TLS)', 'size' => '6', 'help' => 'If your SMTP server requires TLS, check this box.')); ?>
+							<?=$this->BlackprintForm->field('communications.smtp.tls', array('type' => 'checkbox', 'label' => 'Use Transport Layer Security (TLS)', 'size' => '6', 'groupStyle' => 'margin-right: 10px;', 'help' => 'If your SMTP server requires TLS, check this box.')); ?>
 							<?=$this->BlackprintForm->field('communications.smtp.domain', array('type' => 'text', 'label' => 'SMTP Domain', 'size' => '6', 'help' => 'The domain from where you are sending e-mail from.')); ?>
 						</div>
 						<div class="row">
@@ -268,11 +268,71 @@
 					</div>
 				</div>
 
+				<?php // SOCIAL ?>
+				<div class="tab-pane" id="social">
+					<div class="container">
+						<div class="row">
+							<h3>Social Apps</h3>
+							<p>If you're using APIs from various social media services, you'll likely need to provide your app ID in order to make calls. By providing them here, the site's layout template can place them in the proper place when loading JavaScript SDKs, etc.</p>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('socialApps.facebook.appId', array('type' => 'text', 'label' => 'Facebook App ID', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('socialApps.facebook.xfbml', array('type' => 'checkbox', 'checked' => 'checked', 'label' => 'XFBML', 'help' => 'Parse XFBML.', 'size' => '2')); ?>
+							<?=$this->BlackprintForm->field('socialApps.facebook.cookie', array('type' => 'checkbox', 'checked' => 'checked', 'label' => 'Cookies', 'help' => 'Enable cookies to allow the server to access the session.', 'size' => '2')); ?>
+							<?=$this->BlackprintForm->field('socialApps.facebook.status', array('type' => 'checkbox', 'checked' => 'checked', 'label' => 'Status', 'help' => 'Check login status.', 'size' => '2')); ?>
+						</div>
+
+						<div class="row">
+							<h3>Open Graph Tags</h3>
+							<p>Set this site's default Open Graph tags. Pages will inherit these values, but they can (and probably should) be overridden on a page by page basis when creating or updating content. For more information about Open Graph tags, <?=$this->html->link('click here.', 'http://ogp.me/', array('target' => '_blank')); ?></p>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('og.site_name', array('type' => 'text', 'label' => 'Site Name', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('og.title', array('type' => 'text', 'label' => 'Title', 'size' => '6')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('og.description', array('type' => 'text', 'label' => 'Description', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('og.image', array('type' => 'text', 'label' => 'Image URL', 'size' => '6')); ?>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('og.type', array('type' => 'select', 'options' => array(
+								'website' => 'website',
+								'article' => 'article',
+								'book' => 'book',
+								'profile' => 'profile',
+								'video.movie' => 'video.movie',
+								'video.episode' => 'video.episode',
+								'video.tv_show' => 'video.tv_show',
+								'video.other' => 'video.other',
+								'music.song' => 'music.song',
+								'music.album' => 'music.album',
+								'music.playlist' => 'music.playlist',
+								'music.radio_station' => 'music.radio_station'
+							), 'label' => 'Object Type', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+						</div>
+						
+					</div>
+				</div>
+
+				<?php // ANALYTICS ?>
+				<div class="tab-pane" id="analytics">
+					<div class="container">
+						<div class="row">
+							<h3>Google Analytics</h3>
+							<p>If you're using Google Analtyics, please enter the domain and tracking code below (not the entire embed code, just the complete UA-xxxx code).</p>
+						</div>
+						<div class="row">
+							<?=$this->BlackprintForm->field('socialApps.googleAnalytics.code', array('type' => 'text', 'label' => 'Code/Property ID', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('socialApps.googleAnalytics.domain', array('type' => 'text', 'label' => 'Domain', 'size' => '6')); ?>
+						</div>
+						
+					</div>
+				</div>
+
+
 			</div> <?php // end tab content ?>
 			
 		<?=$this->BlackprintForm->end(); ?>
 	</div>
 	
-	<div class="col-md-3">
-	</div>
 </div>

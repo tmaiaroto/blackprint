@@ -56,16 +56,23 @@
 	/**
 	 * Handle some social media JS SDKs, such as Facebook's, if the application has configured them.
 	 */
-	if(isset($this->request()->social)) {
+	if(isset($this->request()->blackprintConfig['socialApps'])) {
 	?>
-		<?php if(isset($this->request()->social['facebook']) && isset($this->request()->social['facebook']['appId'])) { ?>
+		<?php if(isset($this->request()->blackprintConfig['socialApps']['facebook']) && isset($this->request()->blackprintConfig['socialApps']['facebook']['appId'])) { ?>
 			<?php
+			// Set some options so that they don't render as "1" ... ensure they are true or false, no quotes. TODO: Find better way to do this...Or just look to see if Facebook will accept "1" as true and "0" as false.
+			$fbStatus = isset($this->request()->blackprintConfig['socialApps']['facebook']['status']) && !empty($this->request()->blackprintConfig['socialApps']['facebook']['status']) ? true:false;
+			unset($this->request()->blackprintConfig['socialApps']['facebook']['status']);
+			$fbCookie = isset($this->request()->blackprintConfig['socialApps']['facebook']['cookie']) && !empty($this->request()->blackprintConfig['socialApps']['facebook']['cookie']) ? true:false;
+			unset($this->request()->blackprintConfig['socialApps']['facebook']['cookie']);
+			$fbXfbml = isset($this->request()->blackprintConfig['socialApps']['facebook']['xfbml']) && !empty($this->request()->blackprintConfig['socialApps']['facebook']['xfbml']) ? true:false;
+			unset($this->request()->blackprintConfig['socialApps']['facebook']['xfbml']);
 			// Get all the options and set some defaults.
-			$fbOptions = $this->request()->social['facebook'] += array(
+			$fbOptions = $this->request()->blackprintConfig['socialApps']['facebook'] += array(
 				//'channelUrl' => false,
-				'status' => true, // check login status
-				'cookie' => true, // enable cookies to allow the server to access the session
-				'xfbml' => true // parse XFBML
+				'status' => $fbStatus, // check login status
+				'cookie' => $fbCookie, // enable cookies to allow the server to access the session
+				'xfbml' => $fbXfbml // parse XFBML
 			);
 			?>
 			<div id="fb-root"></div>
@@ -104,7 +111,7 @@
 	/**
 	 * Handle Google Analytics if configured.
 	 */
-	if(isset($this->request()->googleAnalytics) && isset($this->request()->googleAnalytics['code']) && isset($this->request()->googleAnalytics['domain'])) {
+	if(isset($this->request()->blackprintConfig['googleAnalytics']) && isset($this->request()->blackprintConfig['googleAnalytics']['code']) && isset($this->request()->blackprintConfig['googleAnalytics']['domain'])) {
 	?>
 	<script type="text/javascript">
 		// GA
@@ -113,7 +120,7 @@
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', '<?=$this->request()->googleAnalytics['code']; ?>', '<?=$this->request()->googleAnalytics['domain']; ?>');
+		ga('create', '<?=$this->request()->blackprintConfig['googleAnalytics']['code']; ?>', '<?=$this->request()->blackprintConfig['googleAnalytics']['domain']; ?>');
 		ga('send', 'pageview');
 	</script>
 	<?php } // end Google Analytics ?>
