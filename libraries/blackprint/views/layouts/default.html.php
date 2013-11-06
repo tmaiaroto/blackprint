@@ -13,7 +13,8 @@
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
 			'/blackprint/css/jquery/tipsy.css',
-			'/blackprint/css/site'
+			'/blackprint/css/site',
+			'/blackprint/css/content'
 		), array('inline' => false));
 	?>
 	<!--[if lt IE 9]>

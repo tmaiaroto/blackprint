@@ -13,7 +13,14 @@
 				<div class="row">
 					<?=$this->BlackprintForm->field('body', array('type' => 'textarea', 'label' => 'Body', 'size' => '12', 'style' => 'width: 100%; height: 400px;', 'class' => 'wysiwyg wysihtml5')); ?>
 				</div>
-
+				<?php 
+				// test two editors on page
+				/*
+				<div class="row">
+					<?=$this->BlackprintForm->field('bodyTwo', array('type' => 'textarea', 'label' => 'Body', 'size' => '12', 'style' => 'width: 100%; height: 400px;', 'class' => 'wysiwyg wysihtml5')); ?>
+				</div>
+				*/ 
+				?>
 				<div class="row">
 					<?=$this->BlackprintForm->submit('Save', array('class' => 'btn btn-primary')); ?> <?=$this->html->link('Cancel', array('library' => 'blackprint', 'admin' => true, 'controller' => 'content', 'action' => 'index'), array('class' => 'btn')); ?>
 				</div>
