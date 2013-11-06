@@ -209,6 +209,12 @@ Router::connect("/plugin/{:library}/{:controller}/{:action}/{:args}", array('act
 )));
 
 /**
+ * Default routes for dynamic pages/content.
+*/
+Router::connect("/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
+Router::connect("/{:contentType}/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
+
+/**
  * Connect the "public" static pages.
  * NOTE: This is something that might very well be overwritten by the main app's routes.
  *

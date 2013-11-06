@@ -601,6 +601,16 @@ class ContentController extends \blackprint\controllers\BaseController {
 
 		$isAdmin = (isset($this->request->user['role']) && $this->request->user['role'] == 'administrator') ? true:false;
 		$conditions = $isAdmin ? array($field => $id):array($field => $id, 'published' => true);
+
+		// Requested content type must match. TODO: Allow pretty URLs to be duplicated if the _type is different.
+		if(isset($this->request->contentType)) {
+			$conditions['_type'] = $this->request->contentType;
+			// It is possible to have snippets of text content. However, these documents shouldn't be seen on their own.
+			if($this->request->contentType == 'text') {
+				return $this->redirect('/');
+			}
+		}
+
 		$document = Content::find('first', array('conditions' => $conditions));
 
 		if(empty($document) || !$document->published) {
@@ -611,11 +621,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 		$defaultAppConfig = Libraries::get(true);
 		$appPath = $defaultAppConfig['path'];
 		if(!empty($document->_type)) {
-			if($document->_type == 'text') {
-				// don't let pieces of text be viewed at pages of their own
-				return $this->redirect('/');
-			}
-			$this->_render['template'] = 'read_' . $document->_type;
+			$this->_render['template'] = $document->_type . '/read';
 		}
 		$this->_render['paths']['template'] = array(
 			$appPath . '/views/_libraries/blackprint/{:controller}/{:template}.{:type}.php',
@@ -625,6 +631,15 @@ class ContentController extends \blackprint\controllers\BaseController {
 		);
 		
 		$options = $document->options ? $document->options->data():Content::$defaultOptions;
+
+		// Set meta and OG tags
+		if(isset($document->og)) {
+			if(isset($this->request->blackprintConfig['og'])) {
+				$this->request->blackprintConfig['og'] += $document->og->data();
+			} else {
+				$this->request->blackprintConfig['og'] = $document->og->data();
+			}
+		}
 		
 		$this->set(compact('document', 'options'));
 	}
