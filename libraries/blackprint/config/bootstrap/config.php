@@ -44,6 +44,11 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 
 	$params['request']->blackprintConfig = array();
 	if($blackprintConfig) {
+		// Site title
+		if(isset($blackprintConfig['siteName'])) {
+			$params['request']->blackprintConfig['siteName'] = $blackprintConfig['siteName'];
+		}
+
 		// Meta data
 		if(isset($blackprintConfig['meta'])) {
 			$params['request']->blackprintConfig['meta'] = $blackprintConfig['meta'];

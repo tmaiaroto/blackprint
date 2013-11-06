@@ -1,12 +1,19 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
-	<?php echo $this->html->charset();?>
-	<?php $title = $this->title() ? $this->title():''; ?>
-	<title><?=$title ?></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Blackprint Admin Dashboard">
-	<meta name="author" content="Shift8Creative">
+	<?php
+	// Page title
+	if($this->request() && isset($this->request()->blackprintConfig['siteName'])) {
+		$defaultTitle = $this->request()->blackprintConfig['siteName'];
+	}
+	$title = $this->title() ? $this->title():$defaultTitle;
+	echo '<title>Admin - ' . $title . '</title>' . "\n\t";
+	echo $this->html->charset() . "\n\t";
+
+	// Meta tags, OG, etc.
+	echo $this->blackprint->metaTags();
+	echo $this->blackprint->ogTags();
+	?>
 	<?php
 		$this->blackprintAsset->style(array(
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',

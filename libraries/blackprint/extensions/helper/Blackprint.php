@@ -294,5 +294,49 @@ class Blackprint extends \lithium\template\helper\Html {
 		return $content;
 	}
 
+	/**
+	 * Renders Open Graph tags from the configuration settings.
+	 * This array should come from the global CMS or page settings.
+	 * Each page's overrides will adjust the config array in the request.
+	 *
+	*/
+	public function ogTags() {
+		$html = '';
+		if($this->_context->request() && isset($this->_context->request()->blackprintConfig['og'])) {
+			foreach($this->_context->request()->blackprintConfig['og'] as $k => $v) {
+				$html .= '<meta property="og:' . $k . '" content="' . $v . '" />' . "\n\t";
+			}
+			
+		}
+		return $html;
+		
+	}
+
+	/**
+	 * Renders meta tags from the configuration.
+	*/
+	public function metaTags() {
+		$default = array(
+			'viewport' => 'width=device-width, initial-scale=1.0',
+			'description' => 'Blackprint',
+			'author' => 'Shift8Creative'
+		);
+
+		if($this->_context->request() && isset($this->_context->request()->blackprintConfig['meta'])) {
+			$metaTags = $this->_context->request()->blackprintConfig['meta'];
+		} else {
+			$metaTags = array();
+		}
+
+		$metaTags += $default;
+
+		$html = '';
+		foreach($metaTags as $k => $v) {
+			$html .= '<meta name="' . $k . '" content="' . $v . '" />' . "\n\t";
+		}
+
+		return $html;
+	}
+
 }
 ?>
