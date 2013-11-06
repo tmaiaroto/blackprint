@@ -68,7 +68,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 		if(empty($type)) {
 			$type = 'page';
 		}
-		$this->_render['template'] = 'admin_create_' . $type;
+		$this->_render['template'] = $type . '/admin_create';
 		
 		// For front-end editing via modal with iframe...or any other special purpose that requires separate templates.
 		if(!empty($viewContext) && is_string($viewContext)) {
@@ -266,7 +266,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 		$contentConfig = Content::contentConfig($document->_type);
 
 		if(!empty($document->_type)) {
-			$this->_render['template'] = 'admin_update_' . $document->_type;
+			$this->_render['template'] = $document->_type . '/admin_update';
 		}
 		
 		// For front-end editing via modal with iframe...or any other special purpose that requires separate templates.

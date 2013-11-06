@@ -142,6 +142,15 @@ Router::connect("/admin/documentation/{:args}", array('library' => 'blackprint',
 	'controller', 'admin'
 )));
 
+/**
+ * Default routes for dynamic pages/content.
+*/
+Router::connect("/admin/content/{:action}/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'args' => array(), 'admin' => true));
+Router::connect("/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
+Router::connect("/{:contentType}/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
+
+
+// Plugin Routes (for add-ons without their own custom routes)
 Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}/sort-{:sort}/{:args}', array('admin' => true), array('persist' => array(
 	'controller', 'admin', 'library'
 )));
@@ -207,12 +216,6 @@ Router::connect('/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}'
 Router::connect("/plugin/{:library}/{:controller}/{:action}/{:args}", array('action' => 'index', 'args' => array()), array('persist' => array(
 	'controller', 'library'
 )));
-
-/**
- * Default routes for dynamic pages/content.
-*/
-Router::connect("/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
-Router::connect("/{:contentType}/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
 
 /**
  * Connect the "public" static pages.
