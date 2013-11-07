@@ -3,6 +3,7 @@
 <head>
 	<?php
 	// Page title
+	$defaultTitle = '';
 	if($this->request() && isset($this->request()->blackprintConfig['siteName'])) {
 		$defaultTitle = $this->request()->blackprintConfig['siteName'];
 	}
