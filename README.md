@@ -1,5 +1,16 @@
 # ![image](https://raw.github.com/tmaiaroto/blackprint/master/webroot/img/blackprint-logo-square-64.png) Blackprint CMS
 
+#### Features
+
+ * Built on top of, Lithium, a rapid application development framework for PHP for organization, maintenance, testability, and scale.
+ * Takes advantage of Bower for installing themes and managing front-end assets for those themes (which can override ALL templates, including the admin back-end).
+ * Uses MongoDB for its schema flexibility, high performance and scalability.
+ * Comes with a bunch of helpers and utilities for increased development speed.
+ * Uses Twitter Bootstrap and Font Awesome right out of the box for increased development speed.
+ * Strong password encryption methods thanks to the Lithium framework.
+ * Support for 9 third party OAuth services completely integrated with the system's user authentication for flexibility and social awareness.
+ * Utilizes Composer for PHP library management and support. You can quickly leverage the power of practically any PHP library! Even if it's not PSR-0 compliant, using Lithium's autoloader, you can "transform" class names to load in non-compliant or older libraries.
+
 **Quickstart** ```bash <(curl -s https://raw.github.com/tmaiaroto/blackprint/master/clone.sh) && bash install.sh```
 
 #### Requirements
