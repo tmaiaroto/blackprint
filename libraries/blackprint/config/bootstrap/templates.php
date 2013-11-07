@@ -49,10 +49,47 @@
  * Yea...A lot of duplication. That's why this template system filter
  * exists on the Dispatcher.
  */
+use blackprint\models\Config;
 use lithium\action\Dispatcher;
 use lithium\core\Libraries;
 
 Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
+
+	// Pass along certain configuration data to each Request. Yes, I know this is a second database query...For now. TODO: Make more efficient.
+	$blackprintConfig = Config::find('first', array('conditions' => array('name' => 'default')));
+	if(!empty($blackprintConfig)) {
+		$blackprintConfig = $blackprintConfig->data();
+	} else {
+		$blackprintConfig = false;
+	}
+
+	$params['request']->blackprintConfig = array();
+	if($blackprintConfig) {
+		// Site title
+		if(isset($blackprintConfig['siteName'])) {
+			$params['request']->blackprintConfig['siteName'] = $blackprintConfig['siteName'];
+		}
+
+		// Meta data
+		if(isset($blackprintConfig['meta'])) {
+			$params['request']->blackprintConfig['meta'] = $blackprintConfig['meta'];
+		}
+
+		// OpenGraph tags
+		if(isset($blackprintConfig['og'])) {
+			$params['request']->blackprintConfig['og'] = $blackprintConfig['og'];
+		}
+
+		// Social apps
+		if(isset($blackprintConfig['socialApps'])) {
+			$params['request']->blackprintConfig['socialApps'] = $blackprintConfig['socialApps'];
+		}
+
+		// Google Analytics
+		if(isset($blackprintConfig['googleAnalytics'])) {
+			$params['request']->blackprintConfig['googleAnalytics'] = $blackprintConfig['googleAnalytics'];
+		}
+	}
 
 	//var_dump($params['params']);
 	//exit();
@@ -139,6 +176,36 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 			$appPath . '/views/elements/{:template}.{:type}.php',
 			$appPath . '/libraries/blackprint/views/elements/{:template}.{:type}.php'
 		);
+
+		/**
+		 * THEMES
+		 *
+		 * The configuration can also hold information about the template theme to use.
+		 * Themes are installed using Bower. It's very easy to manage front-end dependencies that way.
+		 * Every theme looking to use jQuery, for example, won't need its own copy.
+		 * It also provides the theme author with a versioning system and it keeps everything organized.
+		 * Plus, Blackprint is already using Bower so it's a very natural fit.
+		*/
+		// $blackprintConfig['theme'] = array('directory' => 'test');
+		if($blackprintConfig) {
+			if(isset($blackprintConfig['theme']) && isset($blackprintConfig['theme']['directory'])) {
+				$themePath = $appPath . '/webroot/bower_components' . '/' . $blackprintConfig['theme']['directory'];
+				if(file_exists($themePath)) {
+					array_unshift($paths['layout'], 
+						$themePath . '/views/_libraries/' . $params['params']['library'] . '/layouts/{:layout}.{:type}.php',
+						$themePath . '/views/layouts/{:layout}.{:type}.php'
+					);
+					array_unshift($paths['template'], 
+						$themePath . '/views/_libraries/' . $params['params']['library'] . '/{:controller}/{:template}.{:type}.php',
+						$themePath . '/views/{:controller}/{:template}.{:type}.php'
+					);
+					array_unshift($paths['element'], 
+						$themePath . '/views/_libraries/' . $params['params']['library'] . '/elements/{:template}.{:type}.php',
+						$themePath . '/views/elements/{:template}.{:type}.php'
+					);
+				}
+			}
+		}
 
 		$params['options']['render']['paths'] = $paths;
 

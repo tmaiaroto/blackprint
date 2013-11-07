@@ -5,7 +5,6 @@
  *
 */
 use blackprint\models\Config;
-use lithium\action\Dispatcher;
 
 /*
 use lithium\storage\Cache;
@@ -31,46 +30,4 @@ if(!empty($blackprintConfig)) {
 } else {
 	$blackprintConfig = false;
 }
-
-// Pass along certain configuration data to each Request. Yes, I know this is a second database query...For now. TODO: Make more efficient.
-Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
-
-	$blackprintConfig = Config::find('first', array('conditions' => array('name' => 'default')));
-	if(!empty($blackprintConfig)) {
-		$blackprintConfig = $blackprintConfig->data();
-	} else {
-		$blackprintConfig = false;
-	}
-
-	$params['request']->blackprintConfig = array();
-	if($blackprintConfig) {
-		// Site title
-		if(isset($blackprintConfig['siteName'])) {
-			$params['request']->blackprintConfig['siteName'] = $blackprintConfig['siteName'];
-		}
-
-		// Meta data
-		if(isset($blackprintConfig['meta'])) {
-			$params['request']->blackprintConfig['meta'] = $blackprintConfig['meta'];
-		}
-
-		// OpenGraph tags
-		if(isset($blackprintConfig['og'])) {
-			$params['request']->blackprintConfig['og'] = $blackprintConfig['og'];
-		}
-
-		// Social apps
-		if(isset($blackprintConfig['socialApps'])) {
-			$params['request']->blackprintConfig['socialApps'] = $blackprintConfig['socialApps'];
-		}
-
-		// Google Analytics
-		if(isset($blackprintConfig['googleAnalytics'])) {
-			$params['request']->blackprintConfig['googleAnalytics'] = $blackprintConfig['googleAnalytics'];
-		}
-	}
-
-	return $chain->next($self, $params, $chain);
-});
-
 ?>
