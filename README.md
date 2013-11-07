@@ -13,6 +13,8 @@
 
 **Quickstart** ```bash <(curl -s https://raw.github.com/tmaiaroto/blackprint/master/clone.sh) && bash install.sh```
 
+Note: If you want to then push this to your own repository, I would highly recommend renaming the "origin" remote to "blackprint" or something easy to remember. Then add a new "origin" remote for your repository. This will make it easy to recieve any updates from this repository, fork the configuration, and anything else you may need. I would also suggest trying to keep your code in a library for portability and organization.
+
 #### Requirements
 
  * PHP 5.3+ (Blackprint uses the [Lithium PHP Framework](http://lithify.me))
