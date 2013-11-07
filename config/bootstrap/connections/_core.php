@@ -1,14 +1,5 @@
 <?php
 /**
- * Lithium Bootstrap prefers MongoDB.
- * However, it can use any other database as needed.
- *
- * Lithium Bootstrap plugins written for use with MongoDB
- * will use a common `li3b_mongodb` connection.
- *
- * The `li3b_core` library also defines the `li3b_mongodb` connection
- * just in case li3_core is used without this li3_bootstrap wrapper.
- * 
  * This file can be overwritten and configured to change that
  * database connection, or the settings can be changed by using the
  * `config.ini` file. Of course, additional database connections can
@@ -145,13 +136,9 @@ if(isset($options['password'])) {
 	$dbOptions['password'] = $options['password'];
 }
 
-Connections::add('li3b_mongodb', $dbOptions);
-
-// li3b_users is going to use the same database. If this is not the case,
-// you will not be able to configure it from the ini file and must overwrite
-// this connection by overwriting this file or making another file in the
-// `connections` directory. Keep in mind the order in which they are parsed.
-Connections::add('li3b_users', $dbOptions);
+// This overrides the library's configuration using the options above.
+// By default, the settings are the same the and the database used will be called "blackprint"
+Connections::add('blackprint_mongodb', $dbOptions);
 
 // Of course set the default connection to use this MongoDB connection as well.
 // This will make it a little easier for your main application. You won't need
