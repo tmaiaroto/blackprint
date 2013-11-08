@@ -582,8 +582,16 @@ class UsersController extends \lithium\action\Controller {
 			// Now, only Blackprint Auth will be cleared upon logout. Other libraries
 			// using the Auth class will need to clear their own sessions and this logout()
 			// action won't clear any session data it shouldn't.
+			// NOTE: The file and class names under /libraries/blackprint/extensions/adapter/security/auth/... are case sensitive.
+			// The Auth::config() must specify an 'adapter' value which by convention will be Firstlettercapital only. So any new
+			// adapter that gets created (lusitanian service factories - a good place would be under .../extensions/adapter/oauth/service/...)
+			// should follow this convention. For example, AngelList.co ... would be Angellist.php with a class name of Angellist NOT AngelList.
 			if(strstr($name, 'blackprint_')) {
-				Auth::clear($name);
+				try {
+					Auth::clear($name);
+				} catch(\Exception $e) {
+					// var_dump($e);exit();
+				}
 			}
 		}
 		FlashMessage::write('You\'ve successfully logged out.');
