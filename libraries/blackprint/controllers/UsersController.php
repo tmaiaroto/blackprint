@@ -555,7 +555,9 @@ class UsersController extends \lithium\action\Controller {
 		$externalAuthServices = array();
 		if(isset($config['externalAuthServices']) && !empty($config['externalAuthServices'])) {
 			foreach($config['externalAuthServices'] as $service => $v) {
-				$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+				if(!empty($v['key'])) {
+					$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+				}
 			}
 		}
 
@@ -899,7 +901,9 @@ class UsersController extends \lithium\action\Controller {
 		$externalAuthServices = array();
 		if(isset($config['externalAuthServices']) && !empty($config['externalAuthServices'])) {
 			foreach($config['externalAuthServices'] as $service => $v) {
-				$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+				if(!empty($v['key'])) {
+					$externalAuthServices[$service] = array('name' => $v['name'], 'logo' => $v['logo']);
+				}
 			}
 		}
 
