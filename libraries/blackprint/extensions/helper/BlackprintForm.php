@@ -62,8 +62,9 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		
 		$prepend = isset($options['prepend']) ? $options['prepend']:'';
 		$append = isset($options['append']) ? $options['append']:'';
+		$inputDivClass = '';
 		if(!empty($prepend) || !empty($append)) {
-			$inputDivClass .= ' input-group';
+			$inputDivClass = 'input-group';
 		}
 		trim($inputDivClass);
 		unset($options['prepend']);
