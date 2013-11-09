@@ -40,11 +40,6 @@ a.tip-small:hover, a.tip:hover {
 	text-decoration: none;
 }
 
-/* Form Stuff */
-.input-group-addon {
-  height: 20px; /* apparently it is 21px which sets it uneven with the input fields */
-}
-
 /* Menu stuff */
 li a, li:focus, li a:focus {
 	outline: none;
