@@ -18,6 +18,7 @@
 	<?php
 		$this->blackprintAsset->style(array(
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
+			'/blackprint/js/bootstrap-datepicker.js',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
 			'/blackprint/css/jquery/tipsy.css',
@@ -58,6 +59,8 @@
 			// Tooltips
 			$('.tip').tooltip({html: true});
 			$('.tip-small').tooltip({html: true});
+			// Datepicker
+			$('.datepicker').datepicker();
 		});
 	</script>
 	<?php

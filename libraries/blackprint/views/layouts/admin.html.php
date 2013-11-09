@@ -36,6 +36,7 @@
 		$this->blackprintAsset->script(array(
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
+			'/blackprint/js/bootstrap-datepicker.js',
 			'/bower_components/blackprint-wysihtml5/dist/wysihtml5.min.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
@@ -70,6 +71,9 @@
 			// Tooltips
 			$('.tip').tooltip({html: true});
 			$('.tip-small').tooltip({html: true});
+
+			// Datepicker
+			$('.datepicker').datepicker();
 
 			$('.wysihtml5').wysihtml5({html: true,color: true, code:true, insertAnything:true, justify:true});
 		});
