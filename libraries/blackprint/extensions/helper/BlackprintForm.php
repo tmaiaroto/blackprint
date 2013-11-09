@@ -119,7 +119,6 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		// Format for select lists.
 		// NOTE: parent::error() call will only show first error like this...Not all... FIX.
 		if($options['type'] == 'select') {
-			
 			$selectOptions = $options;
 			unset($selectOptions['template']);
 			unset($selectOptions['label']);
@@ -139,6 +138,31 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		
 		if($options['type'] == 'select') {
 			return parent::select($name, $list, $options);
+		}
+
+		// Format datepicker, using: http://www.eyecon.ro/bootstrap-datepicker/
+		// Chrome has a really awesome datepicker when input type="date" but sadly other browsers don't, so we need to set it to "text" and use some JavaScript.
+		if($options['type'] == 'date') {
+			$options['type'] = 'text';
+			// append the datepicker class
+			$options['class'] .= !empty($options['class']) ? $options['class'] . ' datepicker':'datepicker';
+			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
+			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
+			// But catch a special option, 'append'
+			$append = '';
+			$appendClass = '';
+			if(isset($options['append'])) {
+				$appendClass = ' input-append';
+				// If append is a string, then specific HTML was being passed to append, otherwise use the default calendar icon
+				$append = (is_string($options['append'])) ? $options['append']:'<span class="add-on"><i class="fa fa-calendar"></i></span>';
+				unset($options['append']); // no sense passing it along
+			}
+
+			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass .  $appendClass . '">' . $prepend . '{:input}' . $append . '</div>';
+				if($help) {
+					$options['template'] .= '<' . $helpElement . ' class="' . $helpClass . '">' . $help . '</' . $helpElement . '>';
+				}
+			$options['template'] .= '{:error}</div>';
 		}
 		
 		// Use the parent helper's method.
