@@ -150,7 +150,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			// Look out for $append ... old Twitter Bootstrap used 'add-on' and the new one uses 'input-group-addon' so the datepicker JavaScript was updated.
 			if(!empty($append)) {
 				$append = (is_string($append) && !empty($append)) ? $append:'<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
-				$inputDivClass .= ' date';
+				$inputDivClass .= ' date'; // a required class for the datepicker JavaScript to use "component" mode
 			}
 
 			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass . '">' . $prepend . '{:input}' . $append . '</div>';
