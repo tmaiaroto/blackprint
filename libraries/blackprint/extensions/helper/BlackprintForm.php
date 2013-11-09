@@ -145,7 +145,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		if($options['type'] == 'date') {
 			$options['type'] = 'text';
 			// ensure the datepicker class is set
-			if(!strstr($optinos['class'], 'datepicker')) {
+			if(!strstr($options['class'], 'datepicker')) {
 				$options['class'] .= ' datepicker'; 
 			}
 			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
