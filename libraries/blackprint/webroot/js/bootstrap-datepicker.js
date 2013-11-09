@@ -31,6 +31,7 @@
 								//mousedown: $.proxy(this.mousedown, this)
 							});
 		this.isInput = this.element.is('input');
+		console.dir(this.element)
 		this.component = this.element.is('.date') ? this.element.next().find('.add-on') : false;
 		
 		if (this.isInput) {
