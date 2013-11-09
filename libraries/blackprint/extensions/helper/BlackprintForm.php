@@ -147,7 +147,8 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			}
 			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
 			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
-			// But catch a special option, 'append'
+			// Look out for $append ... old Twitter Bootstrap used 'add-on' and the new one uses 'input-group-addon' but the datepicker relies on 'add-on'
+			// which has no effect if left in there, so keep that plus use the proper 'input-graoup-addon' class.
 			if(!empty($append)) {
 				$append = (is_string($append) && !empty($append)) ? $append:'<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>';
 			}
