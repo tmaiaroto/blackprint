@@ -145,7 +145,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		if($options['type'] == 'date') {
 			$options['type'] = 'text';
 			// append the datepicker class
-			$options['class'] .= !empty($options['class']) ? $options['class'] . ' datepicker':'datepicker';
+			$options['class'] = !empty($options['class']) ? $options['class'] . ' datepicker':'datepicker';
 			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
 			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
 			// But catch a special option, 'append'
