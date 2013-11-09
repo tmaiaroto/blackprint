@@ -33,7 +33,7 @@
 		this.isInput = this.element.is('input');
 		this.component = this.element.parent().is('.date') ? this.element.parent().find('.add-on') : false;
 		
-		if (this.isInput) {
+		if (this.isInput && !this.component) {
 			this.element.on({
 				focus: $.proxy(this.show, this),
 				//blur: $.proxy(this.hide, this),
