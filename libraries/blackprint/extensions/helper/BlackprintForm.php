@@ -144,8 +144,10 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		// Chrome has a really awesome datepicker when input type="date" but sadly other browsers don't, so we need to set it to "text" and use some JavaScript.
 		if($options['type'] == 'date') {
 			$options['type'] = 'text';
-			// append the datepicker class
-			$options['class'] = !empty($options['class']) ? $options['class'] . ' datepicker':'datepicker';
+			// ensure the datepicker class is set
+			if(!strstr($optinos['class'], 'datepicker')) {
+				$options['class'] .= ' datepicker'; 
+			}
 			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
 			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
 			// But catch a special option, 'append'
