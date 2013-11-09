@@ -152,7 +152,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			$appendClass = '';
 			if(!empty($append)) {
 				$appendClass = !empty($inputDivClass) ? ' input-append':'input-append';
-				$append = (is_string($options['append'])) ? $options['append']:'<span class="add-on"><i class="fa fa-calendar"></i></span>';
+				$append = (is_string($append) && !empty($append)) ? $append:'<span class="add-on"><i class="fa fa-calendar"></i></span>';
 			}
 
 			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass .  $appendClass . '">' . $prepend . '{:input}' . $append . '</div>';
