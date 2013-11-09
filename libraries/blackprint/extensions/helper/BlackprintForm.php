@@ -152,10 +152,10 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			$append = '';
 			$appendClass = '';
 			if(isset($options['append'])) {
-				$appendClass = ' input-append';
+				$appendClass = !empty($inputDivClass) ? ' input-append':'input-append';
 				// If append is a string, then specific HTML was being passed to append, otherwise use the default calendar icon
 				$append = (is_string($options['append'])) ? $options['append']:'<span class="add-on"><i class="fa fa-calendar"></i></span>';
-				unset($options['append']); // no sense passing it along
+				unset($options['append']); // no sense passing it along, it could even break things given it would be HTML code within an element attribute value
 			}
 
 			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass .  $appendClass . '">' . $prepend . '{:input}' . $append . '</div>';
