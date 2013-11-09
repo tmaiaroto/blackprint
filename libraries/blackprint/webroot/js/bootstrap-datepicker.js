@@ -31,7 +31,8 @@
 								//mousedown: $.proxy(this.mousedown, this)
 							});
 		this.isInput = this.element.is('input');
-		this.component = this.element.parent().is('.date') ? this.element.parent().find('.add-on') : false;
+		// NOTE: This has been modified from the original to better work with Twitter Bootstrap 3 and Blackprint's form field HTML structure.
+		this.component = this.element.parent().is('.date') ? this.element.parent().find('.input-group-addon') : false;
 		
 		if (this.isInput && !this.component) {
 			this.element.on({
