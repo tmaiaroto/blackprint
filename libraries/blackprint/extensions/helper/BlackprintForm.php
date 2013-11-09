@@ -142,9 +142,11 @@ class BlackprintForm extends \lithium\template\helper\Form {
 		if($options['type'] == 'date') {
 			$options['type'] = 'text';
 			// ensure the datepicker class is set
+			/*
 			if(!strstr($options['class'], 'datepicker')) {
 				$options['class'] .= ' datepicker'; 
 			}
+			*/
 			// Other options include; data-date-format, data-date, data-date-viewmode, data-date-minviewmode, etc.
 			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
 			// Look out for $append ... old Twitter Bootstrap used 'add-on' and the new one uses 'input-group-addon' but the datepicker relies on 'add-on'
@@ -153,7 +155,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 				$append = (is_string($append) && !empty($append)) ? $append:'<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>';
 			}
 
-			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass . ' date">' . $prepend . '{:input}' . $append . '</div>';
+			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass . ' datepicker date">' . $prepend . '{:input}' . $append . '</div>';
 				if($help) {
 					$options['template'] .= '<' . $helpElement . ' class="' . $helpClass . '">' . $help . '</' . $helpElement . '>';
 				}
