@@ -149,7 +149,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			// @see http://www.eyecon.ro/bootstrap-datepicker/ for more...
 			// But catch a special option, 'append'
 			if(!empty($append)) {
-				$append = (is_string($append) && !empty($append)) ? $append:'<span class="input-group-addon datepicker"><i class="fa fa-calendar"></i></span>';
+				$append = (is_string($append) && !empty($append)) ? $append:'<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
 			}
 
 			$options['template'] = '<div class="' . $groupClass . '" style="' . $groupStyle . '"{:wrap}>{:label}<div class="' . $inputDivClass . ' date">' . $prepend . '{:input}' . $append . '</div>';
