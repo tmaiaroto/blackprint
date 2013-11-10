@@ -93,7 +93,7 @@ class AssetsController extends \lithium\action\Controller {
 			foreach($this->request->data['Filedata'] as $file) {
 				// Save file to gridFS
 				if ($file['error'] == UPLOAD_ERR_OK) {
-					$ext = substr(strrchr($file['name'], '.'), 1);
+					$ext = strtolower(substr(strrchr($file['name'], '.'), 1));
 					if(in_array($ext, $allowedFileExtensions)) {
 						// Asset::store() works much like the mongo PHP driver. Filename first, then metadata.
 						// We are creating a unique file name as well, otherwise we'd overwrite stuff or have failed saves.
