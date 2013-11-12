@@ -345,6 +345,7 @@ class Blackprint extends \lithium\template\helper\Html {
 		);
 
 		$s = trim($content);
+		$l = is_int($options['characterLimit']) ? $options['characterLimit']:500;
 		$e = (strlen(strip_tags($s)) > $l) ? $options['trail'] : '';
 		if($options['alwaysTrail']) {
 			$e = $options['trail'];
