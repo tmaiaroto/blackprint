@@ -48,7 +48,7 @@ class Post extends \blackprint\models\BaseModel {
 	)
   );
 
-  public $defaultOptions = array(
+  public static $defaultOptions = array(
 	'rainbowTheme' => 'blackboard',
 	'codeLineNumberes' => true,
 	'highlightTheme' => 'solarized_dark',
