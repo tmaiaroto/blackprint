@@ -210,7 +210,7 @@ class Blackprint extends \lithium\template\helper\Html {
 		$options['divClass'] = 'compact-search';
 		$options['inputGroupClass'] = 'input-group';
 		$options['buttonClass'] = 'btn btn-search';
-		$options['inputClass'] = '';
+		//$options['inputClass'] = '';
 		$options['buttonLabel'] = '<i class="fa fa-search"></i>';
 
 		$output .= $this->queryForm($options);
@@ -261,7 +261,7 @@ class Blackprint extends \lithium\template\helper\Html {
 				$output .= '<input type="text" placeholder="' . $options['placeholder'] . '" name="' . $options['key'] . '" value="' . $value . '" class="' . $options['inputClass'] . '" />';
 
 				if($options['bootstrapPrepend'] === false) {
-					$output .= '<button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button>';
+					$output .= '<span class="input-group-btn"><button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button></span>';
 				}
 
 				$output .= ($options['bootstrapAppend']) ? '</div>':'';
