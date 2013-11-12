@@ -126,7 +126,7 @@ class BlackprintForm extends \lithium\template\helper\Form {
 			$options['template'] .= parent::label($name, $label);
 			$options['template'] .= parent::select($name, $list, $selectOptions);
 				if($help) {
-					$options['template'] .= '<br /><' . $helpElement . ' class="' . $helpClass . '">' . $help . '</' . $helpElement . '>';
+					$options['template'] .= '<' . $helpElement . ' class="' . $helpClass . ' select-help">' . $help . '</' . $helpElement . '>';
 				}
 			$options['template'] .= '<div></div>';
 			$options['template'] .= parent::error($name);

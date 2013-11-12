@@ -79,3 +79,54 @@ footer hr {
 tr.valign-middle-row td {
 	vertical-align: middle !important;
 }
+
+/* Labels */
+#current-labels-wrapper {
+	display: block;
+	height: auto;
+}
+
+.label-color-input {
+	float: left;
+	width: 45px;
+}
+.label-color-input label {
+	margin: 0 0 0 8px;
+}
+#create-new-label-button {
+	float: right;
+	clear: left;
+	display: block;
+	margin-top: 4px;
+}
+a.apply-label, a.apply-label span {
+	margin: 1px;
+	clear: left;
+	display: block;
+	float: left;
+}
+.label-selected {
+	background: #ffffff;
+	padding: 1px;
+	border: 1px solid #bf0000;
+}
+
+div.manage-label-wrapper {
+	border: 1px #ddd;
+	padding: 2px;
+}
+a.manage-label {
+	clear: left;
+	display: block;
+	float: left;
+}
+a.delete-label, a.edit-label {
+	float: left;
+	display: block;
+	text-decoration: none;
+	color: #000000;
+	margin-right: 5px;
+}
+a.delete-label:hover, a.edit-label:hover {
+	color: #bf0000;
+}

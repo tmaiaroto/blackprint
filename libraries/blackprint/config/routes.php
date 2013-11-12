@@ -149,7 +149,10 @@ Router::connect("/admin/content/{:action}/{:args}", array('library' => 'blackpri
 Router::connect("/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
 Router::connect("/{:contentType}/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
 
-
+// Admin JSON
+Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/{:args}.json', array('admin' => true, 'type' => 'json'), array('persist' => array(
+	'controller', 'admin', 'library'
+)));
 // Plugin Routes (for add-ons without their own custom routes)
 Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}/sort-{:sort}/{:args}', array('admin' => true), array('persist' => array(
 	'controller', 'admin', 'library'
@@ -170,6 +173,11 @@ Router::connect("/admin/plugin/{:library}/{:controller}/{:action}/{:args}", arra
 	'controller', 'admin', 'library'
 )));
 
+// Non plugin admin JSON.
+Router::connect("/admin/{:controller}/{:action}/{:args}.json", array('library' => 'blackprint', 'admin' => true, 'action' => 'index', 'args' => array(), 'type' => 'json'), array('persist' => array(
+	'controller', 'admin'
+)));
+// Non plugin admin routes.
 Router::connect('/admin/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}/sort-{:sort}/{:args}', array('library' => 'blackprint', 'admin' => true), array('persist' => array(
 	'controller', 'admin'
 )));

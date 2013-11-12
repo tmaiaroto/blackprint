@@ -8,3 +8,4 @@ composer.phar
 /webroot/js/optimized
 /webroot/css/optimized
 /webroot/img/optimized
+!/libraries/blackprint

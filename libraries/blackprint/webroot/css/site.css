@@ -39,6 +39,9 @@ a.help-tooltip {
 a.tip-small:hover, a.tip:hover {
 	text-decoration: none;
 }
+.select-help {
+  clear: left;
+}
 
 /* Menu stuff */
 li a, li:focus, li a:focus {
