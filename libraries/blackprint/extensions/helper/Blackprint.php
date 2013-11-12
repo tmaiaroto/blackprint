@@ -322,7 +322,7 @@ class Blackprint extends \lithium\template\helper\Html {
 			$plainText = preg_replace('/<.*?>/', '', $text);
 			$plainText = preg_replace('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', ' ', $plainText);
 			if(strlen($plainText) <= $length) {
-				return $text
+				return $text;
 			}
 
 			// splits all html-tags to scanable lines
