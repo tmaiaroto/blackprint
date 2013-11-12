@@ -210,7 +210,7 @@ class Blackprint extends \lithium\template\helper\Html {
 		$options['divClass'] = 'input-group compact-search';
 		$options['buttonClass'] = 'btn btn-default input-group-btn add-on';
 		$options['inputClass'] = '';
-		$options['buttonLabel'] = '<i class="icon-search"></i>';
+		$options['buttonLabel'] = '<i class="fa fa-search"></i>';
 
 		$output .= $this->queryForm($options);
 		return $output;
