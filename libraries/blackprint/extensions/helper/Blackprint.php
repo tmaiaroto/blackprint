@@ -142,6 +142,8 @@ class Blackprint extends \lithium\template\helper\Html {
 			case ($minusdate < 99):
 						if($minusdate == 1){
 							$date_string = '1 minute ago';
+						} elseif($minusdate == 0) {
+							$date_string = 'just now';
 						}
 						elseif($minusdate > 59){
 							$date_string =  ($minusdate - 40).' minutes ago';
@@ -156,7 +158,11 @@ class Blackprint extends \lithium\template\helper\Html {
 							$date_string = '1 hour ago';
 						}
 						else {
-							$date_string =  $flr.' hours ago';
+							if($flr == 0) {
+								$date_string =  'just now';
+							} else {
+								$date_string =  $flr.' hours ago';
+							}
 						}
 			break;
 			case ($minusdate > 2359 && $minusdate < 310000):
