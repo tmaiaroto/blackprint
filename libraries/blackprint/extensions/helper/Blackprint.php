@@ -207,8 +207,9 @@ class Blackprint extends \lithium\template\helper\Html {
 			'placeholder' => 'search...'
 		);
 		$output = '<style type="text/css">.compact-search button.add-on { height: inherit !important; }</style>';
-		$options['divClass'] = 'input-group compact-search';
-		$options['buttonClass'] = 'btn btn-default input-group-btn add-on';
+		$options['divClass'] = 'compact-search';
+		$options['inputGroupClass'] = 'input-group';
+		$options['buttonClass'] = 'btn btn-search';
 		$options['inputClass'] = '';
 		$options['buttonLabel'] = '<i class="fa fa-search"></i>';
 
@@ -227,6 +228,7 @@ class Blackprint extends \lithium\template\helper\Html {
 		$options += array(
 			'key' => 'q',
 			'formClass' => 'form-search form-inline',
+			'inputGroupClass' => 'form-group',
 			'inputClass' => 'form-control search-query',
 			'buttonClass' => 'btn btn-default',
 			'labelClass' => '',
@@ -247,13 +249,13 @@ class Blackprint extends \lithium\template\helper\Html {
 			$output .= '<form role="form" class="' . $options['formClass'] . '" id="' . $form_id . '" onSubmit="';
 			$output .= 'window.location = window.location.href + \'?\' + $(\'#' . $form_id . '\').serialize();';
 			$output .= '">';
-				$output .= '<div class="form-group">';
+				$output .= '<div class="' . $options['inputGroupClass'] . '">';
 				$output .= ($options['bootstrapAppend']) ? '<div class="input-append">':'';
 				$output .= ($options['bootstrapPrepend']) ? '<div class="input-prepend">':'';
 
 				$value = (isset($_GET[$options['key']])) ? $_GET[$options['key']]:'';
 				if($options['bootstrapPrepend'] === true) {
-					$output .= '<button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button>';
+					$output .= '<span class="input-group-btn"><button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button></span>';
 				}
 
 				$output .= '<input type="text" placeholder="' . $options['placeholder'] . '" name="' . $options['key'] . '" value="' . $value . '" class="' . $options['inputClass'] . '" />';
