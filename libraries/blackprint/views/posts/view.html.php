@@ -15,7 +15,7 @@ if(isset($options['codeLineNumbers']) && (bool)$options['codeLineNumbers']) {
 <div class="row">
 	<div class="span12">
 		<h1 id="page-heading"><?=$document->title; ?></h1>
-		<p><em>Posted <?=$this->time->to('words', $document->created); ?><?php echo $document->authorAlias ? ' by ' . $document->authorAlias:''; ?>.</em>
+		<p><em>Posted <?=$this->Blackprint->dateAgo($document->created); ?><?php echo $document->authorAlias ? ' by ' . $document->authorAlias:''; ?>.</em>
 		<?php
 		if($labels) {
 			echo '<br />Labels: ';
