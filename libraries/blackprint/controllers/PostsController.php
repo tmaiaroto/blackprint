@@ -214,13 +214,13 @@ class PostsController extends \lithium\action\Controller {
   }
 
   /**
-   * Public view method.
+   * Public read method.
    *
    * The id can be either a pretty URL or a MongoId.
    *
    * @param string $id
    */
-  public function view($id=null) {
+  public function read($id=null) {
 	if(empty($id)) {
 	  return $this->redirect('/');
 	}

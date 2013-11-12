@@ -5,9 +5,9 @@
 	<div class="span9">
 			<?php foreach($documents as $document) { ?>
 					<?php $active = ($document->active) ? 'active':'inactive'; ?>
-					<h1><?=$this->html->link($document->title, array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'view', 'args' => array($document->url))); ?></h1>
-					<p><em>Posted <?=$this->time->to('words', $document->created); ?><?php echo $document->authorAlias ? ' by ' . $document->authorAlias:''; ?>.</em></p>
-					<?php echo $this->html->containsSyntax($document->body); ?>
+					<h1><?=$this->html->link($document->title, array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'read', 'args' => array($document->url))); ?></h1>
+					<p><em>Posted <?=$this->Blackprint->dateAgo($document->created); ?><?php echo $document->authorAlias ? ' by ' . $document->authorAlias:''; ?>.</em></p>
+					<?php echo $this->Blackprint->containsSyntax($document->body); ?>
 					<hr /><br />
 			<?php } ?>
 		<?=$this->BlackprintPaginator->paginate(); ?>
@@ -17,7 +17,7 @@
 		<div class="well" style="padding: 8px 0;">
 			<div style="padding: 8px;">
 				<h3>Search for Posts</h3>
-				<?=$this->html->queryForm(); ?>
+				<?=$this->Blackprint->queryForm(); ?>
 			</div>
 		</div>
 	</div>
