@@ -339,7 +339,7 @@ class Blackprint extends \lithium\template\helper\Html {
 	public function summarizeHtml($content, $options=array()) {
 		$options += array(
 			'characterLimit' => 500,
-			'trail' => '&hellip',
+			'trail' => '...',
 			'alwaysTrail' => false,
 			'neverTrail' => false
 		);
