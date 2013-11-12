@@ -302,6 +302,35 @@ class Blackprint extends \lithium\template\helper\Html {
 	}
 
 	/**
+	 * Will limit the number of words in a string.
+	 *
+	 * @param string $content
+	 * @param array $options
+	*/
+	public function summarize($content=null, $options=array()) {
+		$options += array(
+			'limit' => 250,
+			'trail' => '...',
+			'alwaysTrail' => false,
+			'neverTrail' => false
+		);
+		if(empty($content) || !is_int($options['limit'])) {
+			return '';
+		}
+
+		$trailNeeded = $options['alwaysTrail'];
+		$words = explode(' ', $content, ($options['limit'] + 1));
+		if(count($words) > $options['limit']) {
+			$trailNeeded = true;
+			array_pop($words);
+		}
+		if($options['neverTrail']) {
+			$trailNeeded = false;
+		}
+		return $trailNeeded ? implode(' ', $words) . $options['trail']:implode(' ', $words);
+	}
+
+	/**
 	 * Renders Open Graph tags from the configuration settings.
 	 * This array should come from the global CMS or page settings.
 	 * Each page's overrides will adjust the config array in the request.
