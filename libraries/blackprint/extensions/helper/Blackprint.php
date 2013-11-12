@@ -260,7 +260,7 @@ class Blackprint extends \lithium\template\helper\Html {
 				$output .= '<input type="text" placeholder="' . $options['placeholder'] . '" name="' . $options['key'] . '" value="' . $value . '" class="' . $options['inputClass'] . '" />';
 
 				if($options['bootstrapPrepend'] === false) {
-					$output .= '<span class="input-group-btn"><button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button></span>';
+					$output .= '<button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button>';
 				}
 
 				$output .= ($options['bootstrapAppend']) ? '</div>':'';
