@@ -207,8 +207,8 @@ class Blackprint extends \lithium\template\helper\Html {
 			'placeholder' => 'search...'
 		);
 		$output = '<style type="text/css">.compact-search button.add-on { height: inherit !important; }</style>';
-		$options['divClass'] = 'input-append compact-search';
-		$options['buttonClass'] = 'btn add-on';
+		$options['divClass'] = 'input-group compact-search';
+		$options['buttonClass'] = 'btn btn-default input-group-btn add-on';
 		$options['inputClass'] = '';
 		$options['buttonLabel'] = '<i class="icon-search"></i>';
 
