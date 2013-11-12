@@ -204,15 +204,14 @@ class Blackprint extends \lithium\template\helper\Html {
 	public function compactSearch($options=array()) {
 		$options += array(
 			'formClass' => 'form-search',
-			'placeholder' => 'search...'
+			'placeholder' => 'search...',
+			'buttonClass' => 'btn btn-search',
+			'buttonLabel' => '<i class="fa fa-search"></i>',
+			'divClass' => 'compact-search',
+			'inputGroupClass' => 'input-group'
 		);
 		$output = '<style type="text/css">.compact-search button.add-on { height: inherit !important; }</style>';
-		$options['divClass'] = 'compact-search';
-		$options['inputGroupClass'] = 'input-group';
-		$options['buttonClass'] = 'btn btn-search';
-		//$options['inputClass'] = '';
-		$options['buttonLabel'] = '<i class="fa fa-search"></i>';
-
+		
 		$output .= $this->queryForm($options);
 		return $output;
 	}
