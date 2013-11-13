@@ -40,10 +40,8 @@ $env = 'production';
 if(isset($_SERVER['argv'][1])) {
 	if(substr($_SERVER['argv'][1], 0, 6) == '--env=') {
 		$env = substr($_SERVER['argv'][1], 6);
+		Environment::set($env);
 	}
-}
-if($env == 'development') {
-	Environment::set('development');
 }
 
 $defaults = array(
@@ -74,6 +72,13 @@ if($li3Options) {
 $httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']:'localhost';
 if(in_array($httpHost, $options['devHosts']) || $env == 'development') {
 	$options['database'] = $options['devDatabase'];
+	$env == 'development';
+}
+
+// Set the environment if it hasn't been set yet (which would be be set by CLI at this point).
+$environment = Environment::get();
+if(empty($environment)) {
+	Environment::set($env);
 }
 
 $dbOptions = array(
