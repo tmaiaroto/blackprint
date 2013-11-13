@@ -72,7 +72,7 @@
 				</td>
 				<td>
 					<?=$this->html->link('View', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'read', 'admin' => null, 'args' => array($document->_id)), array('target' => '_blank')); ?> |
-					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'update', 'admin' => true, 'args' => array($document->_id)), array('target' => '_blank')); ?> |
+					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?> |
 					<?=$this->html->link('Delete', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'delete', 'admin' => true, 'args' => array($document->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $document->title . '?\')')); ?>
 				</td>
 			</tr>
