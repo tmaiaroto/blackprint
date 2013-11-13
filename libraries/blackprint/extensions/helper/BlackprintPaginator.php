@@ -371,7 +371,7 @@ class BlackprintPaginator extends \lithium\template\Helper {
 			$content .= $this->last();
 		}
 		$pagingClass = isset($options['pagingClass']) ? $options['pagingClass']:$this->_config['pagingClass'];
-		$pagingWrapper = ($options['pagingWrapper']) ? $options['pagingWrapper']:$this->_strings['pagingWrapper'];
+		$pagingWrapper = isset($options['pagingWrapper']) ? $options['pagingWrapper']:$this->_strings['pagingWrapper'];
 		return $this->_render(__METHOD__, $pagingWrapper, compact('content', 'pagingClass'), array('escape' => false));
 	}
 
