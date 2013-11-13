@@ -103,7 +103,7 @@ class BlackprintPaginator extends \lithium\template\Helper {
 	 * @see li3_paginate\extensions\helper\Paginator::paginate()
 	 */
 	protected $_strings = array(
-		'pagingWrapper' => '<ul>{:content}</ul>'
+		'pagingWrapper' => '<ul class="{:pagingClass}">{:content}</ul>'
 	);
 
 	/**
@@ -149,7 +149,8 @@ class BlackprintPaginator extends \lithium\template\Helper {
 			'library' => null,
 			'controller' => "",
 			'action' => "",
-			'pagingWrapper' => '<div class="pagination pagination-condensed"><ul>{:content}</ul></div>'
+			'pagingClass' => 'pagination',
+			'pagingWrapper' => false // if one wants to overwrite the $_strings value...
 		);
 
 		parent::__construct($config + $defaults);
@@ -370,7 +371,9 @@ class BlackprintPaginator extends \lithium\template\Helper {
 		if ($this->_config["showFirstLast"]) {
 			$content .= $this->last();
 		}
-		return $this->_render(__METHOD__, $this->_config['pagingWrapper'], compact('content'), array('escape' => false));
+		$pagingClass = $this->_config['pagingClass'];
+		$pagingWrapper = ($this->_config['pagingWrapper']) ? $this->_config['pagingWrapper']:$this->_strings['pagingWrapper'];
+		return $this->_render(__METHOD__, $pagingWrapper, compact('content', 'pagingClass'), array('escape' => false));
 	}
 
 	public function config(array $options = array()) {
