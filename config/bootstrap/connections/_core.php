@@ -72,7 +72,7 @@ if($li3Options) {
 $httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']:'localhost';
 if(in_array($httpHost, $options['devHosts']) || $env == 'development') {
 	$options['database'] = $options['devDatabase'];
-	$env == 'development';
+	$env = 'development';
 }
 
 // Set the environment if it hasn't been set yet (which would be be set by CLI at this point).
