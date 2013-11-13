@@ -208,7 +208,8 @@ class Blackprint extends \lithium\template\helper\Html {
 			'buttonClass' => 'btn btn-search',
 			'buttonLabel' => '<i class="fa fa-search"></i>',
 			'divClass' => 'compact-search',
-			'inputGroupClass' => 'input-group'
+			//'inputGroupClass' => 'input-group'
+			'bootstrapAppendButton' => true
 		);
 		$output = '<style type="text/css">.compact-search button.add-on { height: inherit !important; }</style>';
 		
@@ -235,8 +236,7 @@ class Blackprint extends \lithium\template\helper\Html {
 			'div' => true,
 			'divClass' => '',
 			'label' => false,
-			'bootstrapPrepend' => false,
-			'bootstrapAppend' => false,
+			'bootstrapAppendButton' => false,
 			'placeholder' => ''
 		);
 		$output = '';
@@ -248,23 +248,21 @@ class Blackprint extends \lithium\template\helper\Html {
 			$output .= '<form role="form" class="' . $options['formClass'] . '" id="' . $form_id . '" onSubmit="';
 			$output .= 'window.location = window.location.href + \'?\' + $(\'#' . $form_id . '\').serialize();';
 			$output .= '">';
-				$output .= '<div class="' . $options['inputGroupClass'] . '">';
-				$output .= ($options['bootstrapAppend']) ? '<div class="input-append">':'';
-				$output .= ($options['bootstrapPrepend']) ? '<div class="input-prepend">':'';
-
-				$value = (isset($_GET[$options['key']])) ? $_GET[$options['key']]:'';
-				if($options['bootstrapPrepend'] === true) {
-					$output .= '<span class="input-group-btn"><button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button></span>';
+				if($options['bootstrapAppendButton']) {
+					$options['inputGroupClass'] .= ' input-group';
 				}
+				$output .= '<div class="' . $options['inputGroupClass'] . '">';
+			
+				$value = (isset($_GET[$options['key']])) ? $_GET[$options['key']]:'';
 
 				$output .= '<input type="text" placeholder="' . $options['placeholder'] . '" name="' . $options['key'] . '" value="' . $value . '" class="' . $options['inputClass'] . '" />';
 
-				if($options['bootstrapPrepend'] === false) {
+				if($options['bootstrapAppendButton']) {
+					$output .= '<span class="input-group-btn"><button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button></span>';
+				} else {
 					$output .= '<button type="submit" class="' . $options['buttonClass'] . '">' . $options['buttonLabel'] . '</button>';
 				}
 
-				$output .= ($options['bootstrapAppend']) ? '</div>':'';
-				$output .= ($options['bootstrapPrepend']) ? '</div>':'';
 				$output .= '</div>';
 			$output .= '</form>';
 
