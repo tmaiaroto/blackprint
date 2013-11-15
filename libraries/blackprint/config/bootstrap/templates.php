@@ -86,8 +86,8 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 		}
 
 		// Google Analytics
-		if(isset($blackprintConfig['googleAnalytics'])) {
-			$params['request']->blackprintConfig['googleAnalytics'] = $blackprintConfig['googleAnalytics'];
+		if(isset($blackprintConfig['analytics'])) {
+			$params['request']->blackprintConfig['analytics'] = $blackprintConfig['analytics'];
 		}
 	}
 

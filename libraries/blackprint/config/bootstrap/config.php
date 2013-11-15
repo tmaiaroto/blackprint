@@ -30,4 +30,7 @@ if(!empty($blackprintConfig)) {
 } else {
 	$blackprintConfig = false;
 }
+
+// NOTE: The templates.php bootstrap file also gets the Config and makes some of the data available in each Request.
+// This allows Google Analytics codes, etc. to be used in layout templates.
 ?>

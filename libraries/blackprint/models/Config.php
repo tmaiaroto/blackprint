@@ -42,6 +42,8 @@ class Config extends \lithium\data\Model {
 		'og' => array('type' => 'object'),
 		// App IDs, and other data, for social media apps (Facebook's JS SDK will need this for example and it gets included in the layout template)
 		'socialApps' => array('type' => 'object'),
+		// Analytics settings including any Google Analytics account ID for tracking, etc.
+		'analytics' => array('type' => 'object'),
 		// Other web page meta data
 		'meta' => array('type' => 'object'),
 

@@ -322,8 +322,8 @@
 							<p>If you're using Google Analtyics, please enter the domain and tracking code below (not the entire embed code, just the complete UA-xxxx code).</p>
 						</div>
 						<div class="row">
-							<?=$this->BlackprintForm->field('socialApps.googleAnalytics.code', array('type' => 'text', 'label' => 'Code/Property ID', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
-							<?=$this->BlackprintForm->field('socialApps.googleAnalytics.domain', array('type' => 'text', 'label' => 'Domain', 'size' => '6')); ?>
+							<?=$this->BlackprintForm->field('analytics.googleAnalytics.code', array('type' => 'text', 'label' => 'Code/Property ID', 'size' => '6', 'groupStyle' => 'margin-right: 10px;')); ?>
+							<?=$this->BlackprintForm->field('analytics.googleAnalytics.domain', array('type' => 'text', 'label' => 'Domain', 'size' => '6')); ?>
 						</div>
 						
 					</div>

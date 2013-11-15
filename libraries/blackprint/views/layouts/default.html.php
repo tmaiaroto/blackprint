@@ -122,7 +122,7 @@
 	/**
 	 * Handle Google Analytics if configured.
 	 */
-	if(isset($this->request()->blackprintConfig['googleAnalytics']) && isset($this->request()->blackprintConfig['googleAnalytics']['code']) && isset($this->request()->blackprintConfig['googleAnalytics']['domain'])) {
+	if(isset($this->request()->blackprintConfig['analytics']) && isset($this->request()->blackprintConfig['analytics']['googleAnalytics']) && isset($this->request()->blackprintConfig['analytics']['googleAnalytics']['code']) && isset($this->request()->blackprintConfig['analytics']['googleAnalytics']['domain']) && !empty($this->request()->blackprintConfig['analytics']['googleAnalytics']['code'])) {
 	?>
 	<script type="text/javascript">
 		// GA
@@ -131,7 +131,7 @@
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		ga('create', '<?=$this->request()->blackprintConfig['googleAnalytics']['code']; ?>', '<?=$this->request()->blackprintConfig['googleAnalytics']['domain']; ?>');
+		ga('create', '<?=$this->request()->blackprintConfig['analytics']['googleAnalytics']['code']; ?>', '<?=$this->request()->blackprintConfig['analytics']['googleAnalytics']['domain']; ?>');
 		ga('send', 'pageview');
 	</script>
 	<?php } // end Google Analytics ?>
