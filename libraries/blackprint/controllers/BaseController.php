@@ -41,7 +41,7 @@ class BaseController extends \lithium\action\Controller {
 							$options['url'] .= $this->request->data[$field] . ' ';
 						}
 					}
-					$options['url'] = Inflector::slug(trim($url), $urlSeparator);
+					$options['url'] = Inflector::slug(trim($options['url']), $urlSeparator);
 				} else {
 					$options['url'] = Inflector::slug($this->request->data[$urlField], $urlSeparator);
 				}
