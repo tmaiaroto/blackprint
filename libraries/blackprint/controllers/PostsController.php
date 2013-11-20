@@ -18,7 +18,7 @@ class PostsController extends \lithium\action\Controller {
 	$conditions = array();
 	$q = ((isset($this->request->query['q'])) && (!empty($this->request->query['q']))) ? $this->request->query['q']:'';
 	if(!empty($q)) {
-	  $search_schema = Post::searchSchema();
+	  $search_schema = Post::$searchSchema;
 	  $search_conditions = array();
 	  // For each searchable field, adjust the conditions to include a regex
 	  foreach($search_schema as $k => $v) {

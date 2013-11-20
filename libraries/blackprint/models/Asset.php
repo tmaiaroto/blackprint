@@ -45,7 +45,7 @@ class Asset extends \lithium\data\Model {
 
 	public static $validate = array();
 
-	public $search_schema = array(
+	static $searchSchema = array(
 		'originalFilename' => array(
 			'weight' => 1
 		)
@@ -55,21 +55,6 @@ class Asset extends \lithium\data\Model {
 		$class =  __CLASS__;
 		self::$fields += static::$fields;
 		self::$validate += static::$validate;
-		$class::_object()->search_schema = static::_object()->search_schema += $class::_object()->search_schema;
-	}
-
-	/**
-	 * Gets or sets the search schema for the model.
-	 * 
-	 * @param array Optional new search schema values
-	 * @return array
-	*/
-	public static function searchSchema($schema=array()) {
-		$class =  __CLASS__;
-		if(!empty($schema)) {
-			$class::_object()->search_schema = $schema;
-		}
-		return (isset($class::_object()->search_schema) && !empty($class::_object()->search_schema)) ? $class::_object()->search_schema:array();
 	}
 
 	/**

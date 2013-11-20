@@ -19,7 +19,7 @@ class ContentController extends \blackprint\controllers\BaseController {
 
 		$conditions = array();
 		if((isset($this->request->query['q'])) && (!empty($this->request->query['q']))) {
-			$search_schema = Content::searchSchema();
+			$search_schema = Content::$searchSchema;
 			$search_conditions = array();
 			// For each searchable field, adjust the conditions to include a regex
 			foreach($search_schema as $k => $v) {

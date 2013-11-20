@@ -35,7 +35,7 @@ class AssetsController extends \lithium\action\Controller {
 	
 		$conditions = array('_thumbnail' => false);
 		if((isset($this->request->query['q'])) && (!empty($this->request->query['q']))) {
-			$search_schema = Asset::searchSchema();
+			$search_schema = Asset::$searchSchema;
 			$search_conditions = array();
 			// For each searchable field, adjust the conditions to include a regex
 			foreach($search_schema as $k => $v) {

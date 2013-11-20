@@ -26,11 +26,11 @@ class Post extends \blackprint\models\BaseModel {
 	'created' => array('type' => 'date')
   );
 
-  public $url_field = 'title';
+  static $urlField = 'title';
 
-  public $url_separator = '-';
+  static $urlSeparator = '-';
 
-  public $search_schema = array(
+  static $searchSchema = array(
 	'title' => array(
 	  'weight' => 1
 	),

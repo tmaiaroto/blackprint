@@ -35,11 +35,11 @@ class Content extends \blackprint\models\BaseModel {
 		'created' => array('type' => 'date')
 	);
 
-	public $url_field = 'title';
+	static $urlField = 'title';
 
-	public $url_separator = '-';
+	static $urlSeparator = '-';
 
-	public $search_schema = array(
+	static $searchSchema = array(
 		'title' => array(
 			'weight' => 1
 		),
@@ -56,14 +56,6 @@ class Content extends \blackprint\models\BaseModel {
 
 	static $defaultOptions = array(		
 	);
-	
-	public static function __init() {
-		/*
-		 * Some special validation rules.
-		*/
-		
-		parent::__init();
-	}
 	
 	/**
 	 * Returns a list of all content types, which is based

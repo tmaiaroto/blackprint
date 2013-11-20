@@ -44,11 +44,11 @@ class User extends \blackprint\models\BaseModel {
 		'created' => array('type' => 'date')
 	);
 
-	public $url_field = array('firstName', 'lastName');
+	static $urlField = array('firstName', 'lastName');
 
-	public $url_separator = '-';
+	static $urlSeparator = '-';
 
-	public $search_schema = array(
+	static $searchSchema = array(
 		'first_name' => array(
 			'weight' => 1
 		),

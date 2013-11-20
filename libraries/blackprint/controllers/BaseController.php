@@ -32,8 +32,8 @@ class BaseController extends \lithium\action\Controller {
 		$options += $defaults;
 
 		if(class_exists($options['model'])) {
-			$urlField = $options['model']::urlField();
-			$urlSeparator = $options['model']::urlSeparator();
+			$urlField = $options['model']::$urlField;
+			$urlSeparator = $options['model']::$urlSeparator;
 			if($urlField != '_id' && !empty($urlField)) {
 				if(is_array($urlField)) {
 					foreach($urlField as $field) {
