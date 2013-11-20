@@ -78,7 +78,8 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	// return $chain->next($self, $params, $chain);
 });
 
-Access::config(array(
+$config = Access::config();
+$config += array(
 	'blackprint' => array(
 			'adapter' => 'Rules',
 			// optional filters applied for each configuration
@@ -90,7 +91,8 @@ Access::config(array(
 				}*/
 			)
 	)
-));
+);
+Access::config($config);
 
 // Set some basic rules to be used from anywhere
 
