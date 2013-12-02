@@ -126,73 +126,33 @@ class Blackprint extends \lithium\template\helper\Html {
 	 * @return string The parsed date with "ago" language
 	*/
 	public function dateAgo($value=null){
-		$querydate = date('ymdHi');
 		if(is_object($value)) {
-			$querydate = date('ymdHi', $value->sec);
+			$time = $value->sec;
 		} elseif(is_numeric($value)) {
-			$querydate = date('ymdHi', $value);
+			$time = $value;
+		} else {
+			return '';
 		}
-		$date_string = '';
 
-		$minusdate = date('ymdHi') - $querydate;
-		if($minusdate > 88697640 && $minusdate < 100000000){
-			$minusdate = $minusdate - 88697640;
+		$periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
+		$lengths = array("60","60","24","7","4.35","12","10");
+
+		$now = time();
+
+		$difference = $now - $time;
+		$tense = 'ago';
+
+		for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+			$difference /= $lengths[$j];
 		}
-		switch ($minusdate) {
-			case ($minusdate < 99):
-						if($minusdate == 1){
-							$date_string = '1 minute ago';
-						} elseif($minusdate == 0) {
-							$date_string = 'just now';
-						}
-						elseif($minusdate > 59){
-							$date_string =  ($minusdate - 40).' minutes ago';
-						}
-						elseif($minusdate > 1 && $minusdate < 59){
-							$date_string = $minusdate.' minutes ago';
-						}
-			break;
-			case ($minusdate > 99 && $minusdate < 2359):
-						$flr = floor($minusdate * .01);
-						if($flr == 1){
-							$date_string = '1 hour ago';
-						}
-						else {
-							if($flr == 0) {
-								$date_string =  'just now';
-							} else {
-								$date_string =  $flr.' hours ago';
-							}
-						}
-			break;
-			case ($minusdate > 2359 && $minusdate < 310000):
-						$flr = floor($minusdate * .0001);
-						if($flr == 1){
-							$date_string = '1 day ago';
-						}
-						else{
-							$date_string =  $flr.' days ago';
-						}
-			break;
-			case ($minusdate > 310001 && $minusdate < 12320000):
-						$flr = floor($minusdate * .000001);
-						if($flr == 1){
-							$date_string = "1 month ago";
-						}
-						else{
-							$date_string =  $flr.' months ago';
-						}
-			break;
-			case ($minusdate > 100000000):
-					$flr = floor($minusdate * .00000001);
-					if($flr == 1){
-							$date_string = '1 year ago.';
-					}
-					else{
-							$date_string = $flr.' years ago';
-					}
-			}
-		return $date_string;
+
+		$difference = round($difference);
+
+		if($difference != 1) {
+			$periods[$j] .= 's';
+		}
+
+		return $difference $periods[$j] . 'ago';
 	}
 
 	/**
