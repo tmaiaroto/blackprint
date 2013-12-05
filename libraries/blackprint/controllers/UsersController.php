@@ -710,7 +710,7 @@ class UsersController extends \lithium\action\Controller {
 	 */
 	private function _generateUrl($id=null) {
 		$url = '';
-		$url_field = User::urlField();
+		$url_field = User::$urlField;
 		$url_separator = User::urlSeparator();
 		if($url_field != '_id' && !empty($url_field)) {
 			if(is_array($url_field)) {

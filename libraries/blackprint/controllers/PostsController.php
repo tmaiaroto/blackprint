@@ -272,7 +272,7 @@ class PostsController extends \lithium\action\Controller {
    */
   private function _generateUrl($id=null) {
 	$url = '';
-	$url_field = Post::urlField();
+	$url_field = Post::$urlField;
 	$url_separator = Post::urlSeparator();
 	if($url_field != '_id' && !empty($url_field)) {
 	  if(is_array($url_field)) {
