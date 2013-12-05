@@ -38,4 +38,4 @@ echo "------------------------"
 echo ""
 echo "Attempting to install front-end dependencies..."
 echo ""
-./frontend.sh
+(cd webroot && bower install)
