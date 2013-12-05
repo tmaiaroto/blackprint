@@ -152,7 +152,7 @@ class Blackprint extends \lithium\template\helper\Html {
 			$periods[$j] .= 's';
 		}
 
-		return $difference $periods[$j] . 'ago';
+		return $difference . $periods[$j] . 'ago';
 	}
 
 	/**
