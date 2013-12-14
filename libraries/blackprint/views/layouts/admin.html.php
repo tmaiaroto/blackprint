@@ -37,7 +37,8 @@
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
 			'/blackprint/js/bootstrap-datepicker.js',
-			'/bower_components/blackprint-wysihtml5/dist/wysihtml5.min.js',
+			//'/bower_components/blackprint-wysihtml5/dist/wysihtml5.min.js',
+			'/blackprint-wysihtml5/dist/wysihtml5.min.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
 		), array('inline' => false));

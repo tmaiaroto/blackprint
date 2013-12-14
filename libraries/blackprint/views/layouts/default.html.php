@@ -18,7 +18,7 @@
 	<?php
 		$this->blackprintAsset->style(array(
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
-			'/blackprint/js/bootstrap-datepicker.js',
+			'/blackprint/css/datepicker.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
 			'/blackprint/css/jquery/tipsy.css',
