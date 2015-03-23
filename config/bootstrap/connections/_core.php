@@ -84,6 +84,7 @@ if(empty($environment)) {
 $dbOptions = array(
 	'type' => 'database',
 	'adapter' => 'MongoDb',
+	'classes' => array('server' => 'MongoClient'),
 	'database' => $options['database'],
 	'host' => $options['host'],
 	'timeout' => $options['timeout']

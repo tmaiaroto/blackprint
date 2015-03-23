@@ -4,7 +4,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "unionofrad/lithium": "1.0-beta",
+        "unionofrad/lithium": "dev-master",
     	"tmaiaroto/li3_access": "dev-master",
     	"lusitanian/oauth": "~0.2",
     	"swiftmailer/swiftmailer": "5.1.*@dev",
