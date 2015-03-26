@@ -87,7 +87,7 @@ class User extends \blackprint\models\BaseModel {
 		)
 	);
 
-	public static function __init() {
+	public function __construct() {
 		/*
 		 * Some special validation rules
 		*/
@@ -132,7 +132,6 @@ class User extends \blackprint\models\BaseModel {
 			return true;
 		});
 
-		parent::__init();
 	}
 
 	/**

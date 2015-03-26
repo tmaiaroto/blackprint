@@ -51,7 +51,7 @@ class Asset extends \lithium\data\Model {
 		)
 	);
 
-	public static function __init() {
+	public function __construct() {
 		$class =  __CLASS__;
 		self::$fields += static::$fields;
 		self::$validate += static::$validate;

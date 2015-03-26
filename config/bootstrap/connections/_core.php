@@ -83,7 +83,7 @@ if(empty($environment)) {
 
 $dbOptions = array(
 	'type' => 'database',
-	'adapter' => 'MongoDb',
+	'adapter' => '\blackprint\extensions\adapter\data\source\Mongo',
 	'classes' => array('server' => 'MongoClient'),
 	'database' => $options['database'],
 	'host' => $options['host'],

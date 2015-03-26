@@ -95,6 +95,12 @@ class AssetsController extends \lithium\action\Controller {
 				if ($file['error'] == UPLOAD_ERR_OK) {
 					$ext = strtolower(substr(strrchr($file['name'], '.'), 1));
 					if(in_array($ext, $allowedFileExtensions)) {
+						$exifData = null;
+						try {
+							//$exifData = exif_read_data($file['tmp_name']);
+						} catch(\Exception $e) {
+							Logger::debug($e);
+						}
 						// Asset::store() works much like the mongo PHP driver. Filename first, then metadata.
 						// We are creating a unique file name as well, otherwise we'd overwrite stuff or have failed saves.
 						$gridFileId = Asset::store(
@@ -102,7 +108,7 @@ class AssetsController extends \lithium\action\Controller {
 							array(
 								'filename' => (string)uniqid(php_uname('n') . '.') . '.'.$ext,
 								'fileExt' => $ext,
-								'exif' => exif_read_data($file['tmp_name']),
+								'exif' => $exifData,
 								'originalFilename' => $file['name'],
 								// Always be sure to set this to false when storing assets that are not thumbnails as the index listing
 								// has query conditions specifically set for _thumbnail: false
