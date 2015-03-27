@@ -21,7 +21,8 @@
 				<?=$this->BlackprintForm->field('authorAlias', array('label' => 'Author', 'size' => '9', 'value' => $authorAlias)); ?>
 			</div>
 			<div class="row">
-				<?=$this->BlackprintForm->field('body', array('label' => 'Body', 'type' => 'textarea', 'style' => 'width: 100%; height: 400px;', 'groupClass' => 'form-group col-md-12', 'class' => 'wysiwyg wysihtml5')); ?>
+				<?=$this->_render('element', 'admin_wysiwyg_toolbar', array('user' => $this->request()->user), array('library' => 'blackprint')); ?>
+				<?=$this->BlackprintForm->field('body', array('label' => false, 'type' => 'textarea', 'style' => 'width: 100%; height: 400px;', 'groupClass' => 'form-group col-md-12', 'class' => 'wysiwyg wysihtml5')); ?>
 			</div>
 
 			

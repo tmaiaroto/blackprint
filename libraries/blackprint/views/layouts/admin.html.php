@@ -20,7 +20,6 @@
 			'/bower_components/bootstrap/dist/css/bootstrap.min.css',
 			'/bower_components/font-awesome/css/font-awesome.min.css',
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css',
-			'/bower_components/blackprint-wysihtml5/dist/wysihtml5-ui.css',
 			'/blackprint/css/jquery/tipsy.css',
 			'/blackprint/css/site',
 			'/blackprint/css/admin'
@@ -37,8 +36,8 @@
 			'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
 			'/bower_components/bootstrap/dist/js/bootstrap.min.js',
 			'/blackprint/js/bootstrap-datepicker.js',
-			//'/bower_components/blackprint-wysihtml5/dist/wysihtml5.min.js',
-			'/blackprint-wysihtml5/dist/wysihtml5.min.js',
+			'/bower_components/wysihtml/dist/wysihtml5x-toolbar.min.js',
+			'/bower_components/wysihtml/parser_rules/advanced_and_extended.js',
 			'/bower_components/holderjs/holder.js',
 			'/blackprint/js/jquery/jquery.tipsy.js'
 		), array('inline' => false));
@@ -75,8 +74,6 @@
 
 			// Datepicker
 			$('.datepicker').datepicker();
-
-			$('.wysihtml5').wysihtml5({html: true,color: true, code:true, insertAnything:true, justify:true});
 		});
 	</script>
 	<?php

@@ -1,18 +1,20 @@
 {
-	"name": "blackprint",
-	"version": "0.1.0",
-	"homepage": "https://github.com/tmaiaroto/blackprint",
-	"license": "MIT",
-	"private": true,
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components"
-	],
-	"dependencies": {
-		"bootstrap": "latest",
-		"font-awesome": "latest",
-		"holderjs": "latest",
-		"blackprint-wysihtml5": "https://github.com/tmaiaroto/blackprint-wysihtml5.git"
-	}
+  "name": "blackprint",
+  "version": "0.1.0",
+  "homepage": "https://github.com/tmaiaroto/blackprint",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "bootstrap": "latest",
+    "font-awesome": "latest",
+    "holderjs": "latest",
+    "wysihtml": "latest",
+    "blackprint-wysihtml5": "https://github.com/tmaiaroto/blackprint-wysihtml5.git",
+    "spectrum": "~1.6.1"
+  }
 }
