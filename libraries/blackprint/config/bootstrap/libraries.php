@@ -14,6 +14,13 @@ Libraries::add('li3_access');
 Libraries::add('lusitanian', array('bootstrap' => 'oauth/src/OAuth/bootstrap.php'));
 Libraries::add('swiftmailer', array('bootstrap' => 'swiftmailer/lib/swift_required.php'));
 Libraries::add('li3_swiftmailer');
+Libraries::add('HTMLPurifier', array(
+	"path" => LITHIUM_LIBRARY_PATH . '/ezyang/htmlpurifier/library/HTMLPurifier',
+    "includePath" => LITHIUM_LIBRARY_PATH . '/ezyang/htmlpurifier/library/HTMLPurifier',
+    "prefix" => "HTMLPurifier_",
+    "bootstrap" => "Bootstrap.php",
+    "loader" => array("HTMLPurifier_Bootstrap", "autoload")
+));
 
 $appConfig =  Libraries::get(true);
 $libd = $appConfig['path'] . '/config/bootstrap/libraries/*.php';

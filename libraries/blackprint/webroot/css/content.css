@@ -2,141 +2,32 @@
 /* This file should not contain template/layout styles such as grid systems, buttons, etc. */
 /* The styles within this file can easily be overridden with a /css/content.css file in the main application webroot */
 
-/* WYSIWYG Styles - The wysihtml5 editor applies distinct classes that can be styled separately */
-/* This is nice because it allows all user generated content to be kept separate from template styles */
-/* In effect, creating a "sandbox" for user generated content, so it doesn't interfere with layout */
-/* This is of course only applicable to the WYSIWYG5 editor (the forked blackprint-wysihtml5 version). */
-
-.wysiwyg-font-size-smaller {
-  font-size: smaller;
+.main-container, .main-container p, .main-container h3 {
+  font-family: 'LibreBaskerville', serif;
 }
 
-.wysiwyg-font-size-larger {
-  font-size: larger;
+.main-container h1 {
+  font-family: 'Raleway', sans-serif;
 }
 
-.wysiwyg-font-size-xx-large {
-  font-size: xx-large;
+.main-container h2 {
+  font-family: 'Raleway', sans-serif;
 }
 
-.wysiwyg-font-size-x-large {
-  font-size: x-large;
+.main-container h3 {
 }
 
-.wysiwyg-font-size-large {
-  font-size: large;
+.main-container h4 {
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
 }
 
-.wysiwyg-font-size-medium {
-  font-size: medium;
+.post-meta {
+  font-family: 'Raleway', sans-serif;
 }
 
-.wysiwyg-font-size-small {
-  font-size: small;
-}
-
-.wysiwyg-font-size-x-small {
-  font-size: x-small;
-}
-
-.wysiwyg-font-size-xx-small {
-  font-size: xx-small;
-}
-
-.wysiwyg-color-black {
-  color: black;
-}
-
-.wysiwyg-color-silver {
-  color: silver;
-}
-
-.wysiwyg-color-gray {
-  color: gray;
-}
-
-.wysiwyg-color-white {
-  color: white;
-}
-
-.wysiwyg-color-maroon {
-  color: maroon;
-}
-
-.wysiwyg-color-red {
-  color: red;
-}
-
-.wysiwyg-color-purple {
-  color: purple;
-}
-
-.wysiwyg-color-fuchsia {
-  color: fuchsia;
-}
-
-.wysiwyg-color-green {
-  color: green;
-}
-
-.wysiwyg-color-lime {
-  color: lime;
-}
-
-.wysiwyg-color-olive {
-  color: olive;
-}
-
-.wysiwyg-color-yellow {
-  color: yellow;
-}
-
-.wysiwyg-color-navy {
-  color: navy;
-}
-
-.wysiwyg-color-blue {
-  color: blue;
-}
-
-.wysiwyg-color-teal {
-  color: teal;
-}
-
-.wysiwyg-color-aqua {
-  color: aqua;
-}
-
-.wysiwyg-text-align-right {
-  text-align: right;
-}
-
-.wysiwyg-text-align-center {
-  text-align: center;
-}
-
-.wysiwyg-text-align-left {
-  text-align: left;
-}
-
-.wysiwyg-text-align-justify {
-  text-align: justify;
-}
-
-.wysiwyg-float-left {
-  float: left;
-  margin: 0 8px 8px 0;
-}
-
-.wysiwyg-float-right {
-  float: right;
-  margin: 0 0 8px 8px;
-}
-
-.wysiwyg-clear-right {
-  clear: right;
-}
-
-.wysiwyg-clear-left {
-  clear: left;
+.post-meta .byline {
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  color: #aaa;
 }

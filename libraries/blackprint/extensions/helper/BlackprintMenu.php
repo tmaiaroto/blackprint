@@ -1,6 +1,9 @@
 <?php
 /**
  * Menu Helper.
+ * TODO: Redo all Blackprint helpers to be CSS framework specific.
+ * This one uses Twitter Bootstrap, so render() needs to be moved to a different helper.
+ * This helper will still exist for getting raw menu data (and caching it).
  *
 */
 namespace blackprint\extensions\helper;
@@ -12,6 +15,8 @@ use lithium\storage\Cache;
 use lithium\net\http\Router;
 
 class BlackprintMenu extends \lithium\template\Helper {
+
+
 
 	/**
 	 * This renders a menu for use with Twitter Bootstrap

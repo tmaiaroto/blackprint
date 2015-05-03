@@ -22,8 +22,12 @@ class BlackprintMenu extends \lithium\core\StaticObject {
 					),
 					array(
 						'title' => 'Create New Post',
-						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'posts', 'action' => 'create')
-					)
+						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'posts', 'action' => 'create_blank')
+					),
+					array(
+						'title' => 'Configuration',
+						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'config', 'action' => 'update', 'args' => 'blog')
+					),
 				)
 			),
 			'content' => array(
@@ -61,6 +65,19 @@ class BlackprintMenu extends \lithium\core\StaticObject {
 						'url' => array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'create')
 					)
 				)
+			)
+		),
+		'public' => array(
+			'home' => array(
+				'title' => 'Home',
+				'url' => '/',
+				'activeIf' => array('url' => '/')
+			),
+			'blog' => array(
+				'title' => 'Blog',
+				'url' => array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'index'),
+				'activeIf' => array('library' => 'blackprint', 'controller' => 'posts'),
+				'options' => array('escape' => false)
 			)
 		)
 	);

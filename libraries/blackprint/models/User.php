@@ -1,4 +1,29 @@
 <?php
+/**
+ * TODO: Make another model for storing user events.
+ * Events will be sent to Google sure (and maybe some internal analytics) but we also want to store actual user events.
+ * What we'll then do is allow admins to create segments. So for example, "give me a segment of all users who have read less than 2 blog posts" etc.
+ * The templating system will be aware of users and the segments they belong to....This way different content can be rendered to different segments.
+ *
+ * The e-mail system (which needs more work) can also target users to e-mail by segment.
+ *
+ * Anonymous visitors can also be segmented. They need to get a fingerprint (a hash of user agent + ip ... maybe some other data) and their actions/events
+ * are also recorded. Once they register, the fingerprint is matched and applied so they become known in the system, but keep their segments.
+ *
+ * Going even farther -- if users have connected their social media accounts then we can even work with the social network APIs (like Twitter allows for this I believe)
+ * to manage audiences. Even internally we can create segments of users for social networks. So a group of all Twitter usernames that performed some action.
+ * 
+ * Export ALL segemnts as CSV. Then those twitter usernames, e-mails, etc. can be imported and used elsewhere.
+ *
+ * TODO: Make a user role "collaborator" or "guest blogger" ... These users can be invited to the system and can write or edit drafts (or certain drafts, maybe their own
+ * and maybe limited number of posts), but never publish/unpublish or update existing posts. Only admins (maybe site editors too) can publish their posts. 
+ *
+ * So an entire guest blogging system by invite. Users get the e-mail or even Twitter message and can go to the URL to sign in/register. If invite via Twitter 
+ * (which is totally awesome btw - especially now that anyone can be direct messaged, but even if it was a publish mention it's fine), the Twitter username 
+ * would need to match. So only that person could accept the invite.
+ *
+ * Maybe invite links are one time posts. Only good for one story. Maybe that's just optional too.
+ */
 namespace blackprint\models;
 
 use blackprint\extensions\Util;

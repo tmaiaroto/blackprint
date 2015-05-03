@@ -6,8 +6,19 @@ body {
 	font-family: 'Raleway', sans-serif;
 	padding-top: 70px;
 }
+html, body, footer {
+	height: auto;
+}
 p {
 	font-family: 'Raleway', sans-serif;
+	font-size: 1.4rem;
+	line-height: 2rem;
+}
+h3 {
+	margin-top: 10px;
+}
+footer, footer p, footer small {
+	color: rgba(140, 140, 140, 0.8);
 }
 
 /* Form */
@@ -129,4 +140,13 @@ a.delete-label, a.edit-label {
 }
 a.delete-label:hover, a.edit-label:hover {
 	color: #bf0000;
+}
+
+/* Titles may include HTML, so this adjusts the sizes to fit better */
+.index-list-item-title, .index-list-item-title h1, .index-list-item-title h2, .index-list-item-title h3, .index-list-item-title h4, .index-list-item-title h5, .index-list-item-title h6 {
+	text-align: left !important;
+	font-size: 1.4rem;
+	line-height: 1.6rem;
+	margin: 0;
+	padding: 0;
 }

@@ -18,13 +18,14 @@ class ConfigController extends \lithium\action\Controller {
 	 * Manages the configuration settings.
 	 * 
 	*/
-	public function admin_update() {
+	public function admin_update($name='default') {
 		$this->_render['layout'] = 'admin';
+		$this->_render['template'] = ($name == 'default') ? 'admin_update':'admin_update_'.$name;
 	
 		// For now, just one config named "default"
-		$document = Config::find('first', array('conditions' => array('name' => 'default')));
+		$document = Config::find('first', array('conditions' => array('name' => $name)));
 		if(empty($document)) {
-			$document = Config::create(array('name' => 'default'));
+			$document = Config::create(array('name' => $name));
 		}
 
 		if($this->request->data) {
@@ -39,12 +40,12 @@ class ConfigController extends \lithium\action\Controller {
 				}
 
 				// Configuration name, again just one for now.
-				$this->request->data['name'] = 'default';
+				$this->request->data['name'] = $name;
 
 				// Save
 				if($document->save($this->request->data)) {
 					FlashMessage::write('The configuration has been updated successfully.');
-					return $this->redirect(array('library' => 'blackprint', 'controller' => 'config', 'action' => 'update', 'admin' => true));
+					return $this->redirect(array('library' => 'blackprint', 'controller' => 'config', 'action' => 'update', 'args' => array($name), 'admin' => true));
 				} else {
 					FlashMessage::write('The configuration could not be updated, please try again.');
 				}

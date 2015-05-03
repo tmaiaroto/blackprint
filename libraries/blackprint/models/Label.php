@@ -24,15 +24,10 @@ class Label extends \lithium\data\Model {
 	)
   );
   
-  public static function __init() {
+  public function __construct() {
 	$class = __CLASS__;
 	
 	Validator::add('validLabel', '/^[A-z0-9 _-]*$/i');
-	
-	// Future compatibility.
-	if(method_exists('\lithium\data\Model', '__init')) {
-	  parent::__init();
-	}
   }
   
 }

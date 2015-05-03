@@ -13,14 +13,6 @@
 				<?=$this->BlackprintForm->field('subtitle', array('label' => 'Subtitle', 'size' => '9')); ?>
 			</div>
 			<div class="row">
-				<?php
-					$authorAlias = isset($this->_request->user['firstName']) ? $this->_request->user['firstName']:'';
-					$authorAlias = isset($this->_request->user['lastName']) ? $authorAlias . ' ' . $this->_request->user['lastName']:$authorAlias;
-					$authorAlias = $document->authorAlias ? $document->authorAlias:$authorAlias;
-					?>
-				<?=$this->BlackprintForm->field('authorAlias', array('label' => 'Author', 'size' => '9', 'value' => $authorAlias)); ?>
-			</div>
-			<div class="row">
 				<?=$this->BlackprintForm->field('body', array('label' => 'Body', 'type' => 'textarea', 'groupClass' => 'form-group col-md-12', 'style' => 'width: 100%; height: 400px;', 'class' => 'wysiwyg wysihtml5')); ?>
 			</div>
 

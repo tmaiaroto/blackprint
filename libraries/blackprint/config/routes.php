@@ -8,7 +8,7 @@ use lithium\action\Dispatcher;
 use \lithium\action\Response;
 
 // Set the evironment
-if($_SERVER['HTTP_HOST'] == 'blackprint.dev.local' || $_SERVER['HTTP_HOST'] == 'blackprint.local' || $_SERVER['HTTP_HOST'] == 'localhost') {
+if($_SERVER['HTTP_HOST'] == 'blackprint.dev.local' || $_SERVER['HTTP_HOST'] == 'blackprint.li3' || $_SERVER['HTTP_HOST'] == 'blackprint.local' || $_SERVER['HTTP_HOST'] == 'localhost') {
 	Environment::set('development');
 }
 
@@ -121,6 +121,7 @@ Dispatcher::config(array(
 ));
 
 // Convenient short routes for users.
+Router::connect("/user/{:args}", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'read', 'args' => array()));
 Router::connect("/login/{:args}", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'login'));
 Router::connect("/logout", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'logout'));
 Router::connect("/register", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register'));
@@ -132,7 +133,7 @@ Router::connect("/set-profile-picture-from-url.json", array('library' => 'blackp
 Router::connect("/admin", array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'dashboard'));
 Router::connect("/admin/my-account", array('library' => 'blackprint', 'controller' => 'users', 'action' => 'update'));
 Router::connect("/admin/login/{:args}", array('library' => 'blackprint', 'admin' => true, 'controller' => 'users', 'action' => 'login'));
-Router::connect("/admin/config", array('library' => 'blackprint', 'admin' => true, 'controller' => 'config', 'action' => 'update'));
+Router::connect("/admin/config/{:args}", array('library' => 'blackprint', 'admin' => true, 'controller' => 'config', 'args' => array('default'), 'action' => 'update'));
 
 // Convenient short routes for the DocumentationController (so the URL doesn't need to include "view" for the action).
 Router::connect("/documentation", array('library' => 'blackprint', 'admin' => true, 'controller' => 'documentation', 'action' => 'view', 'args' => array()), array('persist' => array(
@@ -146,32 +147,30 @@ Router::connect("/admin/documentation/{:args}", array('library' => 'blackprint',
  * Default routes for dynamic pages/content.
 */
 Router::connect("/admin/content/{:action}/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'args' => array(), 'admin' => true));
+// Router::connect("/content/draft/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'draft', 'args' => array(), 'persist' => false));
 Router::connect("/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
 Router::connect("/{:contentType}/content/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'read', 'args' => array(), 'persist' => false));
 
+/**
+ * Default routes for blog (masks the "plugin/blackprint/posts" URLs - which would also still work, see below).
+*/
+Router::connect("/admin/blog/{:action}/{:args}", array('library' => 'blackprint', 'controller' => 'content', 'action' => 'index', 'args' => array(), 'admin' => true));
+Router::connect("/blog/post/{:args}", array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'read', 'args' => array()));
+// An important draft route that only pirvileged users can see (edit/view permissions can be adjusted). However, this is NOT an admin route.
+// TODO: Perhaps add a draft URL hash that is public so people can share their drafts before publishing.
+Router::connect("/blog/draft/{:args}", array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'draft', 'args' => array()));
+Router::connect("/blog/{:args}", array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'index', 'args' => array()));
+
+
 // Admin JSON
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/{:args}.json', array('admin' => true, 'type' => 'json'), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
+Router::connect('/admin/{:library}/{:controller}/{:action}/{:args}.json', array('admin' => true, 'type' => 'json'));
 // Plugin Routes (for add-ons without their own custom routes)
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}/sort-{:sort}/{:args}', array('admin' => true), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}', array('admin' => true), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/sort-{:sort}', array('admin' => true), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/{:args}', array('admin' => true), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
-Router::connect('/admin/plugin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}', array('admin' => true), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
-Router::connect("/admin/plugin/{:library}/{:controller}/{:action}/{:args}", array('admin' => true, 'action' => 'index', 'args' => array()), array('persist' => array(
-	'controller', 'admin', 'library'
-)));
+Router::connect('/admin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}/sort-{:sort}/{:args}', array('admin' => true));
+Router::connect('/admin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/limit-{:limit:[0-9]+}', array('admin' => true));
+Router::connect('/admin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/sort-{:sort}', array('admin' => true));
+Router::connect('/admin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}/{:args}', array('admin' => true));
+Router::connect('/admin/{:library}/{:controller}/{:action}/page-{:page:[0-9]+}', array('admin' => true));
+Router::connect("/admin/{:library}/{:controller}/{:action}/{:args}", array('admin' => true, 'action' => 'index', 'args' => array()));
 
 // Non plugin admin JSON.
 Router::connect("/admin/{:controller}/{:action}/{:args}.json", array('library' => 'blackprint', 'admin' => true, 'action' => 'index', 'args' => array(), 'type' => 'json'), array('persist' => array(

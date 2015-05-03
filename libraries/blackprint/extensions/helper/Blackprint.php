@@ -13,6 +13,8 @@ use blackprint\extensions\storage\FlashMessage;
 
 use lithium\template\View;
 use lithium\core\Libraries;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 class Blackprint extends \lithium\template\helper\Html {
 
@@ -152,7 +154,7 @@ class Blackprint extends \lithium\template\helper\Html {
 			$periods[$j] .= 's';
 		}
 
-		return $difference . $periods[$j] . 'ago';
+		return $difference . ' ' . $periods[$j] . ' ago';
 	}
 
 	/**
@@ -267,14 +269,22 @@ class Blackprint extends \lithium\template\helper\Html {
 	 * @param string $ending Ending to be appended to the trimmed string.
 	 * @param boolean $exact If false, $text will not be cut mid-word
 	 * @param boolean $considerHtml If true, HTML tags would be handled correctly
+	 * @param array $excludeMedia If true, this removes images and other media from the HTML (if $considerHtml is true)
 	 *
 	 * @return string Trimmed string.
 	 */
-	function truncateHtml($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true) {
+	function truncateHtml($text, $length = 100, $ending = '...', $exact = false, $considerHtml = true, $excludeMedia = true) {
 		if ($considerHtml) {
 			// if the plain text is shorter than the maximum length, return the whole text
 			if (strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
 				return $text;
+			}
+
+			// If true (the default), then all images, embeds, etc. will be removed.
+			if($excludeMedia) {
+				$text = preg_replace('/\<(embed|object|figure|figcaption|img).*\>.*\<\/(embed|object|figure|figcaption|img)\>/si', '', $text);
+				$text = preg_replace('/\<img.*\/\>/si', '', $text);
+				$text = preg_replace('/\<img.*\>/si', '', $text);
 			}
 
 			// apparently a fix for certain cases...
@@ -357,6 +367,7 @@ class Blackprint extends \lithium\template\helper\Html {
 				$truncate = substr($truncate, 0, $spacepos);
 			}
 		}
+
 		// add the defined ending to the text
 		$truncate .= $ending;
 		if($considerHtml) {
@@ -365,7 +376,27 @@ class Blackprint extends \lithium\template\helper\Html {
 				$truncate .= '</' . $tag . '>';
 			}
 		}
+	
+		// remove any empty stuff that are the result of line breaks or wierdness (if at the end of the string)
+		if($considerHtml) {
+			$truncate = preg_replace('/<p[^>]*>(<br\\/>|<br>|<br \\/>)+<\\/p[^>]*>/si', '', $truncate);
+		}
+
 		return $truncate;
+	}
+
+	/**
+	 * Cleans up any HTML that might have been broken.
+	 *
+	 * @param  string $html The potentially dirty HTML string
+	 * @return string
+	 */
+	public function purify($html='') {
+		// this has a tendency to break HTML, so clean it
+		$config = HTMLPurifier_Config::createDefault();
+		$config->set('AutoFormat.RemoveEmpty', 1);
+		$purifier = new HTMLPurifier($config);
+		return $purifier->purify($html);
 	}
 
 	/**

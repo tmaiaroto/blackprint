@@ -1,6 +1,11 @@
 <div class="row">
 	<div class="col-md-8">
-		<?=$this->html->link('<i class="fa fa-plus"></i> New Blog Post', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
+		<?php 
+		// Old admin editor.
+		// $this->html->link('<i class="fa fa-plus"></i> New Blog Post', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'create', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false));
+		// New way will be to create a new story on the front-end of the site using the Medium editor clone.
+		?>
+		<?=$this->html->link('<i class="fa fa-plus"></i> New Blog Post', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'create_blank', 'admin' => true), array('class' => 'btn btn-success', 'escape' => false)); ?>
 	</div>
 	<div class="col-md-4">
 		<?=$this->blackprint->queryForm(array('placeholder' => 'search title or body...', 'buttonLabel' => 'Search', 'divClass' => 'pull-right')); ?>
@@ -45,7 +50,7 @@
 						$authorArrow = ($currentSortDirection == 'desc') ? ' <i class="icon-caret-down"></i>':' <i class="icon-caret-up"></i>';
 					}
 					?>
-					<?=$this->html->link('Author' . $authorArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'posts', 'action' => 'index', 'page' => $page, 'sort' => 'authorAlias,' . $sortDirection), array('escape' => false)); ?>
+					<?=$this->html->link('Author' . $authorArrow, array('admin' => true, 'library' => 'blackprint', 'controller' => 'posts', 'action' => 'index', 'page' => $page, 'sort' => '_author.lastName,' . $sortDirection), array('escape' => false)); ?>
 					</th>
 					<th>
 					<?php
@@ -61,18 +66,18 @@
 			</thead>
 			<?php foreach($documents as $document) { ?>
 			<tr class="valign-middle-row">
-				<td>
-					<?=$document->title; ?>
+				<td class="index-list-item-title">
+					<?php echo $document->title; ?>
 				</td>
 				<td>
-					<?=$document->authorAlias; ?>
+					<?=$document->_author->firstName . ' ' . $document->_author->lastName; ?>
 				</td>
 				<td>
 					<?=$this->blackprint->date($document->created->sec); ?>
 				</td>
 				<td>
-					<?=$this->html->link('View', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'read', 'admin' => null, 'args' => array($document->_id)), array('target' => '_blank')); ?> |
-					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'update', 'admin' => true, 'args' => array($document->_id))); ?> |
+					<?=$this->html->link('View', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'read', 'args' => array($document->url)), array('target' => '_blank')); ?> |
+					<?=$this->html->link('Edit', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'draft', 'args' => array($document->draftHash))); ?> |
 					<?=$this->html->link('Delete', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'delete', 'admin' => true, 'args' => array($document->_id)), array('onClick' => 'return confirm(\'Are you sure you want to delete ' . $document->title . '?\')')); ?>
 				</td>
 			</tr>

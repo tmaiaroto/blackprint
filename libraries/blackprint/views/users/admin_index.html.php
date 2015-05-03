@@ -23,7 +23,7 @@
 			<tr>
 				<td>
 					<?php $active = ($user->active) ? 'active':'inactive'; ?>
-					<?=$this->html->link($user->email, array('library' => 'blackprint', 'controller' => 'users', 'action' => 'read', 'admin' => null, 'args' => array($user->url)), array('class' => 'tip', 'title' => $user->firstName . ' ' . $user->lastName . ' (' . $active . ')')); ?>
+					<?=$this->html->link($user->email, array('library' => 'blackprint', 'controller' => 'users', 'action' => 'read', 'args' => array($user->url)), array('class' => 'tip', 'title' => $user->firstName . ' ' . $user->lastName . ' (' . $active . ')')); ?>
 				</td>
 				<td>
 					<?=$user->role; ?>

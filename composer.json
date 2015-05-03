@@ -8,6 +8,7 @@
     	"tmaiaroto/li3_access": "dev-master",
     	"lusitanian/oauth": "~0.2",
     	"swiftmailer/swiftmailer": "5.1.*@dev",
-        "djordje/li3_swiftmailer": "dev-master"
+        "djordje/li3_swiftmailer": "dev-master",
+        "ezyang/htmlpurifier": "dev-master"
     }
 }

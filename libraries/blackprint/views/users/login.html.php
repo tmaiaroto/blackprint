@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-6">
+	<div class="six wide column">
 		<?=$this->BlackprintForm->create(null, array('class' => 'form-horizontal')); ?>
 		<div class="panel panel-default">
 			<div class="panel-container">
@@ -21,7 +21,7 @@
 		<?php } ?>
 	</div>
 
-	<div class="col-md-6">
+	<div class="six wide column">
 		<h2>Login With Your Account</h2>
 		<p>
 			Please enter your e-mail address and password to login. If you don't have an account yet, you can <?=$this->html->link('click here to register.', array('library' => 'blackprint', 'controller' => 'users', 'action' => 'register')); ?>

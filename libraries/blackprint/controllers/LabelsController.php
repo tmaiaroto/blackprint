@@ -6,11 +6,12 @@ use blackprint\models\Label;
 class LabelsController extends \lithium\action\Controller {
 
   public function admin_index() {
-	$response = array('success' => false, 'labels' => array());
-	if(!$this->request->is('json')) {
+  	$response = array('success' => false, 'labels' => array());
+  	if(!$this->request->is('json')) {
+  		var_dump("NO JSON");exit();
 	  return $response;
 	}
-	
+
 	$documents = Label::all(array('order' => array('name')));
 	if($documents) {
 	  $response['labels'] = $documents;
