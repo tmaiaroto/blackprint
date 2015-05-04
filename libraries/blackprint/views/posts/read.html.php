@@ -75,6 +75,9 @@ if($this->request()->action == 'draft') { ?>
 										case 'twitter':
 											echo $this->html->link('<i class="fa fa-twitter"></i>', 'https://www.twitter.com/' . $service->userName, array('escape' => false, 'class' => 'social-profile', 'target' => '_blank'));
 											break;
+										case 'facebook':
+											echo $this->html->link('<i class="fa fa-twitter"></i>', 'https://www.facebook.com/' . $service->userName, array('escape' => false, 'class' => 'social-profile', 'target' => '_blank'));
+											break;
 									}
 								}
 

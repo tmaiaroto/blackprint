@@ -84,6 +84,32 @@ h3 {
   font-family: 'Raleway', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
 }
 
+.hairline {
+  font-weight: 100;
+}
+.thin {
+  font-weight: 200;
+}
+.light {
+  font-weight: 300;
+}
+.medium {
+  font-weight: 400;
+}
+.heavy {
+  font-weight: 900;
+}
+
+.divider-dark {
+  border-color: #888;
+}
+.divider-light {
+  border-color: #eee;
+}
+.divider-medium {
+  border-color: #c8c8c8;
+}
+
 .panel-container {
 	/*padding: 0 10px 10px 10px;*/
 }

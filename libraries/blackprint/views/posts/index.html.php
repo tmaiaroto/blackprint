@@ -19,6 +19,7 @@
 					</div>
 					<div class="post-meta-author">
 						<small>
+							<?php // TODO: make this an emelent - it appears here in index.html.php as well as read.html.php ?>
 							Posted <?=$this->Blackprint->dateAgo($document->created); ?> by <?php echo $document->_author->firstName . ' ' . $document->_author->lastName; ?><br />
 							<?php
 							if($document->_author->externalAuthServices) {
@@ -28,6 +29,9 @@
 									switch($service->service) {
 										case 'twitter':
 											echo $this->html->link('<i class="fa fa-twitter"></i>', 'https://www.twitter.com/' . $service->userName, array('escape' => false, 'class' => 'social-profile', 'target' => '_blank'));
+											break;
+										case 'facebook':
+											echo $this->html->link('<i class="fa fa-twitter"></i>', 'https://www.facebook.com/' . $service->userName, array('escape' => false, 'class' => 'social-profile', 'target' => '_blank'));
 											break;
 									}
 								}
@@ -41,12 +45,32 @@
 		<?=$this->BlackprintPaginator->paginate(); ?>
 	</div>
 
-	<div class="col-xs-12 col-sm-6 col-md-4 post-index-sidebar">
-		<h3>Search for Posts</h3>
-		<?=$this->Blackprint->queryForm(); ?>
+	<div class="col-xs-12 col-sm-6 col-md-4 post-index-sidebar pg-top-15">
+		<h4 class="thin">Find Posts</h4>
+		<?php
+		// TODO: Update the helper to allow for btn-group compact search form
+		$form_id = sha1('asd#@jsklvSx893S@gMp8oi' . time());
+		$output = '<form role="form" class="form form-horizontal" id="' . $form_id . '" onSubmit="';
+		$output .= 'window.location = window.location.href + \'?\' + $(\'#' . $form_id . '\').serialize();';
+		$output .= '">';
+		echo $output;
+		?>
+		    <div class="input-group">
+		      <input type="text" name="q" class="form-control" placeholder="">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="submit">Search</button>
+		      </span>
+		    </div>
+	    </form>
+
+		<hr class="divider-medium" />
+		<h4 class="thin">Popular Labels</h4>
+		<?php
+		foreach($popularLabels as $label) {
+			echo $this->html->link('<span class="label" data-label-id="' . $label['_id'] . '" style="color: ' . $label['color'] . '; background-color: ' . $label['bgColor'] . '">' . $label['name'] . '</span>', array('library' => 'blackprint', 'controller' => 'posts', 'action' => 'index', 'args' => array(urlencode($label['name']))), array('style' => 'text-decoration: none;', 'escape' => false));
+		}
+		?>
+
 	</div>
 
 </div>
-<script type="text/javascript">
-	$('.user-info').tip();
-</script>
