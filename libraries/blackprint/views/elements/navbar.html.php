@@ -24,7 +24,8 @@
 							<button class="btn btn-default btn-no-outline navbar-btn" data-toggle="sidebar" data-target="#draft-sidebar" href="#"><small>Content</small> <i class="fa fa-gear"></i></button>
 						</li>
 						<?php } ?>
-						<?php if($this->request()->action !== 'draft' && (isset($document) && !empty($document) && $document->_author->_id == $user['_id'])) { ?>
+						<?php // TODO: this is a little silly. make simpler.
+						if($this->request()->action !== 'draft' && isset($document) && !empty($document) && is_object($document->_author) && $document->_author->_id == $user['_id']) { ?>
 						<li>
 							<button class="btn btn-default btn-no-outline navbar-btn" onClick="window.location.href='/blog/draft/<?=$document->draftHash; ?>'"><small>Edit</small> <i class="fa fa-pencil"></i></button>
 						</li>

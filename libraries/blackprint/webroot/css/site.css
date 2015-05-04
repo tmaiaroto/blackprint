@@ -297,6 +297,42 @@ footer hr {
 .mg-bottom-25 {
 	margin-bottom: 25px;
 }
+.pg-top-0 {
+  padding-top: 0;
+}
+.pg-top-5 {
+  padding-top: 5px;
+}
+.pg-top-10 {
+  padding-top: 10px;
+}
+.pg-top-15 {
+  padding-top: 15px;
+}
+.pg-top-20 {
+  padding-top: 20px;
+}
+.pg-top-25 {
+  padding-top: 25px;
+}
+.pg-bottom-0 {
+  padding-bottom: 0;
+}
+.pg-bottom-5 {
+  padding-bottom: 5px;
+}
+.pg-bottom-10 {
+  padding-bottom: 10px;
+}
+.pg-bottom-15 {
+  padding-bottom: 15px;
+}
+.pg-bottom-20 {
+  padding-bottom: 20px;
+}
+.pg-bottom-25 {
+  padding-bottom: 25px;
+}
 
 /*!
  * Datepicker for Bootstrap

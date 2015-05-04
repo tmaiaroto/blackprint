@@ -5,7 +5,7 @@ $usersExternalServices = isset($user['externalAuthServices']) ? $user['externalA
 <?=$this->html->script(array('/blackprint/js/manageUser', '/blackprint/js/md5.js'), array('inline' => false)); ?>
 <div class="row update-profile-container">
 	<div class="col-md-8">
-		<div class="row">
+		<div class="row mg-top-15 mg-bottom-20">
 			<h3>Your User Settings</h3>
 		</div>
 		<?=$this->BlackprintForm->create($document, array('id' => 'user-update-form', 'class' => 'form-horizontal', 'role' => 'form', 'type' => 'file', 'onSubmit' => 'return submitCheck();')); ?>
@@ -51,7 +51,7 @@ $usersExternalServices = isset($user['externalAuthServices']) ? $user['externalA
 			<?=$this->BlackprintForm->end(); ?>
 	</div>
 
-	<div class="col-md-4 update-profile-sidebar">
+	<div class="col-md-4 update-profile-sidebar pg-top-15">
 		<?php // $this->bootstrapBlock->render('blackprint_update_right', array('document' => $document)); // TODO: Rethink this... Lithium Bootstrap had blocks which could be hooked into. This one in particular allowed the social plugin to place some JavaScript that allowed the user profile picture to be set from social media sources. ?>
 		<h3>Note</h3>
 		<p>
